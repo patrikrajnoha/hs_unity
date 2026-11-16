@@ -1,0 +1,88 @@
+{
+  "stages": [
+    {
+      "id": "starter",
+      "title": "Getting Started",
+      "transitionMessage": "Recruiting is now available.",
+      "objectives": [
+        {
+          "id": "starter_first_sale",
+          "title": "Make a first sale",
+          "description": "Buy Seed, grow it, and sell stock.",
+          "progress": "Items sold: {itemsSold}/{itemsRequired} | Successful clients: {clients}/{clientsRequired}",
+          "hint": "Pick up with E; plant F; water C; pack Q."
+        },
+        {
+          "id": "starter_sell_stock",
+          "title": "Sell more stock",
+          "description": "Sell requested items to buyers.",
+          "progress": "Items sold: {itemsSold}/{itemsRequired} | Successful clients: {clients}/{clientsRequired}",
+          "hint": "Pack GreenBud with PackEmpty using Q."
+        },
+        {
+          "id": "starter_reach_clients",
+          "title": "Serve 10 clients",
+          "description": "Complete buyer sales until 10 clients are served.",
+          "progress": "Items sold: {itemsSold}/{itemsRequired} | Successful clients: {clients}/{clientsRequired}",
+          "hint": "The stage advances at 15 items and 10 clients."
+        }
+      ]
+    },
+    {
+      "id": "small_dealer",
+      "title": "Small Dealer",
+      "transitionMessage": "Recruiting is now available.",
+      "objectives": [
+        {
+          "id": "small_dealer_recruit",
+          "title": "Recruit 3 dealers",
+          "description": "Talk to gang NPCs and make offers.",
+          "progress": "Dealers recruited: {dealers}/{dealersRequired}",
+          "hint": "Try another pitch if one fails."
+        }
+      ]
+    },
+    {
+      "id": "gang_leader",
+      "title": "Gang Leader",
+      "transitionMessage": "You are now a gang leader.",
+      "objectives": [
+        {
+          "id": "gang_leader_earnings",
+          "title": "Earn $20,000",
+          "description": "Trade with buyers; dealer sales also count.",
+          "progress": "Cumulative earnings: ${earnings}/{earningsRequired}",
+          "hint": "Dealers sell when buyers are nearby."
+        }
+      ]
+    },
+    {
+      "id": "crime_boss",
+      "title": "Crime Boss",
+      "transitionMessage": "You are now a crime boss.",
+      "objectives": [
+        {
+          "id": "crime_boss_expand",
+          "title": "Expand your empire",
+          "description": "Crime Boss expansion is not implemented yet.",
+          "progress": "Stage reached",
+          "hint": "This is the current end of progression."
+        }
+      ]
+    },
+    {
+      "id": "mafia",
+      "title": "Mafia",
+      "transitionMessage": "",
+      "objectives": [
+        {
+          "id": "mafia_content_unavailable",
+          "title": "Mafia unavailable",
+          "description": "No rule currently reaches this stage.",
+          "progress": "Not reachable",
+          "hint": "Continue from Crime Boss."
+        }
+      ]
+    }
+  ]
+}

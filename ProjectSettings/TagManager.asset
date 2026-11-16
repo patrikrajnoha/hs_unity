@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags:
+  - door
+  - lamp
+  - popup
+  - waterCup
+  - bed
+  - pot
+  - weed
+  - spawn
+  - bud
+  - rake
+  - pruner
+  - sink
+  - wcwater
+  - dirt
+  - pack
+  - statPan
+  - shopUI
+  - btnYes
+  - btnNo
+  - road
+  - grass
+  - sideWalk
+  - crossWalk
+  - btnDrop
+  - inputQuan
+  - inputPrice
+  - lockPanel
+  - itemImg
+  - npcRange
+  - npc
+  - SpawnPoint
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - Terrain
+  - Water
+  - UI
+  - Road
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 1724237655
+    locked: 0
+  m_RenderingLayers:
+  - Default
+  - Light Layer 1
+  - Light Layer 2
+  - Light Layer 3
+  - Light Layer 4
+  - Light Layer 5
+  - Light Layer 6
+  - Light Layer 7
+  m_MigratedRenderPipelines:
+  - UnityEngine.Rendering.Universal.UniversalRenderPipeline

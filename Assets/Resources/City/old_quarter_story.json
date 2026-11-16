@@ -1,0 +1,758 @@
+{
+  "contracts": [
+    {
+      "id": "first_delivery",
+      "title": "01 / First impressions",
+      "description": "Get inside The Jade Room and complete your first delivery.",
+      "reward": 150,
+      "reputation": 5,
+      "baseScore": 1000,
+      "timeLimit": 240,
+      "steps": [
+        {
+          "objective": "Talk to Mara and accept the delivery.",
+          "signal": "accept_delivery",
+          "target": "mara",
+          "dialogue": "mara.delivery",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Collect the sealed parcel at the north dock.",
+          "signal": "collect_parcel",
+          "target": "parcel",
+          "dialogue": "",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Open the cafe door and deliver to Tomas INSIDE.",
+          "signal": "deliver_parcel",
+          "target": "tomas",
+          "dialogue": "tomas.delivery",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Return to Mara for payment.",
+          "signal": "finish_delivery",
+          "target": "mara",
+          "dialogue": "mara.delivery_done",
+          "holdSeconds": 0,
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "power_cut",
+      "title": "02 / Power cut",
+      "description": "Search the workshop and repair its electrical panel in the correct order.",
+      "reward": 220,
+      "reputation": 7,
+      "baseScore": 1200,
+      "timeLimit": 300,
+      "steps": [
+        {
+          "objective": "Ask Mara about the workshop power cut.",
+          "signal": "accept_power",
+          "target": "mara",
+          "dialogue": "mara.power",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Enter the workshop and collect the spare fuse.",
+          "signal": "collect_fuse",
+          "target": "fuse",
+          "dialogue": "",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Read the maintenance note inside the workshop.",
+          "signal": "read_wiring",
+          "target": "wiring",
+          "dialogue": "power.note",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Repair the switchboard. Use the sequence from the note.",
+          "signal": "restore_power",
+          "target": "switchboard",
+          "dialogue": "power.panel",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Report the restored power to Mara.",
+          "signal": "finish_power",
+          "target": "mara",
+          "dialogue": "mara.power_done",
+          "holdSeconds": 0,
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "paper_trail",
+      "title": "03 / Paper trail",
+      "description": "Enter the warehouse, retrieve the ledger and lose any pursuit.",
+      "reward": 350,
+      "reputation": 12,
+      "baseScore": 1500,
+      "timeLimit": 360,
+      "steps": [
+        {
+          "objective": "Hear Mara out about the warehouse ledger.",
+          "signal": "accept_ledger",
+          "target": "mara",
+          "dialogue": "mara.ledger",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Open the warehouse and find its ledger. Ada has an optional locker code.",
+          "signal": "collect_ledger",
+          "target": "ledger",
+          "dialogue": "",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Lose the police, then remain INSIDE the workshop safehouse for 5 seconds.",
+          "signal": "lay_low",
+          "target": "safehouse",
+          "dialogue": "",
+          "holdSeconds": 5,
+          "requiresClear": true
+        },
+        {
+          "objective": "Bring the ledger to Mara.",
+          "signal": "finish_ledger",
+          "target": "mara",
+          "dialogue": "mara.ledger_done",
+          "holdSeconds": 0,
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "cross_check",
+      "title": "04 / Cross-check",
+      "description": "Corroborate the ledger with a shipping manifest, cafe invoice and a witness.",
+      "reward": 420,
+      "reputation": 15,
+      "baseScore": 1800,
+      "timeLimit": 420,
+      "steps": [
+        {
+          "objective": "Accept Mara's evidence-gathering assignment.",
+          "signal": "accept_evidence",
+          "target": "mara",
+          "dialogue": "mara.evidence",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Inspect the shipping manifest inside the warehouse.",
+          "signal": "read_manifest",
+          "target": "manifest",
+          "dialogue": "evidence.manifest",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Find the matching invoice on the cafe counter.",
+          "signal": "read_invoice",
+          "target": "invoice",
+          "dialogue": "evidence.invoice",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Convince Ada to testify using the matching shipment number.",
+          "signal": "confirm_witness",
+          "target": "ada",
+          "dialogue": "evidence.witness",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Return the verified evidence to Mara.",
+          "signal": "finish_evidence",
+          "target": "mara",
+          "dialogue": "mara.evidence_done",
+          "holdSeconds": 0,
+          "requiresClear": false
+        }
+      ]
+    },
+    {
+      "id": "last_broadcast",
+      "title": "05 / The last broadcast",
+      "description": "Use the radio house to expose the evidence, then escape to extraction.",
+      "reward": 600,
+      "reputation": 20,
+      "baseScore": 2200,
+      "timeLimit": 420,
+      "steps": [
+        {
+          "objective": "Accept the final broadcast mission from Mara.",
+          "signal": "accept_final",
+          "target": "mara",
+          "dialogue": "mara.final",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Collect the radio house key from Ada.",
+          "signal": "get_radio_key",
+          "target": "ada",
+          "dialogue": "final.key",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Enter the radio house and tune the correct frequency.",
+          "signal": "broadcast",
+          "target": "radio",
+          "dialogue": "final.radio",
+          "holdSeconds": 0,
+          "requiresClear": false
+        },
+        {
+          "objective": "Broadcast triggered an alarm. Lose the police, then hold at extraction for 6 seconds.",
+          "signal": "finish_campaign",
+          "target": "extraction",
+          "dialogue": "",
+          "holdSeconds": 6,
+          "requiresClear": true
+        }
+      ]
+    }
+  ],
+  "conversations": [
+    {
+      "id": "mara.delivery",
+      "speaker": "Mara / Fixer",
+      "text": "First job: a sealed parcel at the north dock. Bring it to Tomas INSIDE The Jade Room. Open doors with E, and come back to me for $150. Four minutes. Ready?",
+      "choices": [
+        {
+          "text": "Take the job.",
+          "signal": "accept_delivery",
+          "next": "mara.directions"
+        },
+        {
+          "text": "What is in the parcel?",
+          "signal": "",
+          "next": "mara.parcel_question"
+        },
+        {
+          "text": "Not yet.",
+          "signal": "",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "mara.directions",
+      "speaker": "Mara / Fixer",
+      "text": "North-east dock, then the cafe entrance facing the boulevard. E opens the door; walk inside and talk to Tomas. The beacon and map show your current objective.",
+      "choices": [
+        {
+          "text": "On my way.",
+          "signal": "",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "mara.parcel_question",
+      "speaker": "Mara / Fixer",
+      "text": "Coffee parts. Boring work pays for interesting work. Prove you can finish the boring part first.",
+      "choices": [
+        {
+          "text": "Fair enough. I'll take it.",
+          "signal": "accept_delivery",
+          "next": "mara.directions"
+        },
+        {
+          "text": "Not today."
+        }
+      ]
+    },
+    {
+      "id": "tomas.delivery",
+      "speaker": "Tomas / The Jade Room",
+      "text": "Finally! The grinder's been dead all morning. If Mara sent you, tell her we're square. And tell her I still make the best coffee on this side of the river.",
+      "choices": [
+        {
+          "text": "Here's your parcel. I'll let her know.",
+          "signal": "deliver_parcel"
+        },
+        {
+          "text": "Give me a moment."
+        }
+      ]
+    },
+    {
+      "id": "mara.delivery_done",
+      "speaker": "Mara / Fixer",
+      "text": "Tomas called. Good work: $150. Next, I need someone who can do more than carry boxes. The workshop has gone dark.",
+      "choices": [
+        {
+          "text": "Collect payment.",
+          "signal": "finish_delivery",
+          "next": ""
+        },
+        {
+          "text": "One moment.",
+          "signal": "",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "mara.ledger",
+      "speaker": "Mara / Fixer",
+      "text": "A ledger inside the south-east warehouse names the people squeezing our shops. The warehouse door is now accessible. Ada knows the LOCKER code. Without it you will trigger an alarm. Get the book, lose any police, then hide inside the workshop.",
+      "choices": [
+        {
+          "text": "Take the ledger job.",
+          "signal": "accept_ledger",
+          "next": "mara.escape_tip"
+        },
+        {
+          "text": "Why not call the police?",
+          "signal": "",
+          "next": "mara.police_question"
+        },
+        {
+          "text": "Not yet.",
+          "signal": "",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "mara.police_question",
+      "speaker": "Mara / Fixer",
+      "text": "Novak follows the alarm, not the paperwork. I need evidence before I need an audience. You can do this quietly. Talk to Ada first.",
+      "choices": [
+        {
+          "text": "All right. I'll do it.",
+          "signal": "accept_ledger",
+          "next": "mara.escape_tip"
+        },
+        {
+          "text": "I'll think about it."
+        }
+      ]
+    },
+    {
+      "id": "mara.escape_tip",
+      "speaker": "Mara / Fixer",
+      "text": "Turn corners to break the officer's sight. He searches your last known position. The safehouse is INSIDE the workshop, at the back. Stay on the jade floor pad for five seconds after the district is clear.",
+      "choices": [
+        {
+          "text": "Understood.",
+          "signal": "",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "ada.route",
+      "speaker": "Ada / Dock worker",
+      "text": "Locker code: 0417. Use it and the ledger alarm stays quiet. The warehouse entrance faces the road. Later, if you find shipping records, look for a matching shipment number rather than trusting a name.",
+      "choices": [
+        {
+          "text": "Use the code.",
+          "signal": "learn_route",
+          "next": ""
+        },
+        {
+          "text": "How can I escape an officer?",
+          "signal": "",
+          "next": "ada.police"
+        },
+        {
+          "text": "Just passing by.",
+          "signal": "",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "ada.police",
+      "speaker": "Ada / Dock worker",
+      "text": "He can't see through stone, but he remembers where you were. Break sight around the buildings, then keep going. Wait until the district is clear before you try the safehouse. And take the code: 0417.",
+      "choices": [
+        {
+          "text": "Got it. Quiet is better.",
+          "signal": "learn_route"
+        }
+      ]
+    },
+    {
+      "id": "mara.ledger_done",
+      "speaker": "Mara / Fixer",
+      "text": "The ledger is real, but one document is easy to deny. We need a manifest, an invoice and a witness. First, your $350 for recovering this.",
+      "choices": [
+        {
+          "text": "Collect payment.",
+          "signal": "finish_ledger",
+          "next": ""
+        },
+        {
+          "text": "One moment.",
+          "signal": "",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "mara.idle",
+      "speaker": "Mara / Fixer",
+      "text": "Finish the objective on your mission panel first. The map marks the next destination. Indoor objectives require opening the matching building's door and walking inside.",
+      "choices": [
+        {
+          "text": "I am on it.",
+          "signal": "",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "tomas.idle",
+      "speaker": "Tomas / The Jade Room",
+      "text": "Mara gives you work; I give you coffee. Only one of us needs a four-minute deadline. If you're looking for a job, she's by the west workshop.",
+      "choices": [
+        {
+          "text": "I'll ask her."
+        },
+        {
+          "text": "Any local advice?",
+          "next": "local.rumor"
+        }
+      ]
+    },
+    {
+      "id": "officer.idle",
+      "speaker": "Officer Novak",
+      "text": "Afternoon. Keep the crossings clear and leave the warehouse lockers alone. If you hear an alarm, don't make me run. My knees and I are having a difficult week.",
+      "choices": [
+        {
+          "text": "Just taking a walk, officer."
+        },
+        {
+          "text": "Anything I should know?",
+          "next": "officer.advice"
+        }
+      ]
+    },
+    {
+      "id": "officer.advice",
+      "speaker": "Officer Novak",
+      "text": "Know the difference between a shortcut and trespassing. And if Mara offers you easy money, ask what makes it easy.",
+      "choices": [
+        {
+          "text": "I'll keep that in mind."
+        }
+      ]
+    },
+    {
+      "id": "local.rumor",
+      "speaker": "Old Quarter resident",
+      "text": "The cafe is open to customers. The workshop needs repairs. The warehouse and radio house unlock as Mara trusts you with bigger jobs. Look for the jade door signs.",
+      "choices": [
+        {
+          "text": "Good to know.",
+          "signal": "",
+          "next": ""
+        },
+        {
+          "text": "Any advice about alleys?",
+          "signal": "",
+          "next": "local.alleys"
+        }
+      ]
+    },
+    {
+      "id": "local.alleys",
+      "speaker": "Old Quarter resident",
+      "text": "The gaps between the buildings connect the back lanes. If you're ever in a hurry, corners are your friends. Dead ends aren't. Look before you commit.",
+      "choices": [
+        {
+          "text": "Thanks for the tip."
+        }
+      ]
+    },
+    {
+      "id": "menu.pause",
+      "speaker": "HighStakes / Paused",
+      "text": "Completed levels and their scores are saved. Restarting this level counts as a retry; earlier rewards stay. The campaign ends after level five.",
+      "choices": [
+        {
+          "text": "Resume.",
+          "signal": "resume",
+          "next": ""
+        },
+        {
+          "text": "Retry current level.",
+          "signal": "restart",
+          "next": ""
+        },
+        {
+          "text": "New campaign from level one.",
+          "signal": "new_campaign",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "mara.power",
+      "speaker": "Mara / Fixer",
+      "text": "The workshop fuse blew. Find the spare fuse inside, read the maintenance note, then reset the panel in the right order. Wrong switches damage the equipment and cost score. $220 if you fix it.",
+      "choices": [
+        {
+          "text": "I will restore the power.",
+          "signal": "accept_power",
+          "next": ""
+        },
+        {
+          "text": "I will return later.",
+          "signal": "",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "power.note",
+      "speaker": "Maintenance note",
+      "text": "RESTART PROCEDURE: fit the spare fuse, then press BLUE, YELLOW, GREEN. Never start with the green switch. Memorise the order before touching the panel.",
+      "choices": [
+        {
+          "text": "Remember BLUE - YELLOW - GREEN.",
+          "signal": "read_wiring",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "power.panel",
+      "speaker": "Workshop switchboard",
+      "text": "The replacement fuse is in. Which switch comes FIRST?",
+      "choices": [
+        {
+          "text": "Blue.",
+          "signal": "puzzle_click",
+          "next": "power.second"
+        },
+        {
+          "text": "Yellow.",
+          "signal": "mistake",
+          "next": "power.panel"
+        },
+        {
+          "text": "Green.",
+          "signal": "mistake",
+          "next": "power.panel"
+        }
+      ]
+    },
+    {
+      "id": "power.second",
+      "speaker": "Workshop switchboard",
+      "text": "Blue is on. Which switch comes SECOND?",
+      "choices": [
+        {
+          "text": "Green.",
+          "signal": "mistake",
+          "next": "power.panel"
+        },
+        {
+          "text": "Yellow.",
+          "signal": "puzzle_click",
+          "next": "power.third"
+        },
+        {
+          "text": "Blue again.",
+          "signal": "mistake",
+          "next": "power.panel"
+        }
+      ]
+    },
+    {
+      "id": "power.third",
+      "speaker": "Workshop switchboard",
+      "text": "Blue and yellow are on. Complete the restart sequence.",
+      "choices": [
+        {
+          "text": "Green.",
+          "signal": "restore_power",
+          "next": ""
+        },
+        {
+          "text": "Red.",
+          "signal": "mistake",
+          "next": "power.panel"
+        },
+        {
+          "text": "Blue.",
+          "signal": "mistake",
+          "next": "power.panel"
+        }
+      ]
+    },
+    {
+      "id": "mara.power_done",
+      "speaker": "Mara / Fixer",
+      "text": "Lights are back. You followed the instructions instead of guessing. Here is $220. Now we can deal with the warehouse records.",
+      "choices": [
+        {
+          "text": "Collect payment.",
+          "signal": "finish_power",
+          "next": ""
+        },
+        {
+          "text": "One moment.",
+          "signal": "",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "mara.evidence",
+      "speaker": "Mara / Fixer",
+      "text": "Cross-check the warehouse manifest against Tomas's cafe invoice. Remember their shared shipment ID. Then convince Ada to testify. Read carefully: bluffing the wrong ID loses score. $420 for evidence that actually holds up.",
+      "choices": [
+        {
+          "text": "Build the case.",
+          "signal": "accept_evidence",
+          "next": ""
+        },
+        {
+          "text": "Not yet.",
+          "signal": "",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "evidence.manifest",
+      "speaker": "Warehouse manifest",
+      "text": "Shipment J-417. Destination: The Jade Room. Contents: machine parts. The ledger records a second, unreceipted payment. An attached radio note says: emergency public channel 108.4.",
+      "choices": [
+        {
+          "text": "Record shipment J-417.",
+          "signal": "read_manifest",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "evidence.invoice",
+      "speaker": "The Jade Room / Invoice",
+      "text": "Invoice J-417 matches the warehouse manifest. Tomas paid the normal shipping fee; the extra payment was demanded separately. A handwritten note confirms the radio channel: 108.4.",
+      "choices": [
+        {
+          "text": "Keep the invoice as evidence.",
+          "signal": "read_invoice",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "evidence.witness",
+      "speaker": "Ada / Dock worker",
+      "text": "I can testify, but I will not put my name on a rumour. Which shipment appears on BOTH documents?",
+      "choices": [
+        {
+          "text": "J-147.",
+          "signal": "mistake",
+          "next": "evidence.witness"
+        },
+        {
+          "text": "J-417.",
+          "signal": "confirm_witness",
+          "next": ""
+        },
+        {
+          "text": "J-471.",
+          "signal": "mistake",
+          "next": "evidence.witness"
+        }
+      ]
+    },
+    {
+      "id": "mara.evidence_done",
+      "speaker": "Mara / Fixer",
+      "text": "Manifest, invoice, witness: now it is a case. Here is $420. One final step remains. The radio house can broadcast this before the records disappear.",
+      "choices": [
+        {
+          "text": "Collect payment.",
+          "signal": "finish_evidence",
+          "next": ""
+        },
+        {
+          "text": "One moment.",
+          "signal": "",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "mara.final",
+      "speaker": "Mara / Fixer",
+      "text": "Last job. Get the radio house key from Ada, enter the house north-west of the crossing, and broadcast on the channel from the documents. It WILL bring police. Escape back to the extraction pad outside my workshop. Finish this and the campaign is over.",
+      "choices": [
+        {
+          "text": "Finish what we started.",
+          "signal": "accept_final",
+          "next": ""
+        },
+        {
+          "text": "I need a moment.",
+          "signal": "",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "final.key",
+      "speaker": "Ada / Dock worker",
+      "text": "Here is the radio house key. You saw the channel on the papers. Tune it correctly, transmit, then get out. Mara's extraction contact waits by her workshop once the police have given up.",
+      "choices": [
+        {
+          "text": "Take the key.",
+          "signal": "get_radio_key",
+          "next": ""
+        }
+      ]
+    },
+    {
+      "id": "final.radio",
+      "speaker": "Radio house / Transmitter",
+      "text": "Evidence loaded. Select the public emergency frequency from the warehouse and cafe documents.",
+      "choices": [
+        {
+          "text": "104.8 FM.",
+          "signal": "mistake",
+          "next": "final.radio"
+        },
+        {
+          "text": "108.4 FM.",
+          "signal": "broadcast",
+          "next": ""
+        },
+        {
+          "text": "107.4 FM.",
+          "signal": "mistake",
+          "next": "final.radio"
+        }
+      ]
+    }
+  ]
+}
