@@ -67,7 +67,9 @@ public sealed class GameLogger : MonoBehaviour
     private readonly ConcurrentQueue<LogEntry> eventQueue = new ConcurrentQueue<LogEntry>();
     // Synchronization objects
     private readonly object fileLock = new object();
-    private readonly object queueLock = new object();
+
+    // Track queue size for atomic capacity checks
+    private int queueSize = 0;
     private Thread writerThread;
     private readonly AutoResetEvent wakeEvent = new AutoResetEvent(false);
     private volatile bool isWorkerRunning;
@@ -708,8 +710,12 @@ public sealed class GameLogger : MonoBehaviour
 
         if (config.enableFileLogging)
         {
-            if (eventQueue.Count >= MaxQueueCapacity)
+            // Atomic bounded enqueue using queueSize
+            int newSize = Interlocked.Increment(ref queueSize);
+            if (newSize > MaxQueueCapacity)
             {
+                // Overflow – drop entry and adjust counters
+                Interlocked.Decrement(ref queueSize);
                 Interlocked.Increment(ref droppedEventCount);
             }
             else

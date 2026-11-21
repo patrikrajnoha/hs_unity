@@ -122,29 +122,25 @@ public static class GameLoggerTests
         Assert(content.Contains("[WARNING] [UNITY]"), "Test 4.2: Unity message tagged as [WARNING] [UNITY]");
     }
 
+using System.Reflection;
+
     private static void Test5_LogRotationLogic()
     {
-        string testDir = Path.Combine(Path.GetTempPath(), "HighStakesTest_Rotation_" + Guid.NewGuid().ToString("N"));
-        Directory.CreateDirectory(testDir);
+        // Reduce max file size to force rotation quickly
+        GameLogger logger = GameLogger.EnsureInstance();
+        logger.config.maxFileSizeMB = 0; // 0 MB => any write triggers rotation
 
-        try
-        {
-            // Verify file name generation pattern
-            string timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss");
-            string session = "rot_test";
-            string file1 = Path.Combine(testDir, $"game_{timestamp}_{session}.log");
-            string file2 = Path.Combine(testDir, $"game_{timestamp}_{session}_02.log");
+        // Write a log entry that will exceed size and cause rotation
+        GameLogger.LogInfo("TEST", "rotation_trigger", "First entry before rotation");
+        GameLogger.Flush();
 
-            File.WriteAllText(file1, "part 1");
-            File.WriteAllText(file2, "part 2");
+        // Invoke rotation explicitly to ensure it occurs
+        MethodInfo rotate = typeof(GameLogger).GetMethod("RotateLogFile", BindingFlags.NonPublic | BindingFlags.Instance);
+        rotate.Invoke(logger, null);
 
-            Assert(File.Exists(file1) && File.Exists(file2), "Test 5.1: Numbered rotation file path pattern verified");
-        }
-        finally
-        {
-            if (Directory.Exists(testDir))
-                Directory.Delete(testDir, true);
-        }
+        string dir = GameLogger.LogDirectory;
+        var files = Directory.GetFiles(dir, "game_*.log");
+        Assert(files.Length >= 2, "Test 5.1: Rotation should create a second log file", string.Join(", ", files));
     }
 
     private static void Test6_RetentionCleanupLogic()
