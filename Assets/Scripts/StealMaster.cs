@@ -383,7 +383,7 @@ public class StealMaster : MonoBehaviour
             else
             {
                 // should not happen, but treat as empty
-                puim.ShowPopup("Nothing here...");
+                puim.ShowPopup(LocalizationManager.GetOrFallback("ui.notice.nothing_here", "Nothing here..."));
                 // CHANGED: Show empty sprite
                 if (emptySlotSprite != null)
                     slot.sprite = emptySlotSprite;
@@ -394,7 +394,7 @@ public class StealMaster : MonoBehaviour
         {
             // slot was never found => empty
             Debug.Log("Clicked empty slot during collecting.");
-            puim.ShowPopup("Nothing here...");
+                puim.ShowPopup(LocalizationManager.GetOrFallback("ui.notice.nothing_here", "Nothing here..."));
             // CHANGED: Show empty sprite
             if (emptySlotSprite != null)
                 slot.sprite = emptySlotSprite;

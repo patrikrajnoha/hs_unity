@@ -53,12 +53,14 @@ public class SteamNetworkManager : MonoBehaviour
         if (!connectedPlayers.Contains(request.m_steamIDRemote))
         {
             connectedPlayers.Add(request.m_steamIDRemote);
+            GameLogger.LogInfo("network", "player_connected", $"Accepted P2P session from {request.m_steamIDRemote}. Total players: {connectedPlayers.Count + 1}");
             Debug.Log($" Connected to player! Total players: {connectedPlayers.Count + 1}");
         }
     }
 
     void OnP2PSessionConnectFail(P2PSessionConnectFail_t failure)
     {
+        GameLogger.LogError("network", "connection_failed", $"P2P session connection failed: {failure.m_eP2PSessionError}");
         Debug.LogError($" Connection failed: {failure.m_eP2PSessionError}");
     }
 

@@ -14,17 +14,42 @@ namespace HighStakes.City
         private Font font;
         private RectTransform root;
         private Text objective, mission, status, prompt, direction, toast, body, speaker;
+        private Text brandLabel, subtitleLabel, contractLabel, mapLabel;
         private GameObject dialogue;
         private GameObject resultOverlay;
         public bool ResultsVisible => resultOverlay != null && resultOverlay.activeSelf;
+        public bool IsDialogueVisible => dialogue != null && dialogue.activeSelf;
         private readonly Button[] choices = new Button[3];
         private readonly Text[] labels = new Text[3];
         private float toastUntil;
         private RectTransform playerDot, targetDot, officerDot;
         public Action<int> Choose;
 
+        private void OnEnable()
+        {
+            LocalizationManager.LanguageChanged += RefreshLocalizedLabels;
+        }
+
+        private void OnDestroy()
+        {
+            LocalizationManager.LanguageChanged -= RefreshLocalizedLabels;
+        }
+
+        private void RefreshLocalizedLabels()
+        {
+            if (brandLabel != null)
+                brandLabel.text = LocalizationManager.GetOrFallback("ui.city.brand", "HIGHSTAKES");
+            if (subtitleLabel != null)
+                subtitleLabel.text = LocalizationManager.GetOrFallback("ui.city.subtitle", "OLD QUARTER  /  CONTRACTS");
+            if (contractLabel != null)
+                contractLabel.text = LocalizationManager.GetOrFallback("ui.city.current_contract", "CURRENT CONTRACT");
+            if (mapLabel != null)
+                mapLabel.text = LocalizationManager.GetOrFallback("ui.city.old_quarter", "OLD QUARTER");
+        }
+
         public void Build()
         {
+            LocalizationManager.EnsureLoaded();
             font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             var canvasObject = new GameObject("Old Quarter HUD", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             canvasObject.transform.SetParent(transform, false);
@@ -40,26 +65,28 @@ namespace HighStakes.City
                 new GameObject("City Event System", typeof(EventSystem), typeof(InputSystemUIInputModule));
 
             var brand = Panel("Brand", root, new Vector2(0, 1), new Vector2(30, -28), new Vector2(350, 76), Ink);
-            Label(brand, "HIGHSTAKES", 26, Color.white, new Vector2(18, -8), new Vector2(310, 36));
-            Label(brand, "OLD QUARTER  /  CONTRACTS", 11, Mint, new Vector2(19, -48), new Vector2(310, 18));
+            brandLabel = Label(brand, LocalizationManager.GetOrFallback("ui.city.brand", "HIGHSTAKES"), 26, Color.white,
+                new Vector2(18, -8), new Vector2(310, 36));
+            subtitleLabel = Label(brand, LocalizationManager.GetOrFallback("ui.city.subtitle", "OLD QUARTER  /  CONTRACTS"), 11,
+                Mint, new Vector2(19, -48), new Vector2(310, 18));
             var card = Panel("Contract", root, new Vector2(0, 1), new Vector2(30, -120), new Vector2(350, 176), Ink);
             Panel("Accent", card, new Vector2(0, 1), Vector2.zero, new Vector2(3, 176), Mint);
-            Label(card, "CURRENT CONTRACT", 11, Muted, new Vector2(20, -16), new Vector2(310, 20));
+            contractLabel = Label(card, LocalizationManager.GetOrFallback("ui.city.current_contract", "CURRENT CONTRACT"), 11,
+                Muted, new Vector2(20, -16), new Vector2(310, 20));
             mission = Label(card, "", 21, Color.white, new Vector2(20, -45), new Vector2(310, 38));
             objective = Label(card, "", 16, Muted, new Vector2(20, -90), new Vector2(310, 72));
-            var statusPanel = Panel("Status", root, new Vector2(1, 1), new Vector2(-30, -28), new Vector2(290, 154), Ink);
-            status = Label(statusPanel, "", 17, Mint, new Vector2(20, -16), new Vector2(252, 126));
+            var statusPanel = Panel("Status", root, new Vector2(1, 1), new Vector2(-30, -28), new Vector2(300, 94), new Color32(12, 22, 29, 232));
+            Panel("Accent", statusPanel, new Vector2(0, 1), Vector2.zero, new Vector2(3, 94), Mint);
+            status = Label(statusPanel, "", 15, Color.white, new Vector2(18, -14), new Vector2(266, 68));
             status.supportRichText = true;
+            status.horizontalOverflow = HorizontalWrapMode.Overflow;
+            status.lineSpacing = 3;
             direction = Label(root, "", 17, Mint, new Vector2(-240, -34), new Vector2(480, 70), new Vector2(0.5f, 1));
             direction.alignment = TextAnchor.MiddleCenter;
-            prompt = Label(root, "", 18, Color.white, new Vector2(-350, 112), new Vector2(700, 40), new Vector2(0.5f, 0));
+            prompt = Label(root, "", 18, Color.white, new Vector2(-350, 168), new Vector2(700, 40), new Vector2(0.5f, 0));
             prompt.alignment = TextAnchor.MiddleCenter;
             toast = Label(root, "", 20, Mint, new Vector2(-400, -132), new Vector2(800, 70), new Vector2(0.5f, 1));
             toast.alignment = TextAnchor.MiddleCenter;
-            var controls = Label(root, "WASD  MOVE     SHIFT  RUN     SPACE  JUMP     V  CAMERA     E  INTERACT     ESC  MENU", 12,
-                Muted, new Vector2(-530, 35), new Vector2(1060, 28), new Vector2(0.5f, 0));
-            controls.alignment = TextAnchor.MiddleCenter;
-
             var dialogRect = Panel("Conversation", root, new Vector2(0.5f, 0), new Vector2(0, 70), new Vector2(980, 310), Ink);
             dialogRect.pivot = new Vector2(0.5f, 0);
             dialogue = dialogRect.gameObject;
@@ -81,7 +108,8 @@ namespace HighStakes.City
             }
             dialogue.SetActive(false);
             var map = Panel("District map", root, new Vector2(1, 0), new Vector2(-30, 70), new Vector2(196, 220), Ink);
-            Label(map, "OLD QUARTER", 10, Muted, new Vector2(15, -10), new Vector2(170, 20));
+            mapLabel = Label(map, LocalizationManager.GetOrFallback("ui.city.old_quarter", "OLD QUARTER"), 10, Muted,
+                new Vector2(15, -10), new Vector2(170, 20));
             var mapArea = Panel("Streets", map, new Vector2(0.5f, 0.5f), new Vector2(0, -10), new Vector2(168, 168), new Color32(31, 45, 51, 255));
             mapArea.pivot = Vector2.one * 0.5f;
             foreach (int x in new[] { -1, 1 })
@@ -97,10 +125,22 @@ namespace HighStakes.City
 
         public void Refresh(ContractProgress progress, float distance, string target, string police, string interaction, string room)
         {
-            mission.text = progress.Finished ? "Campaign complete" : progress.Current.title;
-            objective.text = progress.Finished ? "The case is closed." : progress.Step.objective;
-            string clock = progress.Active ? $"\n{Mathf.CeilToInt(Mathf.Max(0, progress.Current.timeLimit - progress.Elapsed))}s remaining" : "";
-            status.text = $"LEVEL {Mathf.Min(progress.ContractIndex + 1, progress.Story.contracts.Length)}/{progress.Story.contracts.Length}    SCORE {progress.Score}\n${progress.Money:0000}    /    REP {progress.Reputation}\n<color=#BBCACC>{police}</color>{clock}";
+            bool freeRoam = progress.Finished || !progress.Active;
+            mission.text = freeRoam ? LocalizationManager.GetOrFallback("ui.city.free_roam", "FREE ROAM") : progress.Current.title;
+            objective.text = progress.Finished ? LocalizationManager.GetOrFallback("ui.city.case_closed", "The case is closed. Explore the district freely.") :
+                freeRoam ? LocalizationManager.GetOrFallback("ui.city.next_story", "Next story mission available from Mara.") : progress.Step.objective;
+            int secondsRemaining = Mathf.CeilToInt(Mathf.Max(0, progress.Current.timeLimit - progress.Elapsed));
+            string clock = progress.Active
+                ? "  <color=#A0B5B7>◷</color> " + LocalizationManager.GetOrFallback(
+                    "ui.city.remaining", "{seconds}s remaining", "seconds", secondsRemaining.ToString())
+                : "";
+            string state = freeRoam
+                ? LocalizationManager.GetOrFallback("ui.city.free_roam", "FREE ROAM")
+                : LocalizationManager.GetOrFallback("ui.city.level", "LEVEL") + " " +
+                  $"{Mathf.Min(progress.ContractIndex + 1, progress.Story.contracts.Length)}/{progress.Story.contracts.Length}";
+            status.text = $"<color=#77E9C4>●</color> {state}\n" +
+                $"<color=#FFC25C>★</color> {progress.Score}    <color=#77E9C4>◆</color> {progress.Reputation}    <color=#A0B5B7>$</color>{progress.Money:0000}\n" +
+                $"<color=#A0B5B7>⌂</color> <color=#BBCACC>{police}</color>{clock}";
             direction.text = string.IsNullOrEmpty(target) ? "" : $"{target.ToUpperInvariant()}\n{distance:0} m  /  {room}";
             direction.fontSize = 14;
             prompt.text = dialogue.activeSelf ? "" : interaction;
@@ -125,7 +165,7 @@ namespace HighStakes.City
 
         public void HideResults() { if (resultOverlay != null) resultOverlay.SetActive(false); }
 
-        public void ShowResults(ContractProgress progress, int best, Action next, Action replay, Action quit)
+        public void ShowResults(ContractProgress progress, int best, Action next, Action freeRoam, Action replay, Action quit)
         {
             if (resultOverlay != null) Destroy(resultOverlay);
             var cover = Panel("Campaign results", root, Vector2.zero, Vector2.zero, Vector2.zero, new Color32(6, 14, 20, 250));
@@ -135,14 +175,33 @@ namespace HighStakes.City
             var card = Panel("Score card", cover, Vector2.one * 0.5f, Vector2.zero, new Vector2(1000, 720), Ink);
             card.pivot = Vector2.one * 0.5f;
             bool final = progress.Finished;
-            Label(card, final ? "CASE CLOSED / CAMPAIGN COMPLETE" : $"LEVEL {progress.Results.Count} COMPLETE", 16, Mint,
+            string resultTitle = final
+                ? LocalizationManager.GetOrFallback("ui.city.case_closed_title", "CASE CLOSED / CAMPAIGN COMPLETE")
+                : LocalizationManager.GetOrFallback("ui.city.level_complete", "LEVEL {level} COMPLETE", "level", progress.Results.Count.ToString());
+            Label(card, resultTitle, 16, Mint,
                 new Vector2(40, -26), new Vector2(920, 30));
-            Label(card, final ? $"{progress.Score:N0} POINTS  /  RANK {progress.Rank}" : $"+{progress.Results[progress.Results.Count - 1].score:N0} POINTS", 38,
+            string points = final
+                ? LocalizationManager.GetOrFallback("ui.city.points_rank", "{points} POINTS  /  RANK {rank}",
+                    "points", progress.Score.ToString("N0"), "rank", progress.Rank)
+                : LocalizationManager.GetOrFallback("ui.city.points_gained", "+{points} POINTS",
+                    "points", progress.Results[progress.Results.Count - 1].score.ToString("N0"));
+            Label(card, points, 38,
                 Color.white, new Vector2(40, -76), new Vector2(920, 60));
-            string summary = $"{progress.Results.Count}/{progress.Story.contracts.Length} levels   /   {progress.Failures} retries   /   {progress.Mistakes} mistakes   /   {Mathf.FloorToInt(progress.TotalTime / 60)}m {Mathf.FloorToInt(progress.TotalTime % 60)}s";
+            string summary = LocalizationManager.GetOrFallback("ui.city.summary",
+                "{completed}/{total} levels   /   {retries} retries   /   {mistakes} mistakes   /   {minutes}m {seconds}s",
+                "completed", progress.Results.Count.ToString(), "total", progress.Story.contracts.Length.ToString(),
+                "retries", progress.Failures.ToString(), "mistakes", progress.Mistakes.ToString(),
+                "minutes", Mathf.FloorToInt(progress.TotalTime / 60).ToString(), "seconds", Mathf.FloorToInt(progress.TotalTime % 60).ToString());
             Label(card, summary, 18, Muted, new Vector2(40, -145), new Vector2(920, 32));
-            Label(card, "LEVEL", 14, Mint, new Vector2(40, -207), new Vector2(350, 30));
-            string[] columns = { "BASE", "TIME", "CLEAN", "PENALTY", "TOTAL" };
+            Label(card, LocalizationManager.GetOrFallback("ui.city.level", "LEVEL"), 14, Mint,
+                new Vector2(40, -207), new Vector2(350, 30));
+            string[] columns = {
+                LocalizationManager.GetOrFallback("ui.city.base", "BASE"),
+                LocalizationManager.GetOrFallback("ui.city.time", "TIME"),
+                LocalizationManager.GetOrFallback("ui.city.clean", "CLEAN"),
+                LocalizationManager.GetOrFallback("ui.city.penalty", "PENALTY"),
+                LocalizationManager.GetOrFallback("ui.city.total", "TOTAL")
+            };
             for (int col = 0; col < columns.Length; col++)
                 Label(card, columns[col], 13, Mint, new Vector2(420 + col * 106, -207), new Vector2(100, 30)).alignment = TextAnchor.MiddleRight;
             int row = 0;
@@ -154,17 +213,25 @@ namespace HighStakes.City
                     Label(card, values[col], 16, col == 4 ? Mint : Muted, new Vector2(420 + col * 106, -248 - row * 43), new Vector2(100, 32)).alignment = TextAnchor.MiddleRight;
                 row++;
             }
-            string footer = final ? $"BEST SCORE: {best:N0}  /  Your evidence reached the public. The district is safe."
-                : $"CAMPAIGN SCORE: {progress.Score:N0}  /  Next: {progress.Current.title}";
+            string footer = final
+                ? LocalizationManager.GetOrFallback("ui.city.best_score",
+                    "BEST SCORE: {score}  /  Your evidence reached the public. The district is safe.",
+                    "score", best.ToString("N0"))
+                : LocalizationManager.GetOrFallback("ui.city.campaign_score",
+                    "CAMPAIGN SCORE: {score}  /  Next: {next}",
+                    "score", progress.Score.ToString("N0"), "next", progress.Current.title);
             Label(card, footer, 17, Mint, new Vector2(40, -492), new Vector2(920, 60));
-            Label(card, "Time bonus: 2 points per second remaining. Clean run: +300. Retry: -200. Wrong answer: -75.", 13,
+            Label(card, LocalizationManager.GetOrFallback("ui.city.time_bonus_rules",
+                "Time bonus: 2 points per second remaining. Clean run: +300. Retry: -200. Wrong answer: -75."), 13,
                 Muted, new Vector2(40, -562), new Vector2(920, 40));
             if (final)
             {
-                ResultButton(card, "NEW CAMPAIGN", new Vector2(40, -632), new Vector2(440, 50), replay);
-                ResultButton(card, "QUIT GAME", new Vector2(520, -632), new Vector2(440, 50), quit);
+                ResultButton(card, LocalizationManager.GetOrFallback("ui.city.continue_free_roam", "CONTINUE FREE ROAM"), new Vector2(40, -632), new Vector2(300, 50), freeRoam);
+                ResultButton(card, LocalizationManager.GetOrFallback("ui.city.new_campaign", "NEW CAMPAIGN"), new Vector2(350, -632), new Vector2(300, 50), replay);
+                ResultButton(card, LocalizationManager.GetOrFallback("ui.city.quit_game", "QUIT GAME"), new Vector2(660, -632), new Vector2(300, 50), quit);
             }
-            else ResultButton(card, "CONTINUE TO NEXT LEVEL  [ ENTER ]", new Vector2(40, -632), new Vector2(920, 50), next);
+            else ResultButton(card, LocalizationManager.GetOrFallback("ui.city.continue_free_roam_enter", "CONTINUE FREE ROAM  [ ENTER ]"),
+                new Vector2(40, -632), new Vector2(920, 50), next);
             prompt.text = ""; direction.text = "";
         }
         private void ResultButton(Transform parent, string text, Vector2 position, Vector2 size, Action action)

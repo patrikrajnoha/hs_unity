@@ -12,9 +12,13 @@ namespace HighStakes.City
         private Transform geometry;
         private Material stone, asphalt, pavement, trim, glass, foliage, skin, navy, mint;
         private readonly Dictionary<string, CityActor> actors = new Dictionary<string, CityActor>();
+        private SafehouseFarmingSystem safehouseFarming;
 
         private void Awake()
         {
+            if (FindAnyObjectByType<PauseMenuController>() == null)
+                gameObject.AddComponent<PauseMenuController>();
+
             CreatePalette();
             ConfigureLighting();
             BuildDistrict();
@@ -171,7 +175,7 @@ namespace HighStakes.City
             module.SetParent(geometry, false); module.localPosition = position;
             string room = null; int unlockLevel = 1;
             if (position.x == 17 && position.z == 19) room = "The Jade Room / Cafe";
-            if (position.x == -17 && position.z == -19) { room = "Workshop / Safehouse"; unlockLevel = 2; }
+            if (position.x == -17 && position.z == -19) { room = "Workshop / Safehouse"; unlockLevel = 1; }
             if (position.x == 32 && position.z == -19) { room = "Warehouse / Records"; unlockLevel = 3; }
             if (position.x == -17 && position.z == 19) { room = "Radio House / Studio"; unlockLevel = 5; }
             if (room == null)
@@ -198,6 +202,11 @@ namespace HighStakes.City
                 var upper = Box("Ceiling and upper floors", module, Vector3.up * ((height + 3.8f) / 2), new Vector3(width, height - 3.8f, depth), wall);
                 var upperModifier = upper.AddComponent<NavMeshModifier>(); upperModifier.overrideArea = true; upperModifier.area = 1;
                 FurnishRoom(module, room);
+                if (room == "Workshop / Safehouse")
+                {
+                    safehouseFarming = module.gameObject.AddComponent<SafehouseFarmingSystem>();
+                    safehouseFarming.Build(module, stone, trim, glass, navy, mint);
+                }
                 AddDoor(module, room, unlockLevel, depth);
                 var lamp = new GameObject("Interior warm light").AddComponent<Light>();
                 lamp.transform.SetParent(module, false); lamp.transform.localPosition = new Vector3(0, 3.2f, 0);
@@ -223,7 +232,7 @@ namespace HighStakes.City
             go.transform.position = room.TransformPoint(new Vector3(0, 0, -depth / 2));
             go.transform.rotation = room.rotation;
             var actor = go.AddComponent<CityActor>();
-            actor.id = "door_" + level; actor.displayName = "Door / " + name;
+            actor.id = "door_" + name.ToLowerInvariant().Replace(" / ", "_").Replace(" ", "_"); actor.displayName = "Door / " + name;
             actors.Add(actor.id, actor);
             var hinge = new GameObject("Hinge").transform;
             hinge.SetParent(go.transform, false); hinge.localPosition = new Vector3(-1.1f, 0, 0);
@@ -248,10 +257,13 @@ namespace HighStakes.City
             }
             else if (name.Contains("Workshop"))
             {
-                Box("Workbench", room, new Vector3(2.8f, 0.45f, 2), new Vector3(2.8f, 0.9f, 1.3f), trim);
-                Box("Tool shelf", room, new Vector3(-3.5f, 0.9f, 3.5f), new Vector3(1.2f, 1.8f, 0.6f), navy);
-                Box("Safehouse sofa", room, new Vector3(2.8f, 0.45f, 4.4f), new Vector3(2.6f, 0.9f, 1), mint);
-                Box("Fuse board casing", room, new Vector3(-3.5f, 1.2f, 0), new Vector3(0.25f, 0.95f, 1.2f), navy);
+                // Keep the centre line clear from the entrance to the back wall.
+                // The right side becomes the practical work/rest zone; the
+                // farming system uses the left side for the grow rack.
+                Box("Workbench", room, new Vector3(2.75f, 0.45f, 2.45f), new Vector3(2.4f, 0.9f, 1.1f), trim);
+                Box("Tool shelf", room, new Vector3(3.75f, 0.9f, 0.25f), new Vector3(0.85f, 1.8f, 0.65f), navy);
+                Box("Safehouse sofa", room, new Vector3(2.65f, 0.45f, 4.25f), new Vector3(2.7f, 0.9f, 1), mint);
+                Box("Fuse board casing", room, new Vector3(-4.35f, 1.2f, -0.7f), new Vector3(0.25f, 0.95f, 1.2f), navy);
             }
             else if (name.Contains("Warehouse"))
             {
@@ -294,6 +306,7 @@ namespace HighStakes.City
         private PlayerController CreatePlayer(Vector3 position)
         {
             var go = new GameObject("Old Quarter Player");
+            go.tag = "Player";
             go.transform.position = position;
             var collider = go.AddComponent<CharacterController>();
             collider.height = 1.8f; collider.center = Vector3.up * 0.9f; collider.radius = 0.3f; collider.stepOffset = 0.3f;
@@ -305,10 +318,15 @@ namespace HighStakes.City
             camera.nearClipPlane = 0.08f; camera.farClipPlane = 180; camera.fieldOfView = 62;
             var player = go.AddComponent<PlayerController>();
             player.playerCamera = camera.transform;
+            // Keep the system cursor hidden for camera look, but show a small
+            // in-game pointer at the centre of the player's view.
+            go.AddComponent<PlayerAimReticle>();
             go.AddComponent<CityInputBridge>();
             var switcher = go.AddComponent<PlayerCameraModeSwitcher>();
             switcher.SetFirstPersonPosition(new Vector3(0, 1.65f, 0.05f));
             switcher.SetMode(PlayerCameraModeSwitcher.CameraMode.ThirdPerson);
+            if (safehouseFarming != null)
+                safehouseFarming.ConfigurePlayer(go);
             return player;
         }
 

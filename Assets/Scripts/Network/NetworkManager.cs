@@ -92,6 +92,7 @@ public class NetworkManager : MonoBehaviour
 
             // The person who RECEIVES the connection is the HOST
             isHost = true;
+            GameLogger.LogInfo("network", "player_connected", $"Accepted connection from {request.m_steamIDRemote.m_SteamID} as HOST. Total: {connectedPlayers.Count + 1}");
             Debug.Log($" YOU ARE NOW THE HOST! (received connection)");
             Debug.Log($" Total players: {connectedPlayers.Count + 1}");
         }
@@ -103,6 +104,7 @@ public class NetworkManager : MonoBehaviour
 
     void OnP2PSessionConnectFail(P2PSessionConnectFail_t failure)
     {
+        GameLogger.LogError("network", "connection_failed", $"P2P connection failed: {failure.m_eP2PSessionError}");
         Debug.LogError($" Connection failed: {failure.m_eP2PSessionError}");
     }
 
@@ -113,6 +115,7 @@ public class NetworkManager : MonoBehaviour
         if (ulong.TryParse(steamIDString, out ulong id))
         {
             CSteamID friendId = new CSteamID(id);
+            GameLogger.LogInfo("network", "connect_attempt", $"Connecting to Steam ID: {id}");
             Debug.Log($" Attempting to connect to Steam ID: {id}");
 
             // The person who clicks CONNECT is the CLIENT (not host)
@@ -129,6 +132,7 @@ public class NetworkManager : MonoBehaviour
             if (!connectedPlayers.Contains(friendId))
             {
                 connectedPlayers.Add(friendId);
+                GameLogger.LogInfo("network", "player_connected", $"Connected to friend {id}. Total: {connectedPlayers.Count + 1}");
                 Debug.Log($" Added friend to connected players list. Total: {connectedPlayers.Count + 1}");
             }
             else
@@ -138,6 +142,7 @@ public class NetworkManager : MonoBehaviour
         }
         else
         {
+            GameLogger.LogError("network", "invalid_steam_id", "Invalid Steam ID format: " + steamIDString);
             Debug.LogError(" Invalid Steam ID format!");
         }
     }
@@ -153,6 +158,7 @@ public class NetworkManager : MonoBehaviour
         }
 
         Debug.Log(" Host starting game...");
+        GameLogger.LogInfo("network", "game_started", "Host started game session");
         gameStarted = true;
 
         // Tell all connected players to load the game scene
@@ -197,6 +203,7 @@ public class NetworkManager : MonoBehaviour
         // Spawn local player (host gets spawn 0, client gets spawn 1)
         int mySpawnIndex = isHost ? 0 : 1;
         Debug.Log($"My spawn index: {mySpawnIndex}");
+        GameLogger.LogInfo("network", "players_spawned", $"Spawned player as {(isHost ? "HOST" : "CLIENT")} at index {mySpawnIndex}");
         SpawnLocalPlayer(spawnPoints[mySpawnIndex].position, spawnPoints[mySpawnIndex].rotation);
 
         // Spawn remote players

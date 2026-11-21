@@ -107,6 +107,11 @@ public static class UiModernizer
 
     private static void ApplyMenu(Transform canvas)
     {
+        // The runtime-generated menu owns its complete visual hierarchy.
+        // Do not add the legacy MenuBrand/backdrop on top of it.
+        if (canvas != null && canvas.name == "Main Menu Canvas")
+            return;
+
         GameObject mainPanel = FindNamed("MenuWindow");
         if (mainPanel != null)
         {
@@ -607,7 +612,9 @@ public static class UiModernizer
         title.characterSpacing = 2f;
         title.raycastTarget = false;
 
-        GameObject subtitle = CreateTextObject("ModernHudSubtitle", root.transform, "LIVE OPERATION  •  ESC TO PAUSE", 12f, TextAlignmentOptions.Left);
+        GameObject subtitle = CreateTextObject("ModernHudSubtitle", root.transform,
+            LocalizationManager.GetOrFallback("ui.hud.live_operation", "LIVE OPERATION  •  ESC TO PAUSE"),
+            12f, TextAlignmentOptions.Left);
         RectTransform subtitleRect = subtitle.GetComponent<RectTransform>();
         Anchor(subtitleRect, new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(0f, -21f), new Vector2(350f, 24f));
         subtitle.GetComponent<TMP_Text>().color = Muted;

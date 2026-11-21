@@ -12,23 +12,43 @@ public class PauseMenuController : MonoBehaviour
     [SerializeField] private Button quitButton;
 
     private Button settingsButton;
+    private Button languageButton;
     private Button minimapToggleButton;
     private Button closeSettingsButton;
     private GameObject settingsPanel;
+    private TMP_Text pauseTitleLabel;
+    private TMP_Text resumeLabel;
+    private TMP_Text mainMenuLabel;
+    private TMP_Text quitLabel;
+    private TMP_Text settingsButtonLabel;
+    private TMP_Text settingsTitleLabel;
+    private TMP_Text languageLabel;
     private TMP_Text minimapToggleLabel;
+    private TMP_Text closeSettingsLabel;
     private MinimapController minimapController;
+    private HighStakes.City.CityMissionDirector cityMissionDirector;
 
     private bool isPaused;
     private CursorLockMode previousCursorLockState;
     private bool previousCursorVisible;
 
+    public bool IsPaused => isPaused;
+
     private void Awake()
     {
+        LocalizationManager.EnsureLoaded();
+        if (pausePanel == null)
+            BuildRuntimePauseUi();
         SetPaused(false);
     }
 
     private void Start()
     {
+        pauseTitleLabel = FindLabel(pauseTitleLabel, "PauseTitle");
+        resumeLabel = FindLabel(resumeLabel, resumeButton);
+        mainMenuLabel = FindLabel(mainMenuLabel, mainMenuButton);
+        quitLabel = FindLabel(quitLabel, quitButton);
+
         if (resumeButton != null)
             resumeButton.onClick.AddListener(ResumeGame);
 
@@ -39,6 +59,8 @@ public class PauseMenuController : MonoBehaviour
             quitButton.onClick.AddListener(QuitGame);
 
         BuildSettingsUi();
+        LocalizationManager.LanguageChanged += UpdateLocalizedUi;
+        UpdateLocalizedUi();
     }
 
     private void Update()
@@ -47,7 +69,15 @@ public class PauseMenuController : MonoBehaviour
             return;
 
         if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (cityMissionDirector == null)
+                cityMissionDirector = FindAnyObjectByType<HighStakes.City.CityMissionDirector>();
+
+            if (cityMissionDirector != null && cityMissionDirector.HandleEscape())
+                return;
+
             TogglePause();
+        }
     }
 
     private void OnDestroy()
@@ -65,10 +95,14 @@ public class PauseMenuController : MonoBehaviour
 
         if (settingsButton != null)
             settingsButton.onClick.RemoveListener(OpenSettings);
+        if (languageButton != null)
+            languageButton.onClick.RemoveListener(ToggleLanguage);
         if (minimapToggleButton != null)
             minimapToggleButton.onClick.RemoveListener(ToggleMinimap);
         if (closeSettingsButton != null)
             closeSettingsButton.onClick.RemoveListener(CloseSettings);
+
+        LocalizationManager.LanguageChanged -= UpdateLocalizedUi;
     }
 
     public void TogglePause()
@@ -78,17 +112,20 @@ public class PauseMenuController : MonoBehaviour
 
     public void ResumeGame()
     {
+        GameLogger.LogInfo("gameplay", "pause_resumed", "Game resumed from pause menu");
         SetPaused(false);
     }
 
     public void ReturnToMainMenu()
     {
+        GameLogger.LogInfo("gameplay", "return_to_main_menu", "Returning to Menu from pause menu");
         SetPaused(false);
         SceneManager.LoadScene("Menu");
     }
 
     public void QuitGame()
     {
+        GameLogger.LogInfo("gameplay", "quit_game", "Quitting game from pause menu");
         SetPaused(false);
 
 #if UNITY_EDITOR
@@ -140,8 +177,9 @@ public class PauseMenuController : MonoBehaviour
         if (quitRect != null)
             quitRect.anchoredPosition = new Vector2(quitRect.anchoredPosition.x, -145f);
 
-        settingsButton = CreateButton("SettingsButton", card, "SETTINGS", new Vector2(0f, -75f),
+        settingsButton = CreateButton("SettingsButton", card, "", new Vector2(0f, -75f),
             new Color(0.376f, 0.835f, 0.91f, 0.92f));
+        settingsButtonLabel = settingsButton.GetComponentInChildren<TMP_Text>(true);
         settingsButton.onClick.AddListener(OpenSettings);
 
         settingsPanel = CreateUiObject("SettingsPanel", pausePanel.transform);
@@ -154,28 +192,80 @@ public class PauseMenuController : MonoBehaviour
         GameObject settingsCard = CreateUiObject("SettingsCard", settingsPanel.transform);
         RectTransform settingsCardRect = settingsCard.GetComponent<RectTransform>();
         Anchor(settingsCardRect, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            Vector2.zero, new Vector2(460f, 300f));
+            Vector2.zero, new Vector2(460f, 340f));
         Image cardImage = settingsCard.AddComponent<Image>();
         cardImage.color = new Color(0.09f, 0.145f, 0.243f, 0.98f);
         AddOutline(settingsCard, new Color(0.38f, 0.84f, 0.91f, 0.4f));
 
-        GameObject title = CreateLabel("SettingsTitle", settingsCard.transform, "SETTINGS", 26f,
+        GameObject title = CreateLabel("SettingsTitle", settingsCard.transform, "", 26f,
             TextAlignmentOptions.Center);
         Anchor(title.GetComponent<RectTransform>(), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
             new Vector2(0f, -34f), new Vector2(400f, 42f));
-        title.GetComponent<TMP_Text>().color = new Color(0.38f, 0.84f, 0.91f, 1f);
+        settingsTitleLabel = title.GetComponent<TMP_Text>();
+        settingsTitleLabel.color = new Color(0.38f, 0.84f, 0.91f, 1f);
 
-        minimapToggleButton = CreateButton("MinimapToggleButton", settingsCard.transform, "", new Vector2(0f, 18f),
+        minimapToggleButton = CreateButton("MinimapToggleButton", settingsCard.transform, "", new Vector2(0f, 44f),
             new Color(0.376f, 0.835f, 0.91f, 0.92f));
         minimapToggleLabel = minimapToggleButton.GetComponentInChildren<TMP_Text>(true);
         minimapToggleButton.onClick.AddListener(ToggleMinimap);
 
-        closeSettingsButton = CreateButton("CloseSettingsButton", settingsCard.transform, "BACK", new Vector2(0f, -72f),
+        languageButton = CreateButton("LanguageButton", settingsCard.transform, "", new Vector2(0f, -28f),
+            new Color(0.376f, 0.835f, 0.91f, 0.92f));
+        languageLabel = languageButton.GetComponentInChildren<TMP_Text>(true);
+        languageButton.onClick.AddListener(ToggleLanguage);
+
+        closeSettingsButton = CreateButton("CloseSettingsButton", settingsCard.transform, "", new Vector2(0f, -100f),
             new Color(0.38f, 0.45f, 0.56f, 0.92f));
+        closeSettingsLabel = closeSettingsButton.GetComponentInChildren<TMP_Text>(true);
         closeSettingsButton.onClick.AddListener(CloseSettings);
 
         settingsPanel.SetActive(false);
+        UpdateLocalizedUi();
         UpdateMinimapToggleLabel();
+    }
+
+    private void BuildRuntimePauseUi()
+    {
+        GameObject canvasObject = CreateUiObject("Pause Menu Canvas", null);
+        Canvas canvas = canvasObject.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 100;
+        CanvasScaler scaler = canvasObject.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920f, 1080f);
+        scaler.matchWidthOrHeight = 0.5f;
+        canvasObject.AddComponent<GraphicRaycaster>();
+
+        pausePanel = CreateUiObject("PauseWindow", canvasObject.transform);
+        RectTransform panelRect = pausePanel.GetComponent<RectTransform>();
+        Stretch(panelRect);
+        Image overlay = pausePanel.AddComponent<Image>();
+        overlay.color = new Color(0.01f, 0.02f, 0.05f, 0.78f);
+        overlay.raycastTarget = true;
+
+        GameObject card = CreateUiObject("PauseMenuCard", pausePanel.transform);
+        Anchor(card.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+            Vector2.zero, new Vector2(440f, 400f));
+        Image cardImage = card.AddComponent<Image>();
+        cardImage.color = new Color32(23, 37, 62, 250);
+        AddOutline(card, new Color32(96, 213, 232, 180));
+
+        GameObject title = CreateLabel("PauseTitle", card.transform, "", 30f,
+            TextAlignmentOptions.Center);
+        Anchor(title.GetComponent<RectTransform>(), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
+            new Vector2(0f, -36f), new Vector2(380f, 46f));
+        pauseTitleLabel = title.GetComponent<TMP_Text>();
+        pauseTitleLabel.color = new Color32(96, 213, 232, 255);
+
+        resumeButton = CreateButton("ResumeButton", card.transform, "", new Vector2(0f, 90f),
+            new Color32(96, 213, 232, 255));
+        resumeLabel = resumeButton.GetComponentInChildren<TMP_Text>(true);
+        mainMenuButton = CreateButton("MainMenuButton", card.transform, "", new Vector2(0f, 0f),
+            new Color32(157, 173, 198, 255));
+        mainMenuLabel = mainMenuButton.GetComponentInChildren<TMP_Text>(true);
+        quitButton = CreateButton("QuitButton", card.transform, "", new Vector2(0f, -110f),
+            new Color32(239, 103, 120, 255));
+        quitLabel = quitButton.GetComponentInChildren<TMP_Text>(true);
     }
 
     private void OpenSettings()
@@ -206,6 +296,37 @@ public class PauseMenuController : MonoBehaviour
         UpdateMinimapToggleLabel();
     }
 
+    private void ToggleLanguage()
+    {
+        LocalizationManager.ToggleLanguage();
+    }
+
+    private void UpdateLocalizedUi()
+    {
+        if (pauseTitleLabel != null)
+            pauseTitleLabel.text = LocalizationManager.GetOrFallback("ui.pause.title", "PAUSED");
+        if (resumeLabel != null)
+            resumeLabel.text = LocalizationManager.GetOrFallback("ui.pause.resume", "RESUME GAME");
+        if (mainMenuLabel != null)
+            mainMenuLabel.text = LocalizationManager.GetOrFallback("ui.pause.main_menu", "MAIN MENU");
+        if (quitLabel != null)
+            quitLabel.text = LocalizationManager.GetOrFallback("ui.pause.quit", "QUIT TO DESKTOP");
+        if (settingsButtonLabel != null)
+            settingsButtonLabel.text = LocalizationManager.GetOrFallback("ui.settings.title", "SETTINGS");
+        if (settingsTitleLabel != null)
+            settingsTitleLabel.text = LocalizationManager.GetOrFallback("ui.settings.title", "SETTINGS");
+        if (closeSettingsLabel != null)
+            closeSettingsLabel.text = LocalizationManager.GetOrFallback("ui.settings.back", "BACK");
+        if (languageLabel != null)
+        {
+            string languageName = LocalizationManager.CurrentLanguage == LocalizationManager.Slovak
+                ? LocalizationManager.GetOrFallback("ui.language.slovak", "SLOVAK")
+                : LocalizationManager.GetOrFallback("ui.language.english", "ENGLISH");
+            languageLabel.text = LocalizationManager.GetOrFallback("ui.settings.language", "LANGUAGE") + ": " + languageName;
+        }
+        UpdateMinimapToggleLabel();
+    }
+
     private void UpdateMinimapToggleLabel()
     {
         if (minimapToggleLabel == null)
@@ -215,7 +336,23 @@ public class PauseMenuController : MonoBehaviour
             minimapController = FindAnyObjectByType<MinimapController>(FindObjectsInactive.Include);
 
         bool visible = minimapController == null || minimapController.IsVisible;
-        minimapToggleLabel.text = "MINIMAP: " + (visible ? "ON" : "OFF");
+        string state = visible
+            ? LocalizationManager.GetOrFallback("ui.minimap.on", "ON")
+            : LocalizationManager.GetOrFallback("ui.minimap.off", "OFF");
+        minimapToggleLabel.text = LocalizationManager.GetOrFallback("ui.settings.minimap", "MINIMAP") + ": " + state;
+    }
+
+    private static TMP_Text FindLabel(TMP_Text current, Button button)
+    {
+        return current != null ? current : button != null ? button.GetComponentInChildren<TMP_Text>(true) : null;
+    }
+
+    private TMP_Text FindLabel(TMP_Text current, string objectName)
+    {
+        if (current != null || pausePanel == null)
+            return current;
+        Transform found = pausePanel.transform.Find(objectName);
+        return found != null ? found.GetComponent<TMP_Text>() : null;
     }
 
     private static Button CreateButton(string name, Transform parent, string label, Vector2 position, Color colour)

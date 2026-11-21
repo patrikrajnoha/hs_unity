@@ -32,12 +32,17 @@ public static class HighStakesFeatureBootstrap
 
     public static void EnsureForPlayer(GameObject player)
     {
-        if (player != null && player.GetComponent<HighStakes.City.CityInputBridge>() != null) return;
         if (player == null)
             return;
 
         NetworkPlayer networkPlayer = player.GetComponent<NetworkPlayer>();
         if (networkPlayer != null && !networkPlayer.isLocalPlayer)
+            return;
+
+        if (player.GetComponent<PlayerAimReticle>() == null)
+            player.AddComponent<PlayerAimReticle>();
+
+        if (player.GetComponent<HighStakes.City.CityInputBridge>() != null)
             return;
 
         PoliceHeatController heat = player.GetComponent<PoliceHeatController>();

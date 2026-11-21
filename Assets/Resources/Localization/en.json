@@ -1,0 +1,3119 @@
+{
+  "entries": [
+    {
+      "key": "interaction.prompt",
+      "lines": [
+        "Press E to interact or F to pickpocket"
+      ]
+    },
+    {
+      "key": "personality.friendly.good",
+      "lines": [
+        "Hey buddy! Nice to see you.",
+        "You're in a good mood today!"
+      ]
+    },
+    {
+      "key": "personality.friendly.angry",
+      "lines": [
+        "Whoa, take it easy.",
+        "Relax, no need to be mad."
+      ]
+    },
+    {
+      "key": "personality.friendly.sad",
+      "lines": [
+        "Cheer up, friend.",
+        "You look down. Want to talk?"
+      ]
+    },
+    {
+      "key": "personality.friendly.default",
+      "lines": [
+        "Hi there!"
+      ]
+    },
+    {
+      "key": "personality.suspicious.good",
+      "lines": [
+        "Hmm... trying too hard to smile?",
+        "You seem fake today..."
+      ]
+    },
+    {
+      "key": "personality.suspicious.angry",
+      "lines": [
+        "Why so hostile?",
+        "You look like trouble..."
+      ]
+    },
+    {
+      "key": "personality.suspicious.sad",
+      "lines": [
+        "You hiding something?",
+        "Don't trust those sad eyes..."
+      ]
+    },
+    {
+      "key": "personality.suspicious.default",
+      "lines": [
+        "What are you up to?"
+      ]
+    },
+    {
+      "key": "personality.aggressive.angry",
+      "lines": [
+        "You looking for a fight?!"
+      ]
+    },
+    {
+      "key": "personality.aggressive.default",
+      "lines": [
+        "Back off, I don't like you."
+      ]
+    },
+    {
+      "key": "personality.neutral.good",
+      "lines": [
+        "You seem to be in a good mood today.",
+        "Having a good day?"
+      ]
+    },
+    {
+      "key": "personality.neutral.default",
+      "lines": [
+        "Nice weather today, huh?"
+      ]
+    },
+    {
+      "key": "civilian.friendly.first",
+      "lines": [
+        "Haven't seen you around here before. Keep your eyes open; this street remembers faces."
+      ]
+    },
+    {
+      "key": "civilian.friendly.return",
+      "lines": [
+        "Back again? Good. I was starting to think you only pass through when you need something."
+      ]
+    },
+    {
+      "key": "civilian.friendly.neighborhood",
+      "lines": [
+        "The quiet parts are never as quiet as they look. Ask the shopkeepers, not the loudest people on the corner."
+      ]
+    },
+    {
+      "key": "civilian.friendly.casual",
+      "lines": [
+        "I'm getting through the day. You? Try not to make it harder for everyone else."
+      ]
+    },
+    {
+      "key": "civilian.neutral.first",
+      "lines": [
+        "You're new. That usually means one of two things: business or trouble."
+      ]
+    },
+    {
+      "key": "civilian.neutral.return",
+      "lines": [
+        "We already had this conversation. If you need something specific, say it."
+      ]
+    },
+    {
+      "key": "civilian.neutral.neighborhood",
+      "lines": [
+        "People notice movement around here. They notice patterns even faster."
+      ]
+    },
+    {
+      "key": "civilian.neutral.casual",
+      "lines": [
+        "Nothing much to report. That's usually how I like it."
+      ]
+    },
+    {
+      "key": "civilian.suspicious.first",
+      "lines": [
+        "I don't know you. Start with a name and keep your hands where I can see them."
+      ]
+    },
+    {
+      "key": "civilian.suspicious.return",
+      "lines": [
+        "You again. Either you're persistent or you think I forget quickly."
+      ]
+    },
+    {
+      "key": "civilian.suspicious.neighborhood",
+      "lines": [
+        "I hear plenty. I repeat very little, especially to people who ask too carefully."
+      ]
+    },
+    {
+      "key": "civilian.suspicious.casual",
+      "lines": [
+        "Small talk is how people hide big questions. What do you really want?"
+      ]
+    },
+    {
+      "key": "civilian.aggressive.first",
+      "lines": [
+        "Keep moving. I don't owe strangers a conversation.",
+        "State your business, then get on with your day.",
+        "You're new here. Make the introduction brief."
+      ]
+    },
+    {
+      "key": "civilian.aggressive.return",
+      "lines": [
+        "You came back. Make this quick.",
+        "Back again? Then ask a clear question.",
+        "Again? Keep it short."
+      ]
+    },
+    {
+      "key": "civilian.aggressive.neighborhood",
+      "lines": [
+        "I mind my business. You should try it.",
+        "Nothing I know is yours to ask about.",
+        "Watch the street yourself. I'm not your guide."
+      ]
+    },
+    {
+      "key": "civilian.aggressive.casual",
+      "lines": [
+        "Not interested. Find someone else to bother.",
+        "Small talk isn't my thing. Say what you need.",
+        "I'm busy. If there's a point, get to it."
+      ]
+    },
+    {
+      "key": "civilian.reputation",
+      "lines": [
+        "Your name travels. Whether that's useful depends on which version reached me."
+      ]
+    },
+    {
+      "key": "civilian.suspicion",
+      "lines": [
+        "You look like you're waiting for the street to look away. It won't."
+      ]
+    },
+    {
+      "key": "civilian.stage",
+      "lines": [
+        "Things are changing around here. More people are watching who deals with whom."
+      ]
+    },
+    {
+      "key": "civilian.trusted",
+      "lines": [
+        "You've been straight with me so far. I'll tell you what I know, but don't make me regret it."
+      ]
+    },
+    {
+      "key": "civilian.cold",
+      "lines": [
+        "We didn't leave things on good terms. Say what you need and keep it short."
+      ]
+    },
+    {
+      "key": "civilian.remembers_reputation",
+      "lines": [
+        "Still asking about rumors? I remember what I told you last time. I also remember what you did with it."
+      ]
+    },
+    {
+      "key": "civilian.leave",
+      "lines": [
+        "All right. Keep your head down.",
+        "Fine. Take care of yourself.",
+        "Then keep moving."
+      ]
+    },
+    {
+      "key": "gang.greeting.first",
+      "lines": [
+        "You don't look like you wandered here by accident. Say what you came for.",
+        "If you're here on business, get to the useful part.",
+        "You found us. Now tell me what you need."
+      ]
+    },
+    {
+      "key": "gang.greeting.return",
+      "lines": [
+        "You're back. That means you either learned something or ignored it.",
+        "Back again? Bring a better question this time.",
+        "You're here again. Let's keep this practical."
+      ]
+    },
+    {
+      "key": "gang.talk_shop",
+      "lines": [
+        "The street rewards consistency. Flashy people get remembered; reliable people get paid.",
+        "Move what you can replace. Reliable work beats a loud promise.",
+        "The money is in showing up, not in making a scene."
+      ]
+    },
+    {
+      "key": "gang.stage_starter",
+      "lines": [
+        "You're still proving you can move product. Don't talk about a crew until the numbers speak.",
+        "Keep moving product before you start making bigger promises.",
+        "Build a record first. A crew follows results, not talk."
+      ]
+    },
+    {
+      "key": "gang.stage_recruiting",
+      "lines": [
+        "This is the part where promises become work. If you want people beside you, give them a reason.",
+        "Now the work has to support the talk. Give people a reason to stay.",
+        "A crew needs more than a name. Keep the work moving and the terms clear."
+      ]
+    },
+    {
+      "key": "gang.stage_leader",
+      "lines": [
+        "You've got people moving for you now. Keep them fed, paid, and pointed in the same direction.",
+        "People are following your calls now. Make sure the money and the orders line up.",
+        "Leadership is keeping everyone useful and paid. Don't lose sight of either."
+      ]
+    },
+    {
+      "key": "gang.recruit_offer",
+      "lines": [
+        "You want me working under you? Then make the offer like you mean it.",
+        "You want me on your side? Tell me what the job is and what's in it for me.",
+        "If this is a real offer, give me terms I can judge."
+      ]
+    },
+    {
+      "key": "gang.recruit.more",
+      "lines": [
+        "I can move stock and keep my mouth shut. The question is whether you can do the same.",
+        "I can handle stock, routes, and quiet work. Don't make promises you can't keep.",
+        "I bring steady work and a closed mouth. What are you bringing?"
+      ]
+    },
+    {
+      "key": "gang.greeting.trusted",
+      "lines": [
+        "You kept your word. That buys you a little more of my time.",
+        "You've been reliable. Ask what you came to ask.",
+        "Your word has held up. Let's talk plainly."
+      ]
+    },
+    {
+      "key": "gang.greeting.cold",
+      "lines": [
+        "We remember who wastes our time. Make this conversation worth having.",
+        "We're short on patience today. Get to the point.",
+        "You've used enough of our time already. Make this useful."
+      ]
+    },
+    {
+      "key": "gang.greeting.recruit_followup",
+      "lines": [
+        "You asked me to join you before. If the offer changed, say how.",
+        "Still thinking about working together? Bring me a real plan.",
+        "You raised the idea of a crew before. What are the terms now?"
+      ]
+    },
+    {
+      "key": "gang.recruit.accepted",
+      "lines": [
+        "All right. I'll work with you. Don't make me regret the first step.",
+        "Fine. I'll take the job. Keep your side of the deal and I will too.",
+        "We're working together, then. Make it worth the trust."
+      ]
+    },
+    {
+      "key": "gang.recruit.rejected",
+      "lines": [
+        "No. Come back when you have more than a pitch and a hopeful face.",
+        "Not enough. Come back with terms, not enthusiasm.",
+        "That offer doesn't work for me. Bring something solid next time."
+      ]
+    },
+    {
+      "key": "gang.recruit.declined",
+      "lines": [
+        "Your call. The street keeps moving either way.",
+        "All right. If you change your mind, come prepared.",
+        "No problem. We can talk when you're ready."
+      ]
+    },
+    {
+      "key": "gang.greeting.laura.first",
+      "lines": [
+        "You're here. Good. Keep the questions useful.",
+        "Make it quick—what are you trying to move?",
+        "Don't hover. Tell me what you need."
+      ]
+    },
+    {
+      "key": "gang.greeting.laura.return",
+      "lines": [
+        "Back already? Then come with a better question.",
+        "You're back. Let's keep this practical.",
+        "Again? Fine. What changed?"
+      ]
+    },
+    {
+      "key": "gang.greeting.laura.trusted",
+      "lines": [
+        "You've been reliable. That earns a straight answer.",
+        "Your word has held up. Keep it that way."
+      ]
+    },
+    {
+      "key": "gang.greeting.laura.cold",
+      "lines": [
+        "I've got no patience for another vague pitch. Get to the point.",
+        "You've spent enough of my time. Make this useful."
+      ]
+    },
+    {
+      "key": "gang.greeting.laura.recruit_followup",
+      "lines": [
+        "You asked to work together. If you're serious, be specific.",
+        "Still thinking about joining up? Bring me a real plan."
+      ]
+    },
+    {
+      "key": "gang.greeting.susan.first",
+      "lines": [
+        "Take a breath. If you need something, ask plainly.",
+        "New face? All right—what brings you by?",
+        "Let's skip the tough act. What are you looking for?"
+      ]
+    },
+    {
+      "key": "gang.greeting.susan.return",
+      "lines": [
+        "Back again? I can spare a minute.",
+        "Good to see you again. What are we sorting out?",
+        "You're back. Let's keep the conversation useful."
+      ]
+    },
+    {
+      "key": "gang.greeting.susan.trusted",
+      "lines": [
+        "You've been fair with me. I can work with that.",
+        "You've earned a little trust. Don't waste it."
+      ]
+    },
+    {
+      "key": "gang.greeting.susan.cold",
+      "lines": [
+        "We're not on easy terms, so choose your words carefully.",
+        "Let's keep this strictly business."
+      ]
+    },
+    {
+      "key": "gang.greeting.susan.recruit_followup",
+      "lines": [
+        "You brought up working together before. Want to make it concrete?",
+        "Still interested in a deal? Tell me what you can offer."
+      ]
+    },
+    {
+      "key": "buyer.greeting.first",
+      "lines": [
+        "You the person I've heard about? Keep your voice down and tell me what you can actually deliver.",
+        "You here to sell? Keep it quiet and tell me what you can deliver.",
+        "If you want a deal, start with what you have and when you can bring it."
+      ]
+    },
+    {
+      "key": "buyer.greeting.return",
+      "lines": [
+        "Back for another deal? Good. Familiar faces make bad surprises less likely.",
+        "Back to sell? Good. Let's see if the numbers still work.",
+        "You're back. Tell me what you brought and what you expect for it."
+      ]
+    },
+    {
+      "key": "buyer.request.explain",
+      "lines": [
+        "I buy what I can move quickly. The details matter less than whether you show up with the right thing.",
+        "I need the right item, in usable condition, when you say you'll have it.",
+        "I buy for customers who don't like waiting. Bring the right stock on time."
+      ]
+    },
+    {
+      "key": "buyer.price.talk",
+      "lines": [
+        "Price is trust with numbers attached. Bring me something clean and we can keep talking.",
+        "Give me a fair number and a clean item. That keeps the business moving.",
+        "I pay for stock I can move. Make the price fit the risk."
+      ]
+    },
+    {
+      "key": "buyer.greeting.trusted",
+      "lines": [
+        "You've delivered before. Let's skip the posturing and talk numbers.",
+        "You've come through before. Show me what the next order looks like.",
+        "We know how this works. Give me the item and your price."
+      ]
+    },
+    {
+      "key": "buyer.greeting.cold",
+      "lines": [
+        "We had a rough conversation last time. Don't waste another one.",
+        "Last time cost us both patience. Bring a workable offer.",
+        "If we're doing business again, keep it clear and keep it quick."
+      ]
+    },
+    {
+      "key": "buyer.greeting.price_followup",
+      "lines": [
+        "Still thinking about the price? I remember where we left it.",
+        "Back to the price? Then bring me a number that works.",
+        "We left the price hanging. Are you ready to settle it?"
+      ]
+    },
+    {
+      "key": "buyer.greeting.request_followup",
+      "lines": [
+        "You wanted the details last time. Here they are: I need the right item, on time.",
+        "You asked what I need. Same answer: the right stock, when promised.",
+        "You wanted the order explained. It is simple—right item, right time."
+      ]
+    },
+    {
+      "key": "buyer.leave",
+      "lines": [
+        "No pressure. Come back when you're ready to do business.",
+        "All right. Return when you have an offer worth discussing.",
+        "Fine. Bring the right stock next time."
+      ]
+    },
+    {
+      "key": "recruit.greeting.first",
+      "lines": [
+        "Boss. I kept things moving while you were away. Want the short version or the numbers?",
+        "You're back. I kept the routes covered—want the summary or the cash total?",
+        "I kept the business moving. Tell me whether you want stock, sales, or the numbers first."
+      ]
+    },
+    {
+      "key": "recruit.greeting.return",
+      "lines": [
+        "There you are. The work is still moving, and so is the cash.",
+        "Back again? The route is steady. What do you need from me?",
+        "Good timing. I have work to report and money to account for."
+      ]
+    },
+    {
+      "key": "recruit.status.good",
+      "lines": [
+        "Business is steady. Keep supplying me and I'll keep turning it into money.",
+        "The route is paying. Keep the stock coming and I can keep the cash moving.",
+        "We're doing fine. Consistent supply means consistent money."
+      ]
+    },
+    {
+      "key": "recruit.status.low",
+      "lines": [
+        "It's been thin lately. Give me stock or a better route and I can turn it around.",
+        "The numbers are light. More stock or a safer route would help.",
+        "Sales have slowed. Give me something to move and I'll rebuild the margin."
+      ]
+    },
+    {
+      "key": "recruit.greeting.trusted",
+      "lines": [
+        "You look after your people. That makes the work easier on both sides.",
+        "You keep your promises, so I can plan around them.",
+        "The work is easier when I know you'll follow through."
+      ]
+    },
+    {
+      "key": "recruit.greeting.cold",
+      "lines": [
+        "We can still work, but don't mistake a job for loyalty.",
+        "The arrangement still works. The trust does not.",
+        "I'll do the job, but keep expectations professional."
+      ]
+    },
+    {
+      "key": "recruit.greeting.status_followup",
+      "lines": [
+        "You asked about the business before. The numbers haven't changed themselves.",
+        "You wanted the business update. The short version is still stock in, money out.",
+        "Back for the numbers? Then let's look at what moved and what didn't."
+      ]
+    },
+    {
+      "key": "recruit.leave",
+      "lines": [
+        "I'll keep an eye on things.",
+        "See you around, boss.",
+        "I'll keep the route moving."
+      ]
+    },
+    {
+      "key": "gang.recruit.already_recruited",
+      "lines": [
+        "What can I do for you, boss?"
+      ]
+    },
+    {
+      "key": "buyer.request.generic",
+      "lines": [
+        "Hey, got anything for me?",
+        "What are you carrying today?",
+        "You bring anything I can move?"
+      ]
+    },
+    {
+      "key": "buyer.request.item",
+      "lines": [
+        "Hey, you got {item}?",
+        "I'm looking for {item}, can you help?",
+        "Need {item}. You got any?"
+      ]
+    },
+    {
+      "key": "buyer.invalid_item",
+      "lines": [
+        "I don't want that. I'm looking for {item}."
+      ]
+    },
+    {
+      "key": "buyer.not_enough_item",
+      "lines": [
+        "You don't have enough {item} right now."
+      ]
+    },
+    {
+      "key": "buyer.quantity_prompt",
+      "lines": [
+        "How many {item}s do you want to sell? (Max {available}) I wanted {wantedAmount}."
+      ]
+    },
+    {
+      "key": "buyer.selected_item",
+      "lines": [
+        "You selected {item}. Press Yes to continue."
+      ]
+    },
+    {
+      "key": "buyer.not_enough_quantity",
+      "lines": [
+        "You don't have that many {item}s."
+      ]
+    },
+    {
+      "key": "buyer.invalid_sale_input",
+      "lines": [
+        "Enter a positive quantity and a non-negative price."
+      ]
+    },
+    {
+      "key": "buyer.counter_offer",
+      "lines": [
+        "That is too much. How about {counterTotal} for all {sellAmount}?",
+        "That price is high. I can do {counterTotal} for all {sellAmount}.",
+        "I can't move it at that price. Will you take {counterTotal} for {sellAmount}?"
+      ]
+    },
+    {
+      "key": "buyer.counter_accepted",
+      "lines": [
+        "Fine, your price then.",
+        "All right. I'll meet your number this time.",
+        "Agreed. Let's close it at your price."
+      ]
+    },
+    {
+      "key": "buyer.counter_refused",
+      "lines": [
+        "Forget it then.",
+        "No deal at that price.",
+        "We'll leave it there. I can't make that work."
+      ]
+    },
+    {
+      "key": "buyer.declined",
+      "lines": [
+        "All right, maybe next time.",
+        "No problem. Come back when you're ready.",
+        "Fine. Bring me a better offer later."
+      ]
+    },
+    {
+      "key": "buyer.deal",
+      "lines": [
+        "Deal! I'll take {amount} for {totalPrice}.",
+        "Done. {amount} for {totalPrice}.",
+        "We have a deal: {amount} for {totalPrice}."
+      ]
+    },
+    {
+      "key": "recruit.inventory_header",
+      "lines": [
+        "Hey boss. Here's what I got:\nMoney: ${money}\n",
+        "Current take, boss:\nMoney: ${money}\n",
+        "Here's the account so far:\nMoney: ${money}\n"
+      ]
+    },
+    {
+      "key": "recruit.inventory_item",
+      "lines": [
+        "- {item} x{amount}\n"
+      ]
+    },
+    {
+      "key": "recruit.take_all",
+      "lines": [
+        "You have everything now, boss.",
+        "That's the full take. It's in your hands now.",
+        "All cleared out, boss. The inventory is yours."
+      ]
+    },
+    {
+      "key": "recruit.cannot_take",
+      "lines": [
+        "Cannot take something I can't sell.\nWould you like to drop something else?"
+      ]
+    },
+    {
+      "key": "recruit.not_enough_item",
+      "lines": [
+        "You don't have enough {item}s right now."
+      ]
+    },
+    {
+      "key": "recruit.quantity_prompt",
+      "lines": [
+        "How many {item}s do you want to drop? (Max {available})"
+      ]
+    },
+    {
+      "key": "recruit.selected_item",
+      "lines": [
+        "You selected {item}. Press Drop to continue."
+      ]
+    },
+    {
+      "key": "recruit.not_enough_quantity",
+      "lines": [
+        "You don't have enough {item}s to make that drop."
+      ]
+    },
+    {
+      "key": "recruit.invalid_quantity",
+      "lines": [
+        "Enter a positive quantity."
+      ]
+    },
+    {
+      "key": "recruit.accept_item",
+      "lines": [
+        "Okay boss! I'll take {amount}.",
+        "Got it. I'll move {amount} through the route.",
+        "{amount} received. I'll put it to work."
+      ]
+    },
+    {
+      "key": "recruit.goodbye",
+      "lines": [
+        "Bye, boss.",
+        "I'll get back to work.",
+        "See you on the route."
+      ]
+    },
+    {
+      "key": "police.greet",
+      "lines": [
+        "Good day, citizen.",
+        "Hello there. Keep the walkway clear.",
+        "Morning. Keep moving and keep the path open."
+      ]
+    },
+    {
+      "key": "police.warn",
+      "lines": [
+        "Please follow the rules.",
+        "Watch your behavior. I've got enough paperwork already.",
+        "Keep it orderly. I don't want to write this up."
+      ]
+    },
+    {
+      "key": "police.arrest",
+      "lines": [
+        "You are under arrest!",
+        "Hands behind your back!",
+        "You're being detained. Keep your hands where I can see them."
+      ]
+    },
+    {
+      "key": "police.arrest_demand",
+      "lines": [
+        "Give me everything illegal you possess..."
+      ]
+    },
+    {
+      "key": "police.move_along",
+      "lines": [
+        "Move along.",
+        "Keep the walkway clear.",
+        "You can go. Keep it orderly."
+      ]
+    },
+    {
+      "key": "police.greeting.first",
+      "lines": [
+        "First time we've spoken. Keep it simple and keep your hands visible.",
+        "We haven't spoken before. Stay calm and tell me what's going on.",
+        "First conversation? Keep your hands visible and answer clearly."
+      ]
+    },
+    {
+      "key": "police.greeting.return",
+      "lines": [
+        "We've spoken before. Don't make me repeat the rules.",
+        "We meet again. Keep this straightforward.",
+        "You know the routine. Let's keep this brief."
+      ]
+    },
+    {
+      "key": "police.explain",
+      "lines": [
+        "I'm checking a report. Answer clearly and this stays routine.",
+        "I'm following up on a report. Give me a clear answer.",
+        "This is a routine check. Explain what happened and we'll go from there."
+      ]
+    },
+    {
+      "key": "police.cooperate",
+      "lines": [
+        "Good. Cooperation saves everyone time.",
+        "Thank you. That keeps this simple.",
+        "All right. That's the quickest way through this."
+      ]
+    },
+    {
+      "key": "police.challenge",
+      "lines": [
+        "Careful. Confidence is not the same thing as being untouchable.",
+        "Lower the attitude. I asked a straightforward question.",
+        "Stay calm. Making this difficult will only make it longer."
+      ]
+    },
+    {
+      "key": "police.greeting.cooperative",
+      "lines": [
+        "You cooperated last time. Keep doing that and we won't have a problem.",
+        "You handled the last check well. Let's do the same today.",
+        "Last time stayed routine. Help me keep this one that way."
+      ]
+    },
+    {
+      "key": "police.greeting.hostile",
+      "lines": [
+        "You made this difficult before. I won't give you the benefit of the doubt twice.",
+        "Last time was unnecessarily difficult. Answer clearly today.",
+        "You were uncooperative before. Don't turn this into a longer stop."
+      ]
+    },
+    {
+      "key": "police.leave",
+      "lines": [
+        "Then move along.",
+        "Keep out of trouble.",
+        "All right. Stay clear of trouble."
+      ]
+    },
+    {
+      "key": "steal.started",
+      "lines": [
+        "You start pickpocketing... stay quiet!"
+      ]
+    },
+    {
+      "key": "steal.collect_hint",
+      "lines": [
+        "Collect what you found — click carefully!"
+      ]
+    },
+    {
+      "key": "steal.empty_hint",
+      "lines": [
+        "They don't seem to be carrying much..."
+      ]
+    },
+    {
+      "key": "steal.found_nothing",
+      "lines": [
+        "You found nothing... the NPC noticed!"
+      ]
+    },
+    {
+      "key": "steal.inventory_hint",
+      "lines": [
+        "You notice bulges in their pockets... maybe {itemTypes} item types ({totalItems} total)."
+      ]
+    },
+    {
+      "key": "choice.anything_happening_around_here",
+      "lines": [
+        "Anything happening around here?"
+      ]
+    },
+    {
+      "key": "choice.ask_about_teaming_up",
+      "lines": [
+        "Ask about teaming up"
+      ]
+    },
+    {
+      "key": "choice.ask_directly",
+      "lines": [
+        "Ask directly"
+      ]
+    },
+    {
+      "key": "choice.ask_one_direct_question",
+      "lines": [
+        "Ask one direct question"
+      ]
+    },
+    {
+      "key": "choice.ask_one_more_question",
+      "lines": [
+        "Ask one more question"
+      ]
+    },
+    {
+      "key": "choice.back_off",
+      "lines": [
+        "Back off"
+      ]
+    },
+    {
+      "key": "choice.continue",
+      "lines": [
+        "Continue"
+      ]
+    },
+    {
+      "key": "choice.cooperate",
+      "lines": [
+        "Cooperate"
+      ]
+    },
+    {
+      "key": "choice.discuss_the_price",
+      "lines": [
+        "Discuss the price"
+      ]
+    },
+    {
+      "key": "choice.explain_that",
+      "lines": [
+        "Explain that"
+      ]
+    },
+    {
+      "key": "choice.explain_the_situation",
+      "lines": [
+        "Explain the situation"
+      ]
+    },
+    {
+      "key": "choice.how_s_business_going",
+      "lines": [
+        "How's business going?"
+      ]
+    },
+    {
+      "key": "choice.keep_it_casual",
+      "lines": [
+        "Keep it casual"
+      ]
+    },
+    {
+      "key": "choice.keep_this_professional",
+      "lines": [
+        "Keep this professional"
+      ]
+    },
+    {
+      "key": "choice.keep_your_distance",
+      "lines": [
+        "Keep your distance"
+      ]
+    },
+    {
+      "key": "choice.leave",
+      "lines": [
+        "Leave"
+      ]
+    },
+    {
+      "key": "choice.make_conversation",
+      "lines": [
+        "Make conversation"
+      ]
+    },
+    {
+      "key": "choice.make_offer",
+      "lines": [
+        "Make offer"
+      ]
+    },
+    {
+      "key": "choice.make_the_deal",
+      "lines": [
+        "Make the deal"
+      ]
+    },
+    {
+      "key": "choice.make_the_offer",
+      "lines": [
+        "Make the offer"
+      ]
+    },
+    {
+      "key": "choice.not_today",
+      "lines": [
+        "Not today"
+      ]
+    },
+    {
+      "key": "choice.please_select_an_item_first",
+      "lines": [
+        "Please select an item first."
+      ]
+    },
+    {
+      "key": "choice.show_me_the_inventory",
+      "lines": [
+        "Show me the inventory"
+      ]
+    },
+    {
+      "key": "choice.show_me_the_numbers",
+      "lines": [
+        "Show me the numbers"
+      ]
+    },
+    {
+      "key": "choice.show_me_the_order",
+      "lines": [
+        "Show me the order"
+      ]
+    },
+    {
+      "key": "choice.stay_silent",
+      "lines": [
+        "Stay silent"
+      ]
+    },
+    {
+      "key": "choice.talk_business",
+      "lines": [
+        "Talk business"
+      ]
+    },
+    {
+      "key": "choice.talk_through_the_order",
+      "lines": [
+        "Talk through the order"
+      ]
+    },
+    {
+      "key": "choice.that_s_enough",
+      "lines": [
+        "That's enough"
+      ]
+    },
+    {
+      "key": "choice.try_another_pitch",
+      "lines": [
+        "Try another pitch"
+      ]
+    },
+    {
+      "key": "choice.walk_away",
+      "lines": [
+        "Walk away"
+      ]
+    },
+    {
+      "key": "choice.what_are_you_looking_for",
+      "lines": [
+        "What are you looking for?"
+      ]
+    },
+    {
+      "key": "choice.what_can_you_handle",
+      "lines": [
+        "What can you handle?"
+      ]
+    },
+    {
+      "key": "choice.what_comes_next",
+      "lines": [
+        "What comes next?"
+      ]
+    },
+    {
+      "key": "choice.what_have_you_heard",
+      "lines": [
+        "What have you heard?"
+      ]
+    },
+    {
+      "key": "choice.what_is_this_about",
+      "lines": [
+        "What is this about?"
+      ]
+    },
+    {
+      "key": "choice.what_stock_do_you_have",
+      "lines": [
+        "What stock do you have?"
+      ]
+    },
+    {
+      "key": "city.contract.first_delivery.title",
+      "lines": [
+        "01 / First impressions"
+      ]
+    },
+    {
+      "key": "city.contract.first_delivery.description",
+      "lines": [
+        "Get inside The Jade Room and complete your first delivery."
+      ]
+    },
+    {
+      "key": "city.contract.first_delivery.step.0.objective",
+      "lines": [
+        "Talk to Mara and accept the delivery."
+      ]
+    },
+    {
+      "key": "city.contract.first_delivery.step.1.objective",
+      "lines": [
+        "Collect the sealed parcel at the north dock."
+      ]
+    },
+    {
+      "key": "city.contract.first_delivery.step.2.objective",
+      "lines": [
+        "Open the cafe door and deliver to Tomas INSIDE."
+      ]
+    },
+    {
+      "key": "city.contract.first_delivery.step.3.objective",
+      "lines": [
+        "Return to Mara for payment."
+      ]
+    },
+    {
+      "key": "city.contract.power_cut.title",
+      "lines": [
+        "02 / Power cut"
+      ]
+    },
+    {
+      "key": "city.contract.power_cut.description",
+      "lines": [
+        "Search the workshop and repair its electrical panel in the correct order."
+      ]
+    },
+    {
+      "key": "city.contract.power_cut.step.0.objective",
+      "lines": [
+        "Ask Mara about the workshop power cut."
+      ]
+    },
+    {
+      "key": "city.contract.power_cut.step.1.objective",
+      "lines": [
+        "Enter the workshop and collect the spare fuse."
+      ]
+    },
+    {
+      "key": "city.contract.power_cut.step.2.objective",
+      "lines": [
+        "Read the maintenance note inside the workshop."
+      ]
+    },
+    {
+      "key": "city.contract.power_cut.step.3.objective",
+      "lines": [
+        "Repair the switchboard. Use the sequence from the note."
+      ]
+    },
+    {
+      "key": "city.contract.power_cut.step.4.objective",
+      "lines": [
+        "Report the restored power to Mara."
+      ]
+    },
+    {
+      "key": "city.contract.paper_trail.title",
+      "lines": [
+        "03 / Paper trail"
+      ]
+    },
+    {
+      "key": "city.contract.paper_trail.description",
+      "lines": [
+        "Enter the warehouse, retrieve the ledger and lose any pursuit."
+      ]
+    },
+    {
+      "key": "city.contract.paper_trail.step.0.objective",
+      "lines": [
+        "Hear Mara out about the warehouse ledger."
+      ]
+    },
+    {
+      "key": "city.contract.paper_trail.step.1.objective",
+      "lines": [
+        "Open the warehouse and find its ledger. Ada has an optional locker code."
+      ]
+    },
+    {
+      "key": "city.contract.paper_trail.step.2.objective",
+      "lines": [
+        "Lose the police, then remain INSIDE the workshop safehouse for 5 seconds."
+      ]
+    },
+    {
+      "key": "city.contract.paper_trail.step.3.objective",
+      "lines": [
+        "Bring the ledger to Mara."
+      ]
+    },
+    {
+      "key": "city.contract.cross_check.title",
+      "lines": [
+        "04 / Cross-check"
+      ]
+    },
+    {
+      "key": "city.contract.cross_check.description",
+      "lines": [
+        "Corroborate the ledger with a shipping manifest, cafe invoice and a witness."
+      ]
+    },
+    {
+      "key": "city.contract.cross_check.step.0.objective",
+      "lines": [
+        "Accept Mara's evidence-gathering assignment."
+      ]
+    },
+    {
+      "key": "city.contract.cross_check.step.1.objective",
+      "lines": [
+        "Inspect the shipping manifest inside the warehouse."
+      ]
+    },
+    {
+      "key": "city.contract.cross_check.step.2.objective",
+      "lines": [
+        "Find the matching invoice on the cafe counter."
+      ]
+    },
+    {
+      "key": "city.contract.cross_check.step.3.objective",
+      "lines": [
+        "Convince Ada to testify using the matching shipment number."
+      ]
+    },
+    {
+      "key": "city.contract.cross_check.step.4.objective",
+      "lines": [
+        "Return the verified evidence to Mara."
+      ]
+    },
+    {
+      "key": "city.contract.last_broadcast.title",
+      "lines": [
+        "05 / The last broadcast"
+      ]
+    },
+    {
+      "key": "city.contract.last_broadcast.description",
+      "lines": [
+        "Use the radio house to expose the evidence, then escape to extraction."
+      ]
+    },
+    {
+      "key": "city.contract.last_broadcast.step.0.objective",
+      "lines": [
+        "Accept the final broadcast mission from Mara."
+      ]
+    },
+    {
+      "key": "city.contract.last_broadcast.step.1.objective",
+      "lines": [
+        "Collect the radio house key from Ada."
+      ]
+    },
+    {
+      "key": "city.contract.last_broadcast.step.2.objective",
+      "lines": [
+        "Enter the radio house and tune the correct frequency."
+      ]
+    },
+    {
+      "key": "city.contract.last_broadcast.step.3.objective",
+      "lines": [
+        "Broadcast triggered an alarm. Lose the police, then hold at extraction for 6 seconds."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery.speaker",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery.text",
+      "lines": [
+        "First job: a sealed parcel at the north dock. Bring it to Tomas INSIDE The Jade Room. Open doors with E, and come back to me for $150. Four minutes. Ready?"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery.choice.0.text",
+      "lines": [
+        "Take the job."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery.choice.1.text",
+      "lines": [
+        "What is in the parcel?"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery.choice.2.text",
+      "lines": [
+        "Not yet."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.directions.speaker",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.directions.text",
+      "lines": [
+        "North-east dock, then the cafe entrance facing the boulevard. E opens the door; walk inside and talk to Tomas. The beacon and map show your current objective."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.directions.choice.0.text",
+      "lines": [
+        "On my way."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.parcel_question.speaker",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.parcel_question.text",
+      "lines": [
+        "Coffee parts. Boring work pays for interesting work. Prove you can finish the boring part first."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.parcel_question.choice.0.text",
+      "lines": [
+        "Fair enough. I'll take it."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.parcel_question.choice.1.text",
+      "lines": [
+        "Not today."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.delivery.speaker",
+      "lines": [
+        "Tomas / The Jade Room"
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.delivery.text",
+      "lines": [
+        "Finally! The grinder's been dead all morning. If Mara sent you, tell her we're square. And tell her I still make the best coffee on this side of the river."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.delivery.choice.0.text",
+      "lines": [
+        "Here's your parcel. I'll let her know."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.delivery.choice.1.text",
+      "lines": [
+        "Give me a moment."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery_done.speaker",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery_done.text",
+      "lines": [
+        "Tomas called. Good work: $150. Next, I need someone who can do more than carry boxes. The workshop has gone dark."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery_done.choice.0.text",
+      "lines": [
+        "Collect payment."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery_done.choice.1.text",
+      "lines": [
+        "One moment."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger.speaker",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger.text",
+      "lines": [
+        "A ledger inside the south-east warehouse names the people squeezing our shops. The warehouse door is now accessible. Ada knows the LOCKER code. Without it you will trigger an alarm. Get the book, lose any police, then hide inside the workshop."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger.choice.0.text",
+      "lines": [
+        "Take the ledger job."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger.choice.1.text",
+      "lines": [
+        "Why not call the police?"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger.choice.2.text",
+      "lines": [
+        "Not yet."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.police_question.speaker",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.police_question.text",
+      "lines": [
+        "Novak follows the alarm, not the paperwork. I need evidence before I need an audience. You can do this quietly. Talk to Ada first."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.police_question.choice.0.text",
+      "lines": [
+        "All right. I'll do it."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.police_question.choice.1.text",
+      "lines": [
+        "I'll think about it."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.escape_tip.speaker",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.escape_tip.text",
+      "lines": [
+        "Turn corners to break the officer's sight. He searches your last known position. The safehouse is INSIDE the workshop, at the back. Stay on the jade floor pad for five seconds after the district is clear."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.escape_tip.choice.0.text",
+      "lines": [
+        "Understood."
+      ]
+    },
+    {
+      "key": "city.conversation.ada.route.speaker",
+      "lines": [
+        "Ada / Dock worker"
+      ]
+    },
+    {
+      "key": "city.conversation.ada.route.text",
+      "lines": [
+        "Locker code: 0417. Use it and the ledger alarm stays quiet. The warehouse entrance faces the road. Later, if you find shipping records, look for a matching shipment number rather than trusting a name."
+      ]
+    },
+    {
+      "key": "city.conversation.ada.route.choice.0.text",
+      "lines": [
+        "Use the code."
+      ]
+    },
+    {
+      "key": "city.conversation.ada.route.choice.1.text",
+      "lines": [
+        "How can I escape an officer?"
+      ]
+    },
+    {
+      "key": "city.conversation.ada.route.choice.2.text",
+      "lines": [
+        "Just passing by."
+      ]
+    },
+    {
+      "key": "city.conversation.ada.police.speaker",
+      "lines": [
+        "Ada / Dock worker"
+      ]
+    },
+    {
+      "key": "city.conversation.ada.police.text",
+      "lines": [
+        "He can't see through stone, but he remembers where you were. Break sight around the buildings, then keep going. Wait until the district is clear before you try the safehouse. And take the code: 0417."
+      ]
+    },
+    {
+      "key": "city.conversation.ada.police.choice.0.text",
+      "lines": [
+        "Got it. Quiet is better."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger_done.speaker",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger_done.text",
+      "lines": [
+        "The ledger is real, but one document is easy to deny. We need a manifest, an invoice and a witness. First, your $350 for recovering this."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger_done.choice.0.text",
+      "lines": [
+        "Collect payment."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger_done.choice.1.text",
+      "lines": [
+        "One moment."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.idle.speaker",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.idle.text",
+      "lines": [
+        "Finish the objective on your mission panel first. The map marks the next destination. Indoor objectives require opening the matching building's door and walking inside."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.idle.choice.0.text",
+      "lines": [
+        "I am on it."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.idle.speaker",
+      "lines": [
+        "Tomas / The Jade Room"
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.idle.text",
+      "lines": [
+        "Mara gives you work; I give you coffee. Only one of us needs a four-minute deadline. If you're looking for a job, she's by the west workshop."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.idle.choice.0.text",
+      "lines": [
+        "I'll ask her."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.idle.choice.1.text",
+      "lines": [
+        "Any local advice?"
+      ]
+    },
+    {
+      "key": "city.conversation.officer.idle.speaker",
+      "lines": [
+        "Officer Novak"
+      ]
+    },
+    {
+      "key": "city.conversation.officer.idle.text",
+      "lines": [
+        "Afternoon. Keep the crossings clear and leave the warehouse lockers alone. If you hear an alarm, don't make me run. My knees and I are having a difficult week."
+      ]
+    },
+    {
+      "key": "city.conversation.officer.idle.choice.0.text",
+      "lines": [
+        "Just taking a walk, officer."
+      ]
+    },
+    {
+      "key": "city.conversation.officer.idle.choice.1.text",
+      "lines": [
+        "Anything I should know?"
+      ]
+    },
+    {
+      "key": "city.conversation.officer.advice.speaker",
+      "lines": [
+        "Officer Novak"
+      ]
+    },
+    {
+      "key": "city.conversation.officer.advice.text",
+      "lines": [
+        "Know the difference between a shortcut and trespassing. And if Mara offers you easy money, ask what makes it easy."
+      ]
+    },
+    {
+      "key": "city.conversation.officer.advice.choice.0.text",
+      "lines": [
+        "I'll keep that in mind."
+      ]
+    },
+    {
+      "key": "city.conversation.local.rumor.speaker",
+      "lines": [
+        "Old Quarter resident"
+      ]
+    },
+    {
+      "key": "city.conversation.local.rumor.text",
+      "lines": [
+        "The cafe is open to customers. The workshop needs repairs. The warehouse and radio house unlock as Mara trusts you with bigger jobs. Look for the jade door signs."
+      ]
+    },
+    {
+      "key": "city.conversation.local.rumor.choice.0.text",
+      "lines": [
+        "Good to know."
+      ]
+    },
+    {
+      "key": "city.conversation.local.rumor.choice.1.text",
+      "lines": [
+        "Any advice about alleys?"
+      ]
+    },
+    {
+      "key": "city.conversation.local.alleys.speaker",
+      "lines": [
+        "Old Quarter resident"
+      ]
+    },
+    {
+      "key": "city.conversation.local.alleys.text",
+      "lines": [
+        "The gaps between the buildings connect the back lanes. If you're ever in a hurry, corners are your friends. Dead ends aren't. Look before you commit."
+      ]
+    },
+    {
+      "key": "city.conversation.local.alleys.choice.0.text",
+      "lines": [
+        "Thanks for the tip."
+      ]
+    },
+    {
+      "key": "city.conversation.menu.pause.speaker",
+      "lines": [
+        "HighStakes / Paused"
+      ]
+    },
+    {
+      "key": "city.conversation.menu.pause.text",
+      "lines": [
+        "Completed levels and their scores are saved. Restarting this level counts as a retry; earlier rewards stay. The campaign ends after level five."
+      ]
+    },
+    {
+      "key": "city.conversation.menu.pause.choice.0.text",
+      "lines": [
+        "Resume."
+      ]
+    },
+    {
+      "key": "city.conversation.menu.pause.choice.1.text",
+      "lines": [
+        "Retry current level."
+      ]
+    },
+    {
+      "key": "city.conversation.menu.pause.choice.2.text",
+      "lines": [
+        "New campaign from level one."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power.speaker",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power.text",
+      "lines": [
+        "The workshop fuse blew. Find the spare fuse inside, read the maintenance note, then reset the panel in the right order. Wrong switches damage the equipment and cost score. $220 if you fix it."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power.choice.0.text",
+      "lines": [
+        "I will restore the power."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power.choice.1.text",
+      "lines": [
+        "I will return later."
+      ]
+    },
+    {
+      "key": "city.conversation.power.note.speaker",
+      "lines": [
+        "Maintenance note"
+      ]
+    },
+    {
+      "key": "city.conversation.power.note.text",
+      "lines": [
+        "RESTART PROCEDURE: fit the spare fuse, then press BLUE, YELLOW, GREEN. Never start with the green switch. Memorise the order before touching the panel."
+      ]
+    },
+    {
+      "key": "city.conversation.power.note.choice.0.text",
+      "lines": [
+        "Remember BLUE - YELLOW - GREEN."
+      ]
+    },
+    {
+      "key": "city.conversation.power.panel.speaker",
+      "lines": [
+        "Workshop switchboard"
+      ]
+    },
+    {
+      "key": "city.conversation.power.panel.text",
+      "lines": [
+        "The replacement fuse is in. Which switch comes FIRST?"
+      ]
+    },
+    {
+      "key": "city.conversation.power.panel.choice.0.text",
+      "lines": [
+        "Blue."
+      ]
+    },
+    {
+      "key": "city.conversation.power.panel.choice.1.text",
+      "lines": [
+        "Yellow."
+      ]
+    },
+    {
+      "key": "city.conversation.power.panel.choice.2.text",
+      "lines": [
+        "Green."
+      ]
+    },
+    {
+      "key": "city.conversation.power.second.speaker",
+      "lines": [
+        "Workshop switchboard"
+      ]
+    },
+    {
+      "key": "city.conversation.power.second.text",
+      "lines": [
+        "Blue is on. Which switch comes SECOND?"
+      ]
+    },
+    {
+      "key": "city.conversation.power.second.choice.0.text",
+      "lines": [
+        "Green."
+      ]
+    },
+    {
+      "key": "city.conversation.power.second.choice.1.text",
+      "lines": [
+        "Yellow."
+      ]
+    },
+    {
+      "key": "city.conversation.power.second.choice.2.text",
+      "lines": [
+        "Blue again."
+      ]
+    },
+    {
+      "key": "city.conversation.power.third.speaker",
+      "lines": [
+        "Workshop switchboard"
+      ]
+    },
+    {
+      "key": "city.conversation.power.third.text",
+      "lines": [
+        "Blue and yellow are on. Complete the restart sequence."
+      ]
+    },
+    {
+      "key": "city.conversation.power.third.choice.0.text",
+      "lines": [
+        "Green."
+      ]
+    },
+    {
+      "key": "city.conversation.power.third.choice.1.text",
+      "lines": [
+        "Red."
+      ]
+    },
+    {
+      "key": "city.conversation.power.third.choice.2.text",
+      "lines": [
+        "Blue."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power_done.speaker",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power_done.text",
+      "lines": [
+        "Lights are back. You followed the instructions instead of guessing. Here is $220. Now we can deal with the warehouse records."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power_done.choice.0.text",
+      "lines": [
+        "Collect payment."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power_done.choice.1.text",
+      "lines": [
+        "One moment."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence.speaker",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence.text",
+      "lines": [
+        "Cross-check the warehouse manifest against Tomas's cafe invoice. Remember their shared shipment ID. Then convince Ada to testify. Read carefully: bluffing the wrong ID loses score. $420 for evidence that actually holds up."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence.choice.0.text",
+      "lines": [
+        "Build the case."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence.choice.1.text",
+      "lines": [
+        "Not yet."
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.manifest.speaker",
+      "lines": [
+        "Warehouse manifest"
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.manifest.text",
+      "lines": [
+        "Shipment J-417. Destination: The Jade Room. Contents: machine parts. The ledger records a second, unreceipted payment. An attached radio note says: emergency public channel 108.4."
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.manifest.choice.0.text",
+      "lines": [
+        "Record shipment J-417."
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.invoice.speaker",
+      "lines": [
+        "The Jade Room / Invoice"
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.invoice.text",
+      "lines": [
+        "Invoice J-417 matches the warehouse manifest. Tomas paid the normal shipping fee; the extra payment was demanded separately. A handwritten note confirms the radio channel: 108.4."
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.invoice.choice.0.text",
+      "lines": [
+        "Keep the invoice as evidence."
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.witness.speaker",
+      "lines": [
+        "Ada / Dock worker"
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.witness.text",
+      "lines": [
+        "I can testify, but I will not put my name on a rumour. Which shipment appears on BOTH documents?"
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.witness.choice.0.text",
+      "lines": [
+        "J-147."
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.witness.choice.1.text",
+      "lines": [
+        "J-417."
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.witness.choice.2.text",
+      "lines": [
+        "J-471."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence_done.speaker",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence_done.text",
+      "lines": [
+        "Manifest, invoice, witness: now it is a case. Here is $420. One final step remains. The radio house can broadcast this before the records disappear."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence_done.choice.0.text",
+      "lines": [
+        "Collect payment."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence_done.choice.1.text",
+      "lines": [
+        "One moment."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.final.speaker",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.final.text",
+      "lines": [
+        "Last job. Get the radio house key from Ada, enter the house north-west of the crossing, and broadcast on the channel from the documents. It WILL bring police. Escape back to the extraction pad outside my workshop. Finish this and the campaign is over."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.final.choice.0.text",
+      "lines": [
+        "Finish what we started."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.final.choice.1.text",
+      "lines": [
+        "I need a moment."
+      ]
+    },
+    {
+      "key": "city.conversation.final.key.speaker",
+      "lines": [
+        "Ada / Dock worker"
+      ]
+    },
+    {
+      "key": "city.conversation.final.key.text",
+      "lines": [
+        "Here is the radio house key. You saw the channel on the papers. Tune it correctly, transmit, then get out. Mara's extraction contact waits by her workshop once the police have given up."
+      ]
+    },
+    {
+      "key": "city.conversation.final.key.choice.0.text",
+      "lines": [
+        "Take the key."
+      ]
+    },
+    {
+      "key": "city.conversation.final.radio.speaker",
+      "lines": [
+        "Radio house / Transmitter"
+      ]
+    },
+    {
+      "key": "city.conversation.final.radio.text",
+      "lines": [
+        "Evidence loaded. Select the public emergency frequency from the warehouse and cafe documents."
+      ]
+    },
+    {
+      "key": "city.conversation.final.radio.choice.0.text",
+      "lines": [
+        "104.8 FM."
+      ]
+    },
+    {
+      "key": "city.conversation.final.radio.choice.1.text",
+      "lines": [
+        "108.4 FM."
+      ]
+    },
+    {
+      "key": "city.conversation.final.radio.choice.2.text",
+      "lines": [
+        "107.4 FM."
+      ]
+    },
+    {
+      "key": "ui.pause.title",
+      "lines": [
+        "PAUSED"
+      ]
+    },
+    {
+      "key": "ui.pause.resume",
+      "lines": [
+        "RESUME GAME"
+      ]
+    },
+    {
+      "key": "ui.pause.main_menu",
+      "lines": [
+        "MAIN MENU"
+      ]
+    },
+    {
+      "key": "ui.pause.quit",
+      "lines": [
+        "QUIT TO DESKTOP"
+      ]
+    },
+    {
+      "key": "ui.settings.title",
+      "lines": [
+        "SETTINGS"
+      ]
+    },
+    {
+      "key": "ui.settings.minimap",
+      "lines": [
+        "MINIMAP"
+      ]
+    },
+    {
+      "key": "ui.settings.language",
+      "lines": [
+        "LANGUAGE"
+      ]
+    },
+    {
+      "key": "ui.settings.back",
+      "lines": [
+        "BACK"
+      ]
+    },
+    {
+      "key": "ui.language.english",
+      "lines": [
+        "ENGLISH"
+      ]
+    },
+    {
+      "key": "ui.language.slovak",
+      "lines": [
+        "SLOVAK"
+      ]
+    },
+    {
+      "key": "ui.minimap.on",
+      "lines": [
+        "ON"
+      ]
+    },
+    {
+      "key": "ui.minimap.off",
+      "lines": [
+        "OFF"
+      ]
+    },
+    {
+      "key": "ui.choice.yes",
+      "lines": [
+        "Yes"
+      ]
+    },
+    {
+      "key": "ui.choice.no",
+      "lines": [
+        "No"
+      ]
+    },
+    {
+      "key": "ui.choice.collect",
+      "lines": [
+        "Collect"
+      ]
+    },
+    {
+      "key": "ui.choice.close",
+      "lines": [
+        "Close"
+      ]
+    },
+    {
+      "key": "ui.choice.drop_item",
+      "lines": [
+        "Drop Item"
+      ]
+    },
+    {
+      "key": "ui.choice.recruit",
+      "lines": [
+        "Recruit"
+      ]
+    },
+    {
+      "key": "ui.menu.subtitle",
+      "lines": [
+        "OLD QUARTER  /  UNDERGROUND CONTRACTS"
+      ]
+    },
+    {
+      "key": "ui.menu.status",
+      "lines": [
+        "LOCAL MODE READY\\nA new run starts in the Old Quarter."
+      ]
+    },
+    {
+      "key": "ui.menu.start",
+      "lines": [
+        "START RUN"
+      ]
+    },
+    {
+      "key": "ui.menu.quit",
+      "lines": [
+        "QUIT TO DESKTOP"
+      ]
+    },
+    {
+      "key": "ui.menu.footer",
+      "lines": [
+        "WASD MOVE  •  E INTERACT  •  ESC PAUSE"
+      ]
+    },
+    {
+      "key": "ui.game_over.title",
+      "lines": [
+        "GAME OVER – You got caught!"
+      ]
+    },
+    {
+      "key": "ui.game_over.restart",
+      "lines": [
+        "Restart"
+      ]
+    },
+    {
+      "key": "ui.game_over.main_menu",
+      "lines": [
+        "Main Menu"
+      ]
+    },
+    {
+      "key": "ui.city.brand",
+      "lines": [
+        "HIGHSTAKES"
+      ]
+    },
+    {
+      "key": "ui.city.subtitle",
+      "lines": [
+        "OLD QUARTER  /  CONTRACTS"
+      ]
+    },
+    {
+      "key": "ui.city.current_contract",
+      "lines": [
+        "CURRENT CONTRACT"
+      ]
+    },
+    {
+      "key": "ui.city.old_quarter",
+      "lines": [
+        "OLD QUARTER"
+      ]
+    },
+    {
+      "key": "ui.city.free_roam",
+      "lines": [
+        "FREE ROAM"
+      ]
+    },
+    {
+      "key": "ui.city.case_closed",
+      "lines": [
+        "The case is closed. Explore the district freely."
+      ]
+    },
+    {
+      "key": "ui.city.next_story",
+      "lines": [
+        "Next story mission available from Mara."
+      ]
+    },
+    {
+      "key": "ui.city.score",
+      "lines": [
+        "SCORE"
+      ]
+    },
+    {
+      "key": "ui.city.rep",
+      "lines": [
+        "REP"
+      ]
+    },
+    {
+      "key": "ui.city.remaining",
+      "lines": [
+        "{seconds}s remaining"
+      ]
+    },
+    {
+      "key": "ui.city.level",
+      "lines": [
+        "LEVEL"
+      ]
+    },
+    {
+      "key": "ui.city.base",
+      "lines": [
+        "BASE"
+      ]
+    },
+    {
+      "key": "ui.city.time",
+      "lines": [
+        "TIME"
+      ]
+    },
+    {
+      "key": "ui.city.clean",
+      "lines": [
+        "CLEAN"
+      ]
+    },
+    {
+      "key": "ui.city.penalty",
+      "lines": [
+        "PENALTY"
+      ]
+    },
+    {
+      "key": "ui.city.total",
+      "lines": [
+        "TOTAL"
+      ]
+    },
+    {
+      "key": "ui.city.case_closed_title",
+      "lines": [
+        "CASE CLOSED / CAMPAIGN COMPLETE"
+      ]
+    },
+    {
+      "key": "ui.city.level_complete",
+      "lines": [
+        "LEVEL {level} COMPLETE"
+      ]
+    },
+    {
+      "key": "ui.city.points_rank",
+      "lines": [
+        "{points} POINTS  /  RANK {rank}"
+      ]
+    },
+    {
+      "key": "ui.city.points_gained",
+      "lines": [
+        "+{points} POINTS"
+      ]
+    },
+    {
+      "key": "ui.city.summary",
+      "lines": [
+        "{completed}/{total} levels   /   {retries} retries   /   {mistakes} mistakes   /   {minutes}m {seconds}s"
+      ]
+    },
+    {
+      "key": "ui.city.best_score",
+      "lines": [
+        "BEST SCORE: {score}  /  Your evidence reached the public. The district is safe."
+      ]
+    },
+    {
+      "key": "ui.city.campaign_score",
+      "lines": [
+        "CAMPAIGN SCORE: {score}  /  Next: {next}"
+      ]
+    },
+    {
+      "key": "ui.city.time_bonus_rules",
+      "lines": [
+        "Time bonus: 2 points per second remaining. Clean run: +300. Retry: -200. Wrong answer: -75."
+      ]
+    },
+    {
+      "key": "ui.city.continue_free_roam",
+      "lines": [
+        "CONTINUE FREE ROAM"
+      ]
+    },
+    {
+      "key": "ui.city.continue_free_roam_enter",
+      "lines": [
+        "CONTINUE FREE ROAM  [ ENTER ]"
+      ]
+    },
+    {
+      "key": "ui.city.new_campaign",
+      "lines": [
+        "NEW CAMPAIGN"
+      ]
+    },
+    {
+      "key": "ui.city.quit_game",
+      "lines": [
+        "QUIT GAME"
+      ]
+    },
+    {
+      "key": "ui.notice.level_start",
+      "lines": [
+        "Level {level}/{total}. Talk to Mara to begin."
+      ]
+    },
+    {
+      "key": "ui.notice.radio_key",
+      "lines": [
+        "Ada has the radio house key. Complete the current objective first."
+      ]
+    },
+    {
+      "key": "ui.notice.room_locked",
+      "lines": [
+        "This room opens in level {level}."
+      ]
+    },
+    {
+      "key": "ui.notice.locker_code",
+      "lines": [
+        "Locker code learned. The ledger can be taken without an alarm."
+      ]
+    },
+    {
+      "key": "ui.notice.wrong_answer",
+      "lines": [
+        "Wrong answer. -75 score. Check the clue and try again."
+      ]
+    },
+    {
+      "key": "ui.notice.evidence_on_air",
+      "lines": [
+        "Evidence is on air! Lose the officer, then reach extraction."
+      ]
+    },
+    {
+      "key": "ui.notice.alarm",
+      "lines": [
+        "Alarm! Lose the officer before entering the safehouse."
+      ]
+    },
+    {
+      "key": "ui.notice.code_accepted",
+      "lines": [
+        "Code accepted. Ledger secured without an alarm."
+      ]
+    },
+    {
+      "key": "ui.notice.power_restored",
+      "lines": [
+        "Power restored. Tell Mara the workshop is working again."
+      ]
+    },
+    {
+      "key": "ui.notice.level_unlocked",
+      "lines": [
+        "Level {level}/{total} unlocked. Return to Mara."
+      ]
+    },
+    {
+      "key": "ui.notice.campaign_complete",
+      "lines": [
+        "Campaign complete. Free Roam remains open; explore the Old Quarter."
+      ]
+    },
+    {
+      "key": "ui.notice.time_ran_out",
+      "lines": [
+        "Time ran out. Retry the briefing with Mara. -200 score."
+      ]
+    },
+    {
+      "key": "ui.notice.caught",
+      "lines": [
+        "Caught. This level restarts; earlier scores stay. -200 score."
+      ]
+    },
+    {
+      "key": "ui.notice.no_police",
+      "lines": [
+        "No police nearby!"
+      ]
+    },
+    {
+      "key": "ui.notice.need_greenbud",
+      "lines": [
+        "Need GreenBud"
+      ]
+    },
+    {
+      "key": "ui.notice.select_watering_can",
+      "lines": [
+        "Select WateringCan"
+      ]
+    },
+    {
+      "key": "ui.notice.watering_can_empty",
+      "lines": [
+        "WateringCan is empty"
+      ]
+    },
+    {
+      "key": "ui.notice.nothing_here",
+      "lines": [
+        "Nothing here..."
+      ]
+    },
+    {
+      "key": "ui.watering",
+      "lines": [
+        "WATERING"
+      ]
+    },
+    {
+      "key": "ui.inventory.items",
+      "lines": [
+        "ITEMS  [1-8]"
+      ]
+    },
+    {
+      "key": "ui.inventory.empty",
+      "lines": [
+        "EMPTY"
+      ]
+    },
+    {
+      "key": "ui.inventory.select_item",
+      "lines": [
+        "SELECT ITEM"
+      ]
+    },
+    {
+      "key": "ui.inventory.selected",
+      "lines": [
+        "SELECTED  •  {item}"
+      ]
+    },
+    {
+      "key": "ui.inventory.water",
+      "lines": [
+        "WATER"
+      ]
+    },
+    {
+      "key": "ui.inventory.watering_can",
+      "lines": [
+        "WATERING CAN"
+      ]
+    },
+    {
+      "key": "ui.inventory.full",
+      "lines": [
+        "FULL"
+      ]
+    },
+    {
+      "key": "ui.inventory.select_can",
+      "lines": [
+        "select can"
+      ]
+    },
+    {
+      "key": "item.Seed.name",
+      "lines": [
+        "Seed"
+      ]
+    },
+    {
+      "key": "item.WateringCan.name",
+      "lines": [
+        "Watering Can"
+      ]
+    },
+    {
+      "key": "item.Pruner.name",
+      "lines": [
+        "Pruning Shears"
+      ]
+    },
+    {
+      "key": "item.Rake.name",
+      "lines": [
+        "Rake"
+      ]
+    },
+    {
+      "key": "item.PackEmpty.name",
+      "lines": [
+        "Empty Bag"
+      ]
+    },
+    {
+      "key": "item.GreenBud.name",
+      "lines": [
+        "Green Bud"
+      ]
+    },
+    {
+      "key": "item.Pack.name",
+      "lines": [
+        "Packed Product"
+      ]
+    },
+    {
+      "key": "ui.safehouse.grow_room",
+      "lines": [
+        "SAFEHOUSE GROW ROOM"
+      ]
+    },
+    {
+      "key": "ui.safehouse.packing",
+      "lines": [
+        "PACKING"
+      ]
+    },
+    {
+      "key": "ui.growth",
+      "lines": [
+        "GROWTH"
+      ]
+    },
+    {
+      "key": "ui.stage",
+      "lines": [
+        "STAGE"
+      ]
+    },
+    {
+      "key": "ui.network.steam_unavailable",
+      "lines": [
+        "Steam unavailable - local mode"
+      ]
+    },
+    {
+      "key": "ui.network.steam_id",
+      "lines": [
+        "Your Steam ID: {id}"
+      ]
+    },
+    {
+      "key": "ui.network.waiting_connection",
+      "lines": [
+        "Waiting for connection..."
+      ]
+    },
+    {
+      "key": "ui.network.share_id",
+      "lines": [
+        "Share your ID or enter friend's ID"
+      ]
+    },
+    {
+      "key": "ui.network.connected",
+      "lines": [
+        "Connected! Players: {count}"
+      ]
+    },
+    {
+      "key": "ui.network.host",
+      "lines": [
+        "You are the HOST"
+      ]
+    },
+    {
+      "key": "ui.network.client",
+      "lines": [
+        "You are the CLIENT"
+      ]
+    },
+    {
+      "key": "ui.network.start_game",
+      "lines": [
+        "START GAME"
+      ]
+    },
+    {
+      "key": "ui.network.waiting_host",
+      "lines": [
+        "Waiting for host..."
+      ]
+    },
+    {
+      "key": "ui.network.play_old_quarter",
+      "lines": [
+        "PLAY OLD QUARTER"
+      ]
+    },
+    {
+      "key": "ui.network.connected_players",
+      "lines": [
+        "Connected Players: {count}"
+      ]
+    },
+    {
+      "key": "ui.network.controls",
+      "lines": [
+        "Use WASD or Arrow Keys to move"
+      ]
+    },
+    {
+      "key": "ui.network.share_friend",
+      "lines": [
+        "Share your ID with your friend!"
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.title",
+      "lines": [
+        "Getting Started"
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.transition",
+      "lines": [
+        "Recruiting is now available."
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_first_sale.title",
+      "lines": [
+        "Make a first sale"
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_first_sale.description",
+      "lines": [
+        "Buy Seed, grow it, and sell stock."
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_first_sale.progress",
+      "lines": [
+        "Items sold: {itemsSold}/{itemsRequired} | Successful clients: {clients}/{clientsRequired}"
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_first_sale.hint",
+      "lines": [
+        "Pick up with E; plant F; water C; pack Q."
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_sell_stock.title",
+      "lines": [
+        "Sell more stock"
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_sell_stock.description",
+      "lines": [
+        "Sell requested items to buyers."
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_sell_stock.progress",
+      "lines": [
+        "Items sold: {itemsSold}/{itemsRequired} | Successful clients: {clients}/{clientsRequired}"
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_sell_stock.hint",
+      "lines": [
+        "Pack GreenBud with PackEmpty using Q."
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_reach_clients.title",
+      "lines": [
+        "Serve 10 clients"
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_reach_clients.description",
+      "lines": [
+        "Complete buyer sales until 10 clients are served."
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_reach_clients.progress",
+      "lines": [
+        "Items sold: {itemsSold}/{itemsRequired} | Successful clients: {clients}/{clientsRequired}"
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_reach_clients.hint",
+      "lines": [
+        "The stage advances at 15 items and 10 clients."
+      ]
+    },
+    {
+      "key": "guidance.stage.small_dealer.title",
+      "lines": [
+        "Small Dealer"
+      ]
+    },
+    {
+      "key": "guidance.stage.small_dealer.transition",
+      "lines": [
+        "Recruiting is now available."
+      ]
+    },
+    {
+      "key": "guidance.stage.small_dealer.objective.small_dealer_recruit.title",
+      "lines": [
+        "Recruit 3 dealers"
+      ]
+    },
+    {
+      "key": "guidance.stage.small_dealer.objective.small_dealer_recruit.description",
+      "lines": [
+        "Talk to gang NPCs and make offers."
+      ]
+    },
+    {
+      "key": "guidance.stage.small_dealer.objective.small_dealer_recruit.progress",
+      "lines": [
+        "Dealers recruited: {dealers}/{dealersRequired}"
+      ]
+    },
+    {
+      "key": "guidance.stage.small_dealer.objective.small_dealer_recruit.hint",
+      "lines": [
+        "Try another pitch if one fails."
+      ]
+    },
+    {
+      "key": "guidance.stage.gang_leader.title",
+      "lines": [
+        "Gang Leader"
+      ]
+    },
+    {
+      "key": "guidance.stage.gang_leader.transition",
+      "lines": [
+        "You are now a gang leader."
+      ]
+    },
+    {
+      "key": "guidance.stage.gang_leader.objective.gang_leader_earnings.title",
+      "lines": [
+        "Earn $20,000"
+      ]
+    },
+    {
+      "key": "guidance.stage.gang_leader.objective.gang_leader_earnings.description",
+      "lines": [
+        "Trade with buyers; dealer sales also count."
+      ]
+    },
+    {
+      "key": "guidance.stage.gang_leader.objective.gang_leader_earnings.progress",
+      "lines": [
+        "Cumulative earnings: ${earnings}/{earningsRequired}"
+      ]
+    },
+    {
+      "key": "guidance.stage.gang_leader.objective.gang_leader_earnings.hint",
+      "lines": [
+        "Dealers sell when buyers are nearby."
+      ]
+    },
+    {
+      "key": "guidance.stage.crime_boss.title",
+      "lines": [
+        "Crime Boss"
+      ]
+    },
+    {
+      "key": "guidance.stage.crime_boss.transition",
+      "lines": [
+        "You are now a crime boss."
+      ]
+    },
+    {
+      "key": "guidance.stage.crime_boss.objective.crime_boss_expand.title",
+      "lines": [
+        "Expand your empire"
+      ]
+    },
+    {
+      "key": "guidance.stage.crime_boss.objective.crime_boss_expand.description",
+      "lines": [
+        "Crime Boss expansion is not implemented yet."
+      ]
+    },
+    {
+      "key": "guidance.stage.crime_boss.objective.crime_boss_expand.progress",
+      "lines": [
+        "Stage reached"
+      ]
+    },
+    {
+      "key": "guidance.stage.crime_boss.objective.crime_boss_expand.hint",
+      "lines": [
+        "This is the current end of progression."
+      ]
+    },
+    {
+      "key": "guidance.stage.mafia.title",
+      "lines": [
+        "Mafia"
+      ]
+    },
+    {
+      "key": "guidance.stage.mafia.transition",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.mafia.objective.mafia_content_unavailable.title",
+      "lines": [
+        "Mafia unavailable"
+      ]
+    },
+    {
+      "key": "guidance.stage.mafia.objective.mafia_content_unavailable.description",
+      "lines": [
+        "No rule currently reaches this stage."
+      ]
+    },
+    {
+      "key": "guidance.stage.mafia.objective.mafia_content_unavailable.progress",
+      "lines": [
+        "Not reachable"
+      ]
+    },
+    {
+      "key": "guidance.stage.mafia.objective.mafia_content_unavailable.hint",
+      "lines": [
+        "Continue from Crime Boss."
+      ]
+    },
+    {
+      "key": "ui.inventory.selected_marker",
+      "lines": [
+        "SELECTED"
+      ]
+    },
+    {
+      "key": "ui.action.open_door",
+      "lines": [
+        "Open door"
+      ]
+    },
+    {
+      "key": "ui.action.close_door",
+      "lines": [
+        "Close door"
+      ]
+    },
+    {
+      "key": "ui.action.toggle_lamp",
+      "lines": [
+        "Toggle lamp"
+      ]
+    },
+    {
+      "key": "ui.action.harvest",
+      "lines": [
+        "Harvest"
+      ]
+    },
+    {
+      "key": "ui.action.pick_up",
+      "lines": [
+        "Pick up {item}"
+      ]
+    },
+    {
+      "key": "ui.action.pack_crop",
+      "lines": [
+        "Pack crop"
+      ]
+    },
+    {
+      "key": "ui.action.clear_pot",
+      "lines": [
+        "Clear pot"
+      ]
+    },
+    {
+      "key": "ui.action.water",
+      "lines": [
+        "Water"
+      ]
+    },
+    {
+      "key": "ui.action.plant_seed",
+      "lines": [
+        "Plant Seed"
+      ]
+    },
+    {
+      "key": "ui.action.turn_on_water",
+      "lines": [
+        "Turn on water"
+      ]
+    },
+    {
+      "key": "ui.action.fill_watering_can",
+      "lines": [
+        "Fill WateringCan"
+      ]
+    },
+    {
+      "key": "ui.notice.police_calling",
+      "lines": [
+        "What are you doing man? I'm calling the police..."
+      ]
+    },
+    {
+      "key": "ui.hud.live_operation",
+      "lines": [
+        "LIVE OPERATION  •  ESC TO PAUSE"
+      ]
+    },
+    {
+      "key": "ui.notice.break_sight",
+      "lines": [
+        "Break sight around buildings. Officers can open doors during a chase."
+      ]
+    },
+    {
+      "key": "ui.city.district_clear",
+      "lines": [
+        "DISTRICT / Clear"
+      ]
+    },
+    {
+      "key": "ui.city.police_searching",
+      "lines": [
+        "POLICE / Searching"
+      ]
+    },
+    {
+      "key": "ui.city.police_pursuit",
+      "lines": [
+        "POLICE / Pursuit"
+      ]
+    },
+    {
+      "key": "city.actor.door_workshop_safehouse.name",
+      "lines": [
+        "Door / Workshop / Safehouse"
+      ]
+    },
+    {
+      "key": "city.actor.door_the_jade_room_cafe.name",
+      "lines": [
+        "Door / The Jade Room / Cafe"
+      ]
+    },
+    {
+      "key": "city.actor.door_warehouse_records.name",
+      "lines": [
+        "Door / Warehouse / Records"
+      ]
+    },
+    {
+      "key": "city.actor.door_radio_house_studio.name",
+      "lines": [
+        "Door / Radio House / Studio"
+      ]
+    },
+    {
+      "key": "city.actor.mara.name",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.actor.tomas.name",
+      "lines": [
+        "Tomas / Barista"
+      ]
+    },
+    {
+      "key": "city.actor.ada.name",
+      "lines": [
+        "Ada / Dock worker"
+      ]
+    },
+    {
+      "key": "city.actor.officer.name",
+      "lines": [
+        "Officer Novak"
+      ]
+    },
+    {
+      "key": "city.actor.local.name",
+      "lines": [
+        "Local resident"
+      ]
+    },
+    {
+      "key": "city.actor.parcel.name",
+      "lines": [
+        "Dock parcel"
+      ]
+    },
+    {
+      "key": "city.actor.ledger.name",
+      "lines": [
+        "Warehouse locker"
+      ]
+    },
+    {
+      "key": "city.actor.safehouse.name",
+      "lines": [
+        "Safehouse"
+      ]
+    },
+    {
+      "key": "city.actor.fuse.name",
+      "lines": [
+        "Workshop / Spare fuse"
+      ]
+    },
+    {
+      "key": "city.actor.wiring.name",
+      "lines": [
+        "Workshop / Maintenance note"
+      ]
+    },
+    {
+      "key": "city.actor.switchboard.name",
+      "lines": [
+        "Workshop / Switchboard"
+      ]
+    },
+    {
+      "key": "city.actor.manifest.name",
+      "lines": [
+        "Warehouse / Manifest"
+      ]
+    },
+    {
+      "key": "city.actor.invoice.name",
+      "lines": [
+        "Cafe / Invoice"
+      ]
+    },
+    {
+      "key": "city.actor.radio.name",
+      "lines": [
+        "Radio house / Transmitter"
+      ]
+    },
+    {
+      "key": "city.actor.extraction.name",
+      "lines": [
+        "Final extraction"
+      ]
+    }
+  ]
+}

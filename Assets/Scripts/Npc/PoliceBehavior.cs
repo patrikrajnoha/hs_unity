@@ -156,6 +156,7 @@ public class PoliceBehavior : MonoBehaviour, INpcBehavior
 
     private void GiveUpPursuit()
     {
+        GameLogger.LogInfo("police", "officer_search_lost", $"Officer {gameObject.name} lost suspect and ended pursuit");
         GameObject suspect = gm != null ? gm.criminal : null;
         StopChase();
         foreach (PoliceBehavior officer in PoliceHeatRegistry.ActivePolice)
@@ -205,6 +206,7 @@ public class PoliceBehavior : MonoBehaviour, INpcBehavior
     private void StartChase(Transform target)
     {
         if (isChasing || target == null) return;
+        GameLogger.LogWarning("police", "officer_pursuing", $"Officer {gameObject.name} pursuing {target.name}");
         isChasing = true;
         State = PursuitState.Pursuing;
         lastSeenPosition = target.position;
@@ -243,6 +245,7 @@ public class PoliceBehavior : MonoBehaviour, INpcBehavior
     {
         if (gm != null && gm.arrest)
         {
+            GameLogger.LogWarning("police", "arrest_executed", $"Officer {gameObject.name} executing arrest");
             Debug.Log("u should be here ARREST so the agent is supposed to stop..");
             if (inv == null && gm.criminal != null)
             {
@@ -418,8 +421,14 @@ public class PoliceBehavior : MonoBehaviour, INpcBehavior
             inv.HasIllegal();
             if (gm != null && gm.hasIllegal)
             {
-                // tu by mala byt logika odpocitania veci z inventara
-                inv.RemoveAllIllegal();
+                // Story missions can deliberately trigger a pursuit. Being
+                // arrested there must not silently wipe the player's farming
+                // and mission inventory; only ordinary free-roam arrests
+                // confiscate illegal items.
+                if (IsStoryMissionActive())
+                    gm.hasIllegal = false;
+                else
+                    inv.RemoveAllIllegal();
             }
         }
 
@@ -438,6 +447,14 @@ public class PoliceBehavior : MonoBehaviour, INpcBehavior
         gm.crimeHappened = false;
         gm.criminal = null;
 
+    }
+
+    private bool IsStoryMissionActive()
+    {
+        HighStakes.City.CityMissionDirector mission =
+            FindAnyObjectByType<HighStakes.City.CityMissionDirector>();
+        return mission != null && mission.Progress != null &&
+            mission.Progress.Active && !mission.HasEnded;
     }
 
 }

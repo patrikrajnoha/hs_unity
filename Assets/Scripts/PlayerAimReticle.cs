@@ -3,8 +3,8 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Creates a small screen-centred aiming pointer for both camera modes.
-/// It uses a dedicated overlay Canvas so the dot is visible in Game preview
-/// without depending on the legacy GUI event loop or old sprite assets.
+/// It uses a dedicated screen overlay Canvas so the dot stays fixed to the
+/// display centre while the gameplay camera orbits in third person.
 /// </summary>
 [DisallowMultipleComponent]
 [AddComponentMenu("HighStakes/UI/Player Aim Reticle")]
@@ -15,7 +15,8 @@ public sealed class PlayerAimReticle : MonoBehaviour
     [SerializeField, Min(0f)] private float outlineSize = 2f;
 
     private DialogueCameraController dialogueCameraController;
-    private Camera playerCamera;
+    private PlayerCameraModeSwitcher cameraModeSwitcher;
+    private PauseMenuController pauseMenuController;
     private GameObject reticleCanvasObject;
     private Canvas reticleCanvas;
     private Texture2D reticleTexture;
@@ -26,7 +27,8 @@ public sealed class PlayerAimReticle : MonoBehaviour
         size = Mathf.Max(size, 8f);
         outlineSize = Mathf.Max(outlineSize, 2f);
         dialogueCameraController = GetComponent<DialogueCameraController>();
-        playerCamera = GetComponentInChildren<Camera>(true);
+        cameraModeSwitcher = GetComponent<PlayerCameraModeSwitcher>();
+        pauseMenuController = FindAnyObjectByType<PauseMenuController>();
         CreateReticleCanvas();
     }
 
@@ -35,7 +37,19 @@ public sealed class PlayerAimReticle : MonoBehaviour
         if (reticleCanvas == null)
             return;
 
-        reticleCanvas.enabled = dialogueCameraController == null || !dialogueCameraController.IsInDialogue;
+        if (pauseMenuController == null)
+            pauseMenuController = FindAnyObjectByType<PauseMenuController>();
+
+        // The feature bootstrap can add this component before it adds the
+        // camera mode switcher. Resolve it lazily so third-person mode is
+        // recognised even when both components are created at runtime.
+        if (cameraModeSwitcher == null)
+            cameraModeSwitcher = GetComponent<PlayerCameraModeSwitcher>();
+
+        bool inDialogue = dialogueCameraController != null && dialogueCameraController.IsInDialogue;
+        bool isThirdPerson = cameraModeSwitcher != null && cameraModeSwitcher.IsThirdPerson;
+        bool isPaused = pauseMenuController != null && pauseMenuController.IsPaused;
+        reticleCanvas.enabled = !inDialogue && !isPaused && !isThirdPerson;
     }
 
     private void OnDestroy()
@@ -51,9 +65,11 @@ public sealed class PlayerAimReticle : MonoBehaviour
         reticleCanvasObject = new GameObject("PlayerReticleCanvas", typeof(RectTransform), typeof(Canvas));
         reticleCanvasObject.transform.SetParent(transform, false);
         reticleCanvas = reticleCanvasObject.GetComponent<Canvas>();
-        reticleCanvas.renderMode = RenderMode.ScreenSpaceCamera;
-        reticleCanvas.worldCamera = playerCamera;
-        reticleCanvas.planeDistance = 0.5f;
+        // Do not bind the reticle to the gameplay camera. The camera is an
+        // orbiting child of the player in third person, and a camera-space
+        // canvas that is also parented to the player can inherit that motion
+        // and make the pointer drift or render at the wrong scale.
+        reticleCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
         reticleCanvas.overrideSorting = true;
         reticleCanvas.sortingOrder = 30000;
         reticleCanvas.pixelPerfect = true;

@@ -1,7 +1,10 @@
+using System;
+using HighStakes.City;
 using UnityEngine;
 
 public class PickableObject : MonoBehaviour
 {
+    public event Action<PickableObject> PickedUp;
     public Item item; // Assigned ScriptableObject
     [HideInInspector] public bool isInRange = false;
     [HideInInspector] public bool isLooking = false;
@@ -16,6 +19,25 @@ public class PickableObject : MonoBehaviour
 
 
     [HideInInspector]public bool hasRequiredToolSelected = true; // default true if no tool is needed
+
+    /// <summary>
+    /// Enables real-world physics for a placed pickup. Templates stay
+    /// kinematic while they live off-screen; spawned items can fall onto a
+    /// shelf or the floor and still remain ordinary inventory pickups.
+    /// </summary>
+    public void EnableWorldPhysics()
+    {
+        if (rb == null)
+            rb = GetComponent<Rigidbody>();
+
+        if (rb == null)
+            rb = gameObject.AddComponent<Rigidbody>();
+
+        rb.isKinematic = false;
+        rb.useGravity = true;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+    }
 
 
     void Start()
@@ -122,6 +144,17 @@ public class PickableObject : MonoBehaviour
             {
                 Inventory inventory = player.GetComponent<Inventory>();
 
+                HighStakes.City.CityMissionDirector cityMission =
+                    FindAnyObjectByType<HighStakes.City.CityMissionDirector>();
+                bool storyInteractionHasPriority = cityMission != null &&
+                    (cityMission.IsConversationActive || cityMission.HasPriorityInteraction(player));
+
+                // Mara and story targets also use E. Do not show or process a
+                // pickup on the same frame, otherwise talking to Mara can
+                // accidentally consume the nearby item interaction.
+                if (storyInteractionHasPriority)
+                    continue;
+
                 bool hasRequiredToolSelected = true;
                 if (requiredToolName != "")
                     hasRequiredToolSelected = inventory.HasSelectedItem(requiredToolName);
@@ -135,23 +168,36 @@ public class PickableObject : MonoBehaviour
                 {
                     PlayerUIManager ui = player.GetComponent<PlayerUIManager>();
                     if (ui != null)
-                        ui.ShowInteractionPrompt(KeyCode.E, "Harvest");
+                        ui.ShowInteractionPrompt(KeyCode.E,
+                            LocalizationManager.GetOrFallback("ui.action.harvest", "Harvest"));
                 }
                 else if (!isFixedPot && isInRange && isLooking && hasRequiredToolSelected && item != null)
                 {
                     PlayerUIManager ui = player.GetComponent<PlayerUIManager>();
                     if (ui != null)
-                        ui.ShowInteractionPrompt(KeyCode.E, "Pick up " + item.itemName);
+                        ui.ShowInteractionPrompt(KeyCode.E,
+                            LocalizationManager.GetOrFallback("ui.action.pick_up", "Pick up {item}",
+                                "item", LocalizationManager.GetItemName(item)));
                 }
 
                 if (!isFixedPot && isInRange && isLooking && Input.GetKeyDown(KeyCode.E) && hasRequiredToolSelected)
                 {
                     if (inventory != null && inventory.AddItem(item))
                     {
+                        if (CompareTag("bud"))
+                            GameLogger.LogInfo("farming", "crop_harvested", "Harvested " + (item != null ? item.itemName : gameObject.name));
+                        else
+                            GameLogger.LogInfo("inventory", "item_picked_up", "Picked up " + (item != null ? item.itemName : gameObject.name));
+
+                        PickedUp?.Invoke(this);
                         Destroy(gameObject);
                     }
                     else
                     {
+                        SafehouseInventoryHud hud = player.GetComponent<SafehouseInventoryHud>();
+                        if (hud != null)
+                            hud.ShowFeedback("INVENTORY FULL");
+                        GameLogger.LogWarning("inventory", "pickup_failed_full", $"{player.name} cannot pick up {item?.itemName ?? "item"}: inventory full");
                         Debug.Log($"{player.name} cannot pick up {item.itemName}");
                     }
                 }

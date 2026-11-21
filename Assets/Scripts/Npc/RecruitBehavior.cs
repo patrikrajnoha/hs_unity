@@ -139,7 +139,7 @@ public class RecruitBehavior : MonoBehaviour, INpcBehavior
 
         // random amount from 1 to quantity
         int sellAmount = Random.Range(1, slot.quantity + 1);
-        int total = sellAmount * slot.item.basePrice;
+        int total = sellAmount * ProductItemFactory.GetMarketPrice(slot.item);
 
         // update values
         slot.quantity -= sellAmount;

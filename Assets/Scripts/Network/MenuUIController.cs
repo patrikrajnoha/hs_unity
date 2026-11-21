@@ -14,6 +14,7 @@ public class MenuUIController : MonoBehaviour
 
     void Start()
     {
+        LocalizationManager.EnsureLoaded();
         if (connectButton != null)
             connectButton.onClick.AddListener(OnConnectButtonClicked);
 
@@ -30,7 +31,7 @@ public class MenuUIController : MonoBehaviour
                 connectButton.interactable = false;
 
             if (statusText != null)
-                statusText.text = "Steam unavailable - local mode";
+                statusText.text = LocalizationManager.GetOrFallback("ui.network.steam_unavailable", "Steam unavailable - local mode");
 
             return;
         }
@@ -56,17 +57,20 @@ public class MenuUIController : MonoBehaviour
         // Update status text
         if (statusText != null)
         {
-            statusText.text = $" Your Steam ID: {myID}\n";
+            statusText.text = LocalizationManager.GetOrFallback("ui.network.steam_id", "Your Steam ID: {id}", "id", myID) + "\n";
 
             if (!isConnected)
             {
-                statusText.text += " Waiting for connection...\n";
-                statusText.text += " Share your ID or enter friend's ID";
+                statusText.text += " " + LocalizationManager.GetOrFallback("ui.network.waiting_connection", "Waiting for connection...") + "\n";
+                statusText.text += " " + LocalizationManager.GetOrFallback("ui.network.share_id", "Share your ID or enter friend's ID");
             }
             else
             {
-                statusText.text += $" Connected! Players: {playerCount + 1}\n";
-                statusText.text += isHost ? " You are the HOST" : " You are the CLIENT";
+                statusText.text += " " + LocalizationManager.GetOrFallback("ui.network.connected", "Connected! Players: {count}",
+                    "count", (playerCount + 1).ToString()) + "\n";
+                statusText.text += " " + (isHost
+                    ? LocalizationManager.GetOrFallback("ui.network.host", "You are the HOST")
+                    : LocalizationManager.GetOrFallback("ui.network.client", "You are the CLIENT"));
             }
         }
 
@@ -79,11 +83,11 @@ public class MenuUIController : MonoBehaviour
             if (buttonText != null)
             {
                 if (isHost && isConnected)
-                    buttonText.text = " START GAME";
+                    buttonText.text = " " + LocalizationManager.GetOrFallback("ui.network.start_game", "START GAME");
                 else if (!isHost && isConnected)
-                    buttonText.text = " Waiting for host...";
+                    buttonText.text = " " + LocalizationManager.GetOrFallback("ui.network.waiting_host", "Waiting for host...");
                 else
-                    buttonText.text = " PLAY OLD QUARTER";
+                    buttonText.text = " " + LocalizationManager.GetOrFallback("ui.network.play_old_quarter", "PLAY OLD QUARTER");
             }
         }
     }

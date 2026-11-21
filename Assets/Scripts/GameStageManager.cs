@@ -102,8 +102,26 @@ public class GameStageManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        LocalizationManager.LanguageChanged -= RefreshLocalizedGuidance;
         if (Instance == this)
             Instance = null;
+    }
+
+    private void OnEnable()
+    {
+        LocalizationManager.LanguageChanged += RefreshLocalizedGuidance;
+    }
+
+    private void RefreshLocalizedGuidance()
+    {
+        if (guidanceContent == null)
+            return;
+
+        LocalizationManager.LocalizeGuidance(guidanceContent);
+        lastRenderedStageId = null;
+        lastRenderedObjectiveId = null;
+        lastRenderedProgress = null;
+        RefreshGuidance(true);
     }
 
     private void ResolveUiReferences()
@@ -152,6 +170,8 @@ public class GameStageManager : MonoBehaviour
             Debug.LogError("[GameStageManager] Guidance JSON is malformed: the stages array is missing.");
             guidanceContent = new QuestGuidanceContent { stages = Array.Empty<QuestGuidanceStage>() };
         }
+
+        LocalizationManager.LocalizeGuidance(guidanceContent);
     }
 
     public void RecordPlayerSale(int itemCount, int earnings)
@@ -162,7 +182,7 @@ public class GameStageManager : MonoBehaviour
         successfulSales = AddWithoutOverflow(successfulSales, itemCount);
         successfulClientel = AddWithoutOverflow(successfulClientel, 1);
         totalEarnings = AddWithoutOverflow(totalEarnings, earnings);
-        FirebaseGameLogger.LogInfo("economy", "sale_completed", "Sold " + itemCount + " item(s) for $" + earnings);
+        GameLogger.LogInfo("economy", "sale_completed", "Sold " + itemCount + " item(s) for $" + earnings);
         UpdateProgressAndGuidance();
     }
 
@@ -172,14 +192,14 @@ public class GameStageManager : MonoBehaviour
             return;
 
         totalEarnings = AddWithoutOverflow(totalEarnings, earnings);
-        FirebaseGameLogger.LogInfo("economy", "earnings_recorded", "Recorded $" + earnings + " earnings");
+        GameLogger.LogInfo("economy", "earnings_recorded", "Recorded $" + earnings + " earnings");
         UpdateProgressAndGuidance();
     }
 
     public void RecordDealerRecruitment()
     {
         recruitedDealers = Mathf.Min(AddWithoutOverflow(recruitedDealers, 1), Mathf.Max(DealersRequired, maxRecruitable));
-        FirebaseGameLogger.LogInfo("progression", "dealer_recruited", "Dealer recruited (" + recruitedDealers + ")");
+        GameLogger.LogInfo("progression", "dealer_recruited", "Dealer recruited (" + recruitedDealers + ")");
         UpdateProgressAndGuidance();
     }
 
@@ -214,7 +234,7 @@ public class GameStageManager : MonoBehaviour
 
         GameStage previousStage = currentStage;
         currentStage = nextStage;
-        FirebaseGameLogger.LogInfo("progression", "stage_changed", previousStage + " -> " + nextStage);
+        GameLogger.LogInfo("progression", "stage_changed", previousStage + " -> " + nextStage);
         UnlockFeatures(nextStage);
         RefreshGuidance(false);
     }

@@ -120,10 +120,15 @@ public class NpcInteraction : MonoBehaviour
                     BeginDialogue();
                     npcBehavior.Interact(playerStats);
                 }
+                else if (npcBehavior == null)
+                {
+                    GameLogger.LogError("npc", "missing_behavior", $"NPC {gameObject.name} has no INpcBehavior attached");
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.F))
             {
+                GameLogger.LogInfo("gameplay", "pickpocket_started", $"Started pickpocket attempt on {gameObject.name}");
                 StealMaster.Instance.StartSteal(this.gameObject, player);
             }
         }
@@ -154,6 +159,7 @@ public class NpcInteraction : MonoBehaviour
 
         dialogueStarted = true;
         conversationCount++;
+        GameLogger.LogInfo("npc", "dialogue_started", $"Started dialogue with {gameObject.name} (conversation count: {conversationCount})");
         dialogueCameraController = currentPlayer.GetComponent<DialogueCameraController>();
         if (dialogueCameraController != null)
             dialogueCameraController.EnterDialogue(transform);
@@ -164,6 +170,9 @@ public class NpcInteraction : MonoBehaviour
 
     public void EndDialogue()
     {
+        if (dialogueStarted)
+            GameLogger.LogDebug("npc", "dialogue_ended", $"Ended dialogue with {gameObject.name}");
+
         dialogueStarted = false;
         if (dialogueCameraController != null)
             dialogueCameraController.ExitDialogue();
@@ -287,9 +296,11 @@ public class NpcInteraction : MonoBehaviour
     public void YesNo()
     {
         puim.yesButton.SetActive(true);
-        puim.buttonYes.GetComponentInChildren<TextMeshProUGUI>().text = "Yes";
+        puim.buttonYes.GetComponentInChildren<TextMeshProUGUI>().text =
+            LocalizationManager.GetOrFallback("ui.choice.yes", "Yes");
         puim.noButton.SetActive(true);
-        puim.buttonNo.GetComponentInChildren<TextMeshProUGUI>().text = "No";
+        puim.buttonNo.GetComponentInChildren<TextMeshProUGUI>().text =
+            LocalizationManager.GetOrFallback("ui.choice.no", "No");
         GameObject activePlayer = currentPlayer != null ? currentPlayer : player;
         if (activePlayer != null)
             activePlayer.GetComponent<PlayerController>()?.UnlockMouse();
@@ -298,11 +309,14 @@ public class NpcInteraction : MonoBehaviour
     public void CollectCancelDrop()
     {
         puim.yesButton.SetActive(true);
-        puim.buttonYes.GetComponentInChildren<TextMeshProUGUI>().text = "Collect";
+        puim.buttonYes.GetComponentInChildren<TextMeshProUGUI>().text =
+            LocalizationManager.GetOrFallback("ui.choice.collect", "Collect");
         puim.noButton.SetActive(true);
-        puim.buttonNo.GetComponentInChildren<TextMeshProUGUI>().text = "Close";
+        puim.buttonNo.GetComponentInChildren<TextMeshProUGUI>().text =
+            LocalizationManager.GetOrFallback("ui.choice.close", "Close");
         puim.dropButton.SetActive(true);
-        puim.buttonDrop.GetComponentInChildren<TextMeshProUGUI>().text = "Drop Item";
+        puim.buttonDrop.GetComponentInChildren<TextMeshProUGUI>().text =
+            LocalizationManager.GetOrFallback("ui.choice.drop_item", "Drop Item");
         GameObject activePlayer = currentPlayer != null ? currentPlayer : player;
         if (activePlayer != null)
             activePlayer.GetComponent<PlayerController>()?.UnlockMouse();
@@ -311,9 +325,11 @@ public class NpcInteraction : MonoBehaviour
     public void RecruitClose()
     {
         puim.yesButton.SetActive(true);
-        puim.buttonYes.GetComponentInChildren<TextMeshProUGUI>().text = "Recruit";
+        puim.buttonYes.GetComponentInChildren<TextMeshProUGUI>().text =
+            LocalizationManager.GetOrFallback("ui.choice.recruit", "Recruit");
         puim.noButton.SetActive(true);
-        puim.buttonNo.GetComponentInChildren<TextMeshProUGUI>().text = "Close";
+        puim.buttonNo.GetComponentInChildren<TextMeshProUGUI>().text =
+            LocalizationManager.GetOrFallback("ui.choice.close", "Close");
         GameObject activePlayer = currentPlayer != null ? currentPlayer : player;
         if (activePlayer != null)
             activePlayer.GetComponent<PlayerController>()?.UnlockMouse();

@@ -23,8 +23,9 @@ public class LampSwitch : MonoBehaviour
 
         
 
-        // use parent if it exists, otherwise fallback to self
-        targetTransform = transform.parent != null ? transform.parent : transform;
+        // Target the actual fixture/switch. Using the parent made every
+        // generated safehouse lamp aim at the whole farming corner.
+        targetTransform = transform;
     }
 
     void Update()
@@ -49,7 +50,9 @@ public class LampSwitch : MonoBehaviour
                 if (dot > 0.95f) // more forgiving
                 {
                     puim = player != null ? player.GetComponent<PlayerUIManager>() : null;
-                    puim.ShowInteractionPrompt(KeyCode.E, "Toggle lamp");
+                    if (puim != null)
+                        puim.ShowInteractionPrompt(KeyCode.E,
+                            LocalizationManager.GetOrFallback("ui.action.toggle_lamp", "Toggle lamp"));
 
                     if (Input.GetKeyDown(KeyCode.E) && myLight != null)
                     {

@@ -44,6 +44,7 @@ public class BuyerBehavior : MonoBehaviour, INpcBehavior
     private bool counterOfferAccepted = false;
     private bool saleCompletedForInteraction = false;
     private bool saleFlowOpen;
+    private Item saleItem;
 
     [Header("Addiction Settings")]
     public float addictionDecayRate = 1f; // per in-game hour
@@ -281,7 +282,7 @@ public class BuyerBehavior : MonoBehaviour, INpcBehavior
         Item selected = puim.selectedTradeItem;
 
 
-        if (selected == null || selected.name != currentRequest.itemName)
+        if (selected == null || !ProductItemFactory.MatchesRequest(selected, currentRequest.itemName))
         {
             trust -= 5;
             npcInteraction.interactionMessage = NpcDialogue.Get("buyer.invalid_item", "item", currentRequest.itemName);
@@ -291,7 +292,8 @@ public class BuyerBehavior : MonoBehaviour, INpcBehavior
 
 
 
-        int available = playerInventory.GetItemAmount(selected.name);
+        saleItem = selected;
+        int available = playerInventory.GetItemAmount(selected);
 
         if (available <= 0)
         {
@@ -380,7 +382,8 @@ public class BuyerBehavior : MonoBehaviour, INpcBehavior
             return;
         }
 
-        int available = playerInventory.GetItemAmount(currentRequest.itemName);
+        Item itemBeingSold = saleItem != null ? saleItem : puim.selectedTradeItem;
+        int available = playerInventory.GetItemAmount(itemBeingSold);
 
         if (sellAmount > available)
         {
@@ -466,6 +469,7 @@ public class BuyerBehavior : MonoBehaviour, INpcBehavior
         }
         else
         {
+            GameLogger.LogInfo("economy", "counter_offer_refused", "Buyer " + gameObject.name + " refused counter offer");
             npcInteraction.interactionMessage = NpcDialogue.Get("buyer.counter_refused");
             CloseInteraction();
         }
@@ -510,6 +514,7 @@ public class BuyerBehavior : MonoBehaviour, INpcBehavior
 
     private void OnDeclineSale()
     {
+        GameLogger.LogInfo("economy", "sale_declined", "Player declined sale with buyer " + gameObject.name);
         npcInteraction.interactionMessage = NpcDialogue.Get("buyer.declined");
         CloseInteraction();
     }
@@ -533,7 +538,8 @@ public class BuyerBehavior : MonoBehaviour, INpcBehavior
             return;
         }
 
-        int available = playerInventory.GetItemAmount(currentRequest.itemName);
+        Item itemBeingSold = saleItem != null ? saleItem : puim.selectedTradeItem;
+        int available = playerInventory.GetItemAmount(itemBeingSold);
         if (amount > available)
         {
             Debug.LogWarning("[Buyer] Sale completion ignored because the inventory changed.");
@@ -546,7 +552,7 @@ public class BuyerBehavior : MonoBehaviour, INpcBehavior
             "buyer.deal",
             "amount", amount.ToString(),
             "totalPrice", totalPrice.ToString());
-        playerInventory.RemoveItemByName(currentRequest.itemName, amount);
+        playerInventory.RemoveItem(itemBeingSold, amount);
         currentPlayer.ChangeMoney(totalPrice);
         trust += 5;
 
@@ -576,6 +582,7 @@ public class BuyerBehavior : MonoBehaviour, INpcBehavior
     private void CloseInteraction()
     {
         saleFlowOpen = false;
+        saleItem = null;
 
         if (npcInteraction != null)
             npcInteraction.EndDialogue();

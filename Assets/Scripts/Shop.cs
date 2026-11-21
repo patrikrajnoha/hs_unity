@@ -87,12 +87,14 @@ public class Shop : MonoBehaviour
     {
         if (entry.quantity <= 0)
         {
+            GameLogger.LogWarning("economy", "purchase_failed_out_of_stock", "Out of stock: " + entry.item.name);
             Debug.Log("Out of stock: " + entry.item.name);
             return;
         }
 
         if (!playerStats.CanAfford(entry.price))
         {
+            GameLogger.LogWarning("economy", "purchase_failed_funds", $"Cannot afford {entry.item.name} (${entry.price})");
             Debug.Log("Not enough money!");
             return;
         }
@@ -100,6 +102,7 @@ public class Shop : MonoBehaviour
         // Pay for item
         playerStats.ChangeMoney(-entry.price);
 
+        GameLogger.LogInfo("economy", "item_bought", $"Bought {entry.item.name} for ${entry.price} (remaining stock: {entry.quantity - 1})");
         Debug.Log($"Bought {entry.item.name} for ${entry.price}");
 
         // reduce stock

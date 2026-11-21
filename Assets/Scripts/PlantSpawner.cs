@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using HighStakes.City;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
@@ -61,12 +62,14 @@ public class PlantSpawner : MonoBehaviour
         {
             if (selectedItem != null && selectedItem.name == "Rake")
             {
-                puim.ShowInteractionPrompt(KeyCode.Q, "Clear pot");
-                if (Input.GetKeyDown(KeyCode.Q))
+                puim.ShowInteractionPrompt(KeyCode.E,
+                    LocalizationManager.GetOrFallback("ui.action.clear_pot", "Clear pot"));
+                if (Input.GetKeyDown(KeyCode.E))
                 {
                     if (dryPlants.TryGetValue(pot, out GameObject dryPlant) && dryPlant != null)
                         Destroy(dryPlant);
                     dryPlants.Remove(pot);
+                    GameLogger.LogInfo("farming", "pot_cleared", "Cleared dead plant from " + pot.name);
                 }
             }
 
@@ -83,23 +86,25 @@ public class PlantSpawner : MonoBehaviour
 
             if (selectedItem == null || selectedItem.name != "WateringCan")
             {
-                puim.ShowPopup("Select WateringCan");
+                puim.ShowPopup(LocalizationManager.GetOrFallback("ui.notice.select_watering_can", "Select WateringCan"));
             }
             else if (!inventory.IsSelectedWateringCanFull())
             {
-                puim.ShowPopup("WateringCan is empty");
+                puim.ShowPopup(LocalizationManager.GetOrFallback("ui.notice.watering_can_empty", "WateringCan is empty"));
             }
             else if (!potState.isWatered)
             {
-                puim.ShowInteractionPrompt(KeyCode.C, "Water");
+                puim.ShowInteractionPrompt(KeyCode.C,
+                    LocalizationManager.GetOrFallback("ui.action.water", "Water"));
                 if (Input.GetKeyDown(KeyCode.C) || (Keyboard.current != null && Keyboard.current.cKey.wasPressedThisFrame))
                     TryWater(pot, inventory, water);
             }
         }
 
-        if (selectedItem != null && selectedItem.name == "Seed" && !hasPlantOrPendingStage)
+        if (ProductItemFactory.IsSeed(selectedItem) && !hasPlantOrPendingStage)
         {
-            puim.ShowInteractionPrompt(KeyCode.F, "Plant Seed");
+            puim.ShowInteractionPrompt(KeyCode.F,
+                LocalizationManager.GetOrFallback("ui.action.plant_seed", "Plant Seed"));
 
             if (Input.GetKeyDown(KeyCode.F))
             {
@@ -111,18 +116,25 @@ public class PlantSpawner : MonoBehaviour
                 }
 
                 GameObject stageOne = Instantiate(stageOnePrefab, spawnPoint.position, Quaternion.identity, pot.transform);
-                if (stageOne == null || !inventory.RemoveItemByName("Seed", 1))
+                if (stageOne == null || !inventory.RemoveItem(selectedItem, 1))
                 {
                     if (stageOne != null)
                         Destroy(stageOne);
                     return;
                 }
 
+                PlantCropState cropState = stageOne.GetComponent<PlantCropState>();
+                if (cropState == null)
+                    cropState = stageOne.AddComponent<PlantCropState>();
+                cropState.seedItem = selectedItem;
+                cropState.outputProduct = selectedItem.harvestProduct;
+                cropState.careScore = 0.35f;
+
                 // Keep the planted stage available until the player has time
                 // to fetch and fill the watering can. The watering action is
                 // completed explicitly with C and must not expire in transit.
                 StartCoroutine(WaitForWater(stageOne, pot));
-                FirebaseGameLogger.LogInfo("farming", "seed_planted", "Planted seed in " + pot.name);
+                GameLogger.LogInfo("farming", "seed_planted", "Planted seed in " + pot.name);
 
                 Transform dirt = FindNamedChild(pot.transform, "Soil", "dirt");
                 if (dirt != null)
@@ -157,7 +169,7 @@ public class PlantSpawner : MonoBehaviour
         potState.isWatered = true;
         water.isFull = false;
         ApplyWetDirt(potState);
-        FirebaseGameLogger.LogInfo("farming", "plant_watered", "Watered " + potState.name);
+        GameLogger.LogInfo("farming", "plant_watered", "Watered " + potState.name);
         return true;
     }
 
@@ -176,7 +188,7 @@ public class PlantSpawner : MonoBehaviour
             water.isFull = false;
 
         ApplyWetDirt(potState);
-        FirebaseGameLogger.LogInfo("farming", "plant_watered", "Watered " + potState.name);
+        GameLogger.LogInfo("farming", "plant_watered", "Watered " + potState.name);
         return true;
     }
 
@@ -313,6 +325,10 @@ public class PlantSpawner : MonoBehaviour
     {
         int stages = plant.transform.childCount;
         float stageTime = growthTime / stages;
+        PlantGrowthIndicator indicator = plant.GetComponent<PlantGrowthIndicator>();
+        if (indicator == null)
+            indicator = plant.AddComponent<PlantGrowthIndicator>();
+        indicator.Initialize(stages);
 
         for (int i = 0; i < stages; i++)
         {
@@ -323,21 +339,31 @@ public class PlantSpawner : MonoBehaviour
             // Activate current stage
             Transform currentStage = plant.transform.GetChild(i);
             currentStage.gameObject.SetActive(true);
+            indicator.SetProgress(i / (float)stages, i + 1);
 
             // If this is the last stage, start monitoring for children
             if (i == stages - 1)
-                StartCoroutine(DestroyWhenEmpty(currentStage.gameObject, 5f)); // 15 sec delay
+                StartCoroutine(DestroyWhenEmpty(currentStage.gameObject, 5f, plant.GetComponent<PlantCropState>()));
 
             if (i < stages - 1)
-                yield return new WaitForSeconds(stageTime);
+            {
+                float elapsed = 0f;
+                while (elapsed < stageTime)
+                {
+                    elapsed += Time.deltaTime;
+                    indicator.SetProgress((i + Mathf.Clamp01(elapsed / stageTime)) / stages, i + 1);
+                    yield return null;
+                }
+            }
         }
 
+        indicator.SetProgress(1f, stages);
         Debug.Log("Plant fully grown!");
         
     }
 
     // Coroutine to destroy plant when last stage has no more children
-    private IEnumerator DestroyWhenEmpty(GameObject lastStage, float delay)
+    private IEnumerator DestroyWhenEmpty(GameObject lastStage, float delay, PlantCropState cropState)
     {
         while (lastStage.transform.childCount > 0)
             yield return null; // wait until all children are gone
@@ -345,7 +371,7 @@ public class PlantSpawner : MonoBehaviour
         yield return new WaitForSeconds(delay);
 
         // Drop seeds before destroying
-        DropSeeds(lastStage.transform.position);
+        DropSeeds(lastStage.transform.position, cropState != null ? cropState.seedItem : null);
 
         // Get the pot (parent of the plant)
         Transform pot = lastStage.transform.parent.parent; // because lastStage -> plantPrefab -> pot
@@ -378,7 +404,7 @@ public class PlantSpawner : MonoBehaviour
 
 
 
-    private void DropSeeds(Vector3 dropPosition)
+    private void DropSeeds(Vector3 dropPosition, Item seedItem)
     {
         if (seedPrefab == null)
         {
@@ -387,14 +413,20 @@ public class PlantSpawner : MonoBehaviour
         }
 
         // Always drop one seed
-        Instantiate(seedPrefab, dropPosition + Vector3.up * 0.3f, Quaternion.identity);
+        GameObject seed = Instantiate(seedPrefab, dropPosition + Vector3.up * 0.3f, Quaternion.identity);
+        if (seedItem != null)
+            seed.GetComponent<PickableObject>().item = seedItem;
+        seed.GetComponent<PickableObject>()?.EnableWorldPhysics();
 
         // 10–20% chance for an extra seed
         float chance = Random.Range(0f, 1f);
         if (chance <= Random.Range(0.1f, 0.2f))
         {
             Vector3 offset = new Vector3(Random.Range(-0.2f, 0.2f), 0.3f, Random.Range(-0.2f, 0.2f));
-            Instantiate(seedPrefab, dropPosition + offset, Quaternion.identity);
+            GameObject bonusSeed = Instantiate(seedPrefab, dropPosition + offset, Quaternion.identity);
+            if (seedItem != null)
+                bonusSeed.GetComponent<PickableObject>().item = seedItem;
+            bonusSeed.GetComponent<PickableObject>()?.EnableWorldPhysics();
             Debug.Log("Bonus seed dropped!");
         }
         else
@@ -435,8 +467,27 @@ public class PlantSpawner : MonoBehaviour
                 if (puim != null)
                     puim.HideWateringCountdown();
 
-                // Spawn the real plant and start growing
+                PlantCropState plantedState = stageOne.GetComponent<PlantCropState>();
+
+                // Spawn the real plant and start growing. The selected seed
+                // determines which product the mature buds produce.
                 GameObject plant = Instantiate(plantPrefab, spawnPoint.position, Quaternion.identity, pot.transform);
+
+                PlantCropState cropState = plant.GetComponent<PlantCropState>();
+                if (cropState == null)
+                    cropState = plant.AddComponent<PlantCropState>();
+                cropState.seedItem = plantedState != null ? plantedState.seedItem : null;
+                cropState.outputProduct = plantedState != null ? plantedState.outputProduct : null;
+                cropState.careScore = plantedState != null
+                    ? Mathf.Clamp01(plantedState.careScore + Mathf.Clamp01(remaining / Mathf.Max(1f, wateringTimeLimit)) * 0.65f)
+                    : 0.5f;
+
+                if (cropState.outputProduct != null)
+                {
+                    cropState.outputProduct = ProductItemFactory.CreateQualityVariant(
+                        cropState.outputProduct, ProductQualityRules.RollQuality(cropState.careScore));
+                    AssignHarvestProduct(plant, cropState.outputProduct);
+                }
 
                 // Disable all stages at start
                 for (int i = 0; i < plant.transform.childCount; i++)
@@ -473,6 +524,19 @@ public class PlantSpawner : MonoBehaviour
 
         if (puim != null)
             puim.HideWateringCountdown();
+    }
+
+    private void AssignHarvestProduct(GameObject plant, Item product)
+    {
+        if (plant == null || product == null)
+            return;
+
+        PickableObject[] buds = plant.GetComponentsInChildren<PickableObject>(true);
+        foreach (PickableObject bud in buds)
+        {
+            if (bud != null && bud.CompareTag("bud"))
+                bud.item = product;
+        }
     }
 
     private static Transform FindNamedChild(Transform parent, string preferredName, string legacyName)

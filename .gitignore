@@ -5,6 +5,8 @@
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
+*.log
+*.jsonl
 [Uu]ser[Ss]ettings/
 [Mm]emoryCaptures/
 [Rr]ecordings/

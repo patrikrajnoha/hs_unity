@@ -10,13 +10,14 @@ public class SteamUIController : MonoBehaviour
 
     void Start()
     {
+        LocalizationManager.EnsureLoaded();
         if (!SteamManager.Initialized)
         {
             if (connectButton != null)
                 connectButton.interactable = false;
 
             if (statusText != null)
-                statusText.text = "Steam unavailable - local mode";
+                statusText.text = LocalizationManager.GetOrFallback("ui.network.steam_unavailable", "Steam unavailable - local mode");
 
             return;
         }
@@ -50,10 +51,11 @@ public class SteamUIController : MonoBehaviour
             string myID = NetworkManager.Instance.GetMySteamID();
             int playerCount = NetworkManager.Instance.GetConnectedPlayerCount();
 
-            statusText.text = $" Your Steam ID: {myID}\n" +
-                            $" Connected Players: {playerCount}\n" +
-                            $" Use WASD or Arrow Keys to move\n" +
-                            $" Share your ID with your friend!";
+            statusText.text = " " + LocalizationManager.GetOrFallback("ui.network.steam_id", "Your Steam ID: {id}", "id", myID) + "\n" +
+                            " " + LocalizationManager.GetOrFallback("ui.network.connected_players", "Connected Players: {count}",
+                                "count", playerCount.ToString()) + "\n" +
+                            " " + LocalizationManager.GetOrFallback("ui.network.controls", "Use WASD or Arrow Keys to move") + "\n" +
+                            " " + LocalizationManager.GetOrFallback("ui.network.share_friend", "Share your ID with your friend!");
         }
     }
 

@@ -107,8 +107,9 @@ public class SteamManager : MonoBehaviour {
 				return;
 			}
 		}
-		catch (System.DllNotFoundException) { // We catch this exception here, as it will be the first occurrence of it.
+		catch (System.DllNotFoundException ex) { // We catch this exception here, as it will be the first occurrence of it.
 			m_bInitialized = false;
+			GameLogger.LogError("steam", "steam_dll_missing", "Steamworks DLL not found: " + ex.Message);
 			return;
 		}
 
@@ -123,9 +124,11 @@ public class SteamManager : MonoBehaviour {
 		// https://partner.steamgames.com/doc/sdk/api#initialization_and_shutdown
 		m_bInitialized = SteamAPI.Init();
 		if (!m_bInitialized) {
+			GameLogger.LogWarning("steam", "steam_init_failed", "Steamworks initialization returned false (Steam client not running or invalid AppID)");
 			return;
 		}
 
+		GameLogger.LogInfo("steam", "steam_initialized", "Steamworks initialized successfully");
 		s_EverInitialized = true;
 	}
 

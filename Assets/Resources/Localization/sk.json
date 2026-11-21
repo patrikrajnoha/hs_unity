@@ -1,0 +1,3119 @@
+{
+  "entries": [
+    {
+      "key": "interaction.prompt",
+      "lines": [
+        "Stlač E na interakciu alebo F na vykradnutie vreciek"
+      ]
+    },
+    {
+      "key": "personality.friendly.good",
+      "lines": [
+        "Čau, kamoš! Rád ťa vidím.",
+        "Dnes máš dobrú náladu!"
+      ]
+    },
+    {
+      "key": "personality.friendly.angry",
+      "lines": [
+        "Hej, pokoj.",
+        "Upokoj sa, nemusíš sa hnevať."
+      ]
+    },
+    {
+      "key": "personality.friendly.sad",
+      "lines": [
+        "Hlavu hore, kamarát.",
+        "Vyzeráš sklesnuto. Chceš sa porozprávať?"
+      ]
+    },
+    {
+      "key": "personality.friendly.default",
+      "lines": [
+        "Ahoj!"
+      ]
+    },
+    {
+      "key": "personality.suspicious.good",
+      "lines": [
+        "Hmm... neusmievaš sa trochu nasilu?",
+        "Dnes pôsobíš nejako falošne..."
+      ]
+    },
+    {
+      "key": "personality.suspicious.angry",
+      "lines": [
+        "Prečo si taký nepriateľský?",
+        "Vyzeráš, že budú problémy..."
+      ]
+    },
+    {
+      "key": "personality.suspicious.sad",
+      "lines": [
+        "Niečo skrývaš?",
+        "Tým smutným očiam neverím..."
+      ]
+    },
+    {
+      "key": "personality.suspicious.default",
+      "lines": [
+        "Čo máš za lubom?"
+      ]
+    },
+    {
+      "key": "personality.aggressive.angry",
+      "lines": [
+        "Chceš sa biť?!"
+      ]
+    },
+    {
+      "key": "personality.aggressive.default",
+      "lines": [
+        "Daj mi pokoj, nemám ťa rád."
+      ]
+    },
+    {
+      "key": "personality.neutral.good",
+      "lines": [
+        "Zdá sa, že dnes máš dobrú náladu.",
+        "Máš dobrý deň?"
+      ]
+    },
+    {
+      "key": "personality.neutral.default",
+      "lines": [
+        "Dnes je pekné počasie, čo?"
+      ]
+    },
+    {
+      "key": "civilian.friendly.first",
+      "lines": [
+        "Ešte som ťa tu nevidel. Maj oči otvorené, táto ulica si pamätá tváre."
+      ]
+    },
+    {
+      "key": "civilian.friendly.return",
+      "lines": [
+        "Zase si tu? Dobre. Už som si myslel, že sem chodíš len vtedy, keď niečo potrebuješ."
+      ]
+    },
+    {
+      "key": "civilian.friendly.neighborhood",
+      "lines": [
+        "Tiché zákutia nie sú nikdy také tiché, ako vyzerajú. Pýtaj sa obchodníkov, nie tých najhlučnejších na rohu."
+      ]
+    },
+    {
+      "key": "civilian.friendly.casual",
+      "lines": [
+        "Nejako prežívam deň. A ty? Hlavne to ostatným nesťažuj."
+      ]
+    },
+    {
+      "key": "civilian.neutral.first",
+      "lines": [
+        "Si tu nový. To väčšinou znamená jedno z dvoch: obchod alebo problémy."
+      ]
+    },
+    {
+      "key": "civilian.neutral.return",
+      "lines": [
+        "O tomto sme sa už bavili. Ak niečo konkrétne potrebuješ, povedz to."
+      ]
+    },
+    {
+      "key": "civilian.neutral.neighborhood",
+      "lines": [
+        "Ľudia si tu všímajú pohyb. A pravidelne sa opakujúce veci ešte rýchlejšie."
+      ]
+    },
+    {
+      "key": "civilian.neutral.casual",
+      "lines": [
+        "Nič nové. Takto mi to väčšinou vyhovuje."
+      ]
+    },
+    {
+      "key": "civilian.suspicious.first",
+      "lines": [
+        "Nepoznám ťa. Najprv povedz meno a ruky nechaj tam, kde na ne vidím."
+      ]
+    },
+    {
+      "key": "civilian.suspicious.return",
+      "lines": [
+        "Zase ty. Buď si vytrvalý, alebo si myslíš, že rýchlo zabúdam."
+      ]
+    },
+    {
+      "key": "civilian.suspicious.neighborhood",
+      "lines": [
+        "Veľa toho počujem. Ale málokomu to opakujem, najmä tým, čo sa vypytujú až príliš opatrne."
+      ]
+    },
+    {
+      "key": "civilian.suspicious.casual",
+      "lines": [
+        "Nezáväznými rečami ľudia zakrývajú vážne otázky. Čo vlastne chceš?"
+      ]
+    },
+    {
+      "key": "civilian.aggressive.first",
+      "lines": [
+        "Pokračuj ďalej. Cudzím ľuďom nič nevysvetľujem.",
+        "Povedz, čo tu chceš, a pokračuj svojou cestou.",
+        "Si tu nový. Tak sa predstav stručne."
+      ]
+    },
+    {
+      "key": "civilian.aggressive.return",
+      "lines": [
+        "Vrátil si sa. Tak rýchlo.",
+        "Zase tu? Tak sa spýtaj priamo.",
+        "Znova? Stručne."
+      ]
+    },
+    {
+      "key": "civilian.aggressive.neighborhood",
+      "lines": [
+        "Starám sa o svoje veci. Skús to aj ty.",
+        "Do toho, čo viem, ťa nič nie je.",
+        "Sleduj ulicu sám. Nie som tvoj sprievodca."
+      ]
+    },
+    {
+      "key": "civilian.aggressive.casual",
+      "lines": [
+        "Nemám záujem. Otravuj niekoho iného.",
+        "Na prázdne reči nemám náladu. Povedz, čo potrebuješ.",
+        "Mám prácu. Ak niečo chceš, prejdi k veci."
+      ]
+    },
+    {
+      "key": "civilian.reputation",
+      "lines": [
+        "Tvoje meno sa šíri. Či ti to pomôže, závisí od toho, čo sa ku mne donieslo."
+      ]
+    },
+    {
+      "key": "civilian.suspicion",
+      "lines": [
+        "Vyzeráš, akoby si čakal, kým sa ulica prestane pozerať. To sa nestane."
+      ]
+    },
+    {
+      "key": "civilian.stage",
+      "lines": [
+        "Veci sa tu menia. Čoraz viac ľudí sleduje, kto s kým obchoduje."
+      ]
+    },
+    {
+      "key": "civilian.trusted",
+      "lines": [
+        "Zatiaľ si so mnou jednal férovo. Poviem ti, čo viem, ale nech to neľutujem."
+      ]
+    },
+    {
+      "key": "civilian.cold",
+      "lines": [
+        "Naposledy sme sa nerozišli v dobrom. Povedz, čo chceš, a stručne."
+      ]
+    },
+    {
+      "key": "civilian.remembers_reputation",
+      "lines": [
+        "Stále sa vypytuješ na klebety? Pamätám si, čo som ti povedal minule. Aj to, čo si s tým urobil."
+      ]
+    },
+    {
+      "key": "civilian.leave",
+      "lines": [
+        "Dobre. Drž sa pri zemi.",
+        "Fajn. Dávaj na seba pozor.",
+        "Tak pokračuj ďalej."
+      ]
+    },
+    {
+      "key": "gang.greeting.first",
+      "lines": [
+        "Nevyzeráš, že si sem zablúdil náhodou. Povedz, prečo si prišiel.",
+        "Ak ide o obchod, prejdi k podstatnému.",
+        "Našiel si nás. Tak povedz, čo potrebuješ."
+      ]
+    },
+    {
+      "key": "gang.greeting.return",
+      "lines": [
+        "Vrátil si sa. Buď si sa niečo naučil, alebo si to odignoroval.",
+        "Zase tu? Tentoraz sa spýtaj niečo rozumnejšie.",
+        "Znova si tu. Poďme rovno k veci."
+      ]
+    },
+    {
+      "key": "gang.talk_shop",
+      "lines": [
+        "Ulica odmeňuje spoľahlivosť. Frajeri sa preslávia, spoľahliví ľudia zarobia.",
+        "Predávaj to, čo dokážeš doplniť. Spoľahlivá práca je viac než veľké reči.",
+        "Peniaze zarobíš tým, že prídeš a odvedieš prácu, nie robením rozruchu."
+      ]
+    },
+    {
+      "key": "gang.stage_starter",
+      "lines": [
+        "Ešte len dokazuješ, že vieš predávať tovar. O partii hovor až vtedy, keď budú hovoriť čísla.",
+        "Najprv predávaj tovar, až potom dávaj veľké sľuby.",
+        "Najprv si vybuduj výsledky. Partia nasleduje činy, nie reči."
+      ]
+    },
+    {
+      "key": "gang.stage_recruiting",
+      "lines": [
+        "Teraz sa sľuby menia na prácu. Ak chceš ľudí po svojom boku, daj im dôvod.",
+        "Teraz musíš svoje slová podložiť činmi. Daj ľuďom dôvod zostať.",
+        "Partii nestačí len meno. Práca musí pokračovať a podmienky musia byť jasné."
+      ]
+    },
+    {
+      "key": "gang.stage_leader",
+      "lines": [
+        "Teraz už pre teba pracujú ľudia. Postaraj sa, aby mali jedlo, výplatu a spoločný cieľ.",
+        "Ľudia teraz poslúchajú tvoje rozkazy. Dohliadni, aby sedeli peniaze aj pokyny.",
+        "Vedenie znamená, že každý má svoju úlohu a dostane zaplatené. Na nič z toho nezabudni."
+      ]
+    },
+    {
+      "key": "gang.recruit_offer",
+      "lines": [
+        "Chceš, aby som pre teba pracoval? Tak mi daj poriadnu ponuku.",
+        "Chceš ma na svojej strane? Povedz mi, čo je to za prácu a čo z toho budem mať.",
+        "Ak to myslíš vážne, daj mi konkrétne podmienky."
+      ]
+    },
+    {
+      "key": "gang.recruit.more",
+      "lines": [
+        "Viem predávať tovar a držať jazyk za zubami. Otázka je, či to dokážeš aj ty.",
+        "Zvládnem zásoby, trasy aj nenápadnú prácu. Nesľubuj, čo nemôžeš splniť.",
+        "Ponúkam poctivú prácu a mlčanlivosť. Čo ponúkaš ty?"
+      ]
+    },
+    {
+      "key": "gang.greeting.trusted",
+      "lines": [
+        "Dodržal si slovo. Zaslúžiš si trochu viac môjho času.",
+        "Bol si spoľahlivý. Spýtaj sa, na čo si prišiel.",
+        "Tvoje slovo zatiaľ platí. Hovorme otvorene."
+      ]
+    },
+    {
+      "key": "gang.greeting.cold",
+      "lines": [
+        "Pamätáme si, kto nám márni čas. Nech tento rozhovor za niečo stojí.",
+        "Dnes nemáme veľa trpezlivosti. Prejdi k veci.",
+        "Už si nám zobral dosť času. Tak nech to má zmysel."
+      ]
+    },
+    {
+      "key": "gang.greeting.recruit_followup",
+      "lines": [
+        "Predtým si chcel, aby som sa pridal. Ak sa ponuka zmenila, povedz ako.",
+        "Stále uvažuješ o spolupráci? Prines konkrétny plán.",
+        "Už si hovoril o vytvorení partie. Aké sú teraz podmienky?"
+      ]
+    },
+    {
+      "key": "gang.recruit.accepted",
+      "lines": [
+        "Dobre. Budem s tebou pracovať. Len nech to hneď neoľutujem.",
+        "Fajn. Beriem tú prácu. Dodrž svoju časť dohody a ja dodržím svoju.",
+        "Tak teda spolupracujeme. Nesklam moju dôveru."
+      ]
+    },
+    {
+      "key": "gang.recruit.rejected",
+      "lines": [
+        "Nie. Vráť sa, keď budeš mať viac než prázdne reči a nádejný úsmev.",
+        "To nestačí. Príď s podmienkami, nie s nadšením.",
+        "Táto ponuka mi nevyhovuje. Nabudúce prines niečo konkrétne."
+      ]
+    },
+    {
+      "key": "gang.recruit.declined",
+      "lines": [
+        "Je to na tebe. Ulica žije ďalej tak či tak.",
+        "Dobre. Ak si to rozmyslíš, príď pripravený.",
+        "Bez problému. Porozprávame sa, keď budeš pripravený."
+      ]
+    },
+    {
+      "key": "gang.greeting.laura.first",
+      "lines": [
+        "Si tu. Dobre. Pýtaj sa len na podstatné veci.",
+        "Rýchlo — čo sa snažíš predať?",
+        "Nepostávaj tu. Povedz, čo potrebuješ."
+      ]
+    },
+    {
+      "key": "gang.greeting.laura.return",
+      "lines": [
+        "Už si späť? Tak sa spýtaj niečo rozumnejšie.",
+        "Vrátil si sa. Poďme rovno k veci.",
+        "Zase? Dobre. Čo sa zmenilo?"
+      ]
+    },
+    {
+      "key": "gang.greeting.laura.trusted",
+      "lines": [
+        "Bol si spoľahlivý. Zaslúžiš si priamu odpoveď.",
+        "Dodržal si slovo. Len tak ďalej."
+      ]
+    },
+    {
+      "key": "gang.greeting.laura.cold",
+      "lines": [
+        "Nemám trpezlivosť na ďalšiu neurčitú ponuku. Prejdi k veci.",
+        "Už si mi zobral dosť času. Nech to má zmysel."
+      ]
+    },
+    {
+      "key": "gang.greeting.laura.recruit_followup",
+      "lines": [
+        "Chcel si spolupracovať. Ak to myslíš vážne, povedz konkrétne ako.",
+        "Stále uvažuješ o spolupráci? Prines skutočný plán."
+      ]
+    },
+    {
+      "key": "gang.greeting.susan.first",
+      "lines": [
+        "Pokojne. Ak niečo potrebuješ, spýtaj sa priamo.",
+        "Nová tvár? Dobre — čo ťa sem privádza?",
+        "Nehraj sa na drsňáka. Čo hľadáš?"
+      ]
+    },
+    {
+      "key": "gang.greeting.susan.return",
+      "lines": [
+        "Zase tu? Minútku si nájdem.",
+        "Rada ťa znova vidím. Čo potrebujeme vyriešiť?",
+        "Vrátil si sa. Poďme sa baviť o niečom užitočnom."
+      ]
+    },
+    {
+      "key": "gang.greeting.susan.trusted",
+      "lines": [
+        "Bol si ku mne férový. S tým sa dá pracovať.",
+        "Získal si trochu dôvery. Nepremrhaj ju."
+      ]
+    },
+    {
+      "key": "gang.greeting.susan.cold",
+      "lines": [
+        "Nemáme práve najlepšie vzťahy, tak si dobre vyberaj slová.",
+        "Držme sa výlučne obchodu."
+      ]
+    },
+    {
+      "key": "gang.greeting.susan.recruit_followup",
+      "lines": [
+        "Už si spomínal spoluprácu. Chceš sa dohodnúť konkrétne?",
+        "Stále máš záujem o dohodu? Povedz, čo vieš ponúknuť."
+      ]
+    },
+    {
+      "key": "buyer.greeting.first",
+      "lines": [
+        "Ty si ten, o kom som počul? Hovor potichu a povedz, čo mi naozaj vieš dodať.",
+        "Prišiel si predávať? Hovor potichu a povedz, čo vieš dodať.",
+        "Ak chceš obchodovať, začni tým, čo máš a kedy to môžeš priniesť."
+      ]
+    },
+    {
+      "key": "buyer.greeting.return",
+      "lines": [
+        "Zase ďalší obchod? Dobre. So známymi tvárami býva menej nepríjemných prekvapení.",
+        "Zase predávaš? Dobre. Pozrime sa, či čísla stále sedia.",
+        "Vrátil si sa. Povedz, čo si priniesol a koľko za to chceš."
+      ]
+    },
+    {
+      "key": "buyer.request.explain",
+      "lines": [
+        "Kupujem to, čo viem rýchlo predať ďalej. Najdôležitejšie je, aby si prišiel so správnym tovarom.",
+        "Potrebujem správny tovar v použiteľnom stave a v dohodnutom čase.",
+        "Kupujem pre zákazníkov, ktorí neradi čakajú. Dones správny tovar načas."
+      ]
+    },
+    {
+      "key": "buyer.price.talk",
+      "lines": [
+        "Cena je dôvera vyjadrená číslami. Dones mi čistý tovar a môžeme sa baviť.",
+        "Navrhni férovú cenu a dones bezproblémový tovar. Tak obchod funguje.",
+        "Platím za tovar, ktorý viem predať. Cena musí zodpovedať riziku."
+      ]
+    },
+    {
+      "key": "buyer.greeting.trusted",
+      "lines": [
+        "Už si mi dodal tovar. Vynechajme pózy a bavme sa o číslach.",
+        "Predtým si nesklamal. Ukáž mi, ako vyzerá ďalšia objednávka.",
+        "Vieme, ako to funguje. Daj mi tovar a povedz cenu."
+      ]
+    },
+    {
+      "key": "buyer.greeting.cold",
+      "lines": [
+        "Minule sme sa nepohodli. Nepokaz aj tento rozhovor.",
+        "Minule sme obaja stratili trpezlivosť. Daj mi rozumnú ponuku.",
+        "Ak znova obchodujeme, hovor jasne a stručne."
+      ]
+    },
+    {
+      "key": "buyer.greeting.price_followup",
+      "lines": [
+        "Ešte premýšľaš o cene? Pamätám si, kde sme skončili.",
+        "Zase riešime cenu? Tak navrhni sumu, ktorá dáva zmysel.",
+        "Cenu sme nechali otvorenú. Chceš sa už dohodnúť?"
+      ]
+    },
+    {
+      "key": "buyer.greeting.request_followup",
+      "lines": [
+        "Minule si chcel podrobnosti. Tak teda: potrebujem správny tovar načas.",
+        "Pýtal si sa, čo potrebujem. Odpoveď je rovnaká: správny tovar v dohodnutom čase.",
+        "Chcel si vysvetliť objednávku. Je to jednoduché — správny tovar, správny čas."
+      ]
+    },
+    {
+      "key": "buyer.leave",
+      "lines": [
+        "Žiadny nátlak. Vráť sa, keď budeš pripravený obchodovať.",
+        "Dobre. Príď, keď budeš mať ponuku, o ktorej sa oplatí hovoriť.",
+        "Fajn. Nabudúce dones správny tovar."
+      ]
+    },
+    {
+      "key": "recruit.greeting.first",
+      "lines": [
+        "Šéfe, kým si bol preč, všetko som udržiaval v chode. Chceš stručné zhrnutie alebo čísla?",
+        "Si späť. Trasy som udržal v prevádzke — chceš prehľad alebo celkovú tržbu?",
+        "Obchod som udržal v chode. Povedz, či chceš najprv zásoby, predaj alebo čísla."
+      ]
+    },
+    {
+      "key": "recruit.greeting.return",
+      "lines": [
+        "Tu si. Práca pokračuje a peniaze pribúdajú.",
+        "Zase si tu? Trasa funguje stabilne. Čo odo mňa potrebuješ?",
+        "Prišiel si vhod. Musím podať hlásenie o práci a vyúčtovať peniaze."
+      ]
+    },
+    {
+      "key": "recruit.status.good",
+      "lines": [
+        "Obchody idú stabilne. Dodávaj mi tovar a ja ho budem meniť na peniaze.",
+        "Trasa zarába. Pokračuj v zásobovaní a peniaze budú prúdiť.",
+        "Darí sa nám. Pravidelné dodávky znamenajú pravidelný príjem."
+      ]
+    },
+    {
+      "key": "recruit.status.low",
+      "lines": [
+        "V poslednom čase to ide slabo. Daj mi tovar alebo lepšiu trasu a zmením to.",
+        "Čísla sú slabé. Pomohlo by viac tovaru alebo bezpečnejšia trasa.",
+        "Predaj spomalil. Daj mi niečo na predaj a zlepším zisk."
+      ]
+    },
+    {
+      "key": "recruit.greeting.trusted",
+      "lines": [
+        "Staráš sa o svojich ľudí. Obom nám to uľahčuje prácu.",
+        "Dodržiavaš sľuby, takže si podľa toho viem plánovať prácu.",
+        "Práca je ľahšia, keď viem, že dodržíš slovo."
+      ]
+    },
+    {
+      "key": "recruit.greeting.cold",
+      "lines": [
+        "Stále môžeme spolupracovať, ale nemýľ si prácu s vernosťou.",
+        "Dohoda stále platí. Dôvera už nie.",
+        "Prácu si urobím, ale držme sa profesionálnych vzťahov."
+      ]
+    },
+    {
+      "key": "recruit.greeting.status_followup",
+      "lines": [
+        "Už si sa pýtal na obchod. Samy od seba sa čísla nezmenia.",
+        "Chcel si prehľad o obchode. Stručne: tovar dnu, peniaze von.",
+        "Zase chceš čísla? Tak sa pozrime, čo sa predalo a čo nie."
+      ]
+    },
+    {
+      "key": "recruit.leave",
+      "lines": [
+        "Dohliadnem na všetko.",
+        "Vidíme sa, šéfe.",
+        "Postarám sa, aby trasa fungovala."
+      ]
+    },
+    {
+      "key": "gang.recruit.already_recruited",
+      "lines": [
+        "Čo pre teba môžem urobiť, šéfe?"
+      ]
+    },
+    {
+      "key": "buyer.request.generic",
+      "lines": [
+        "Hej, máš pre mňa niečo?",
+        "Čo dnes nesieš?",
+        "Priniesol si niečo, čo môžem predať?"
+      ]
+    },
+    {
+      "key": "buyer.request.item",
+      "lines": [
+        "Hej, máš {item}?",
+        "Hľadám {item}, vieš mi pomôcť?",
+        "Potrebujem {item}. Máš niečo?"
+      ]
+    },
+    {
+      "key": "buyer.invalid_item",
+      "lines": [
+        "Toto nechcem. Hľadám {item}."
+      ]
+    },
+    {
+      "key": "buyer.not_enough_item",
+      "lines": [
+        "Momentálne nemáš dosť položiek {item}."
+      ]
+    },
+    {
+      "key": "buyer.quantity_prompt",
+      "lines": [
+        "Koľko kusov {item} chceš predať? (Max. {available}) Ja som chcel {wantedAmount}."
+      ]
+    },
+    {
+      "key": "buyer.selected_item",
+      "lines": [
+        "Vybral si {item}. Pokračuj stlačením Áno."
+      ]
+    },
+    {
+      "key": "buyer.not_enough_quantity",
+      "lines": [
+        "Nemáš toľko kusov {item}."
+      ]
+    },
+    {
+      "key": "buyer.invalid_sale_input",
+      "lines": [
+        "Zadaj kladné množstvo a nezápornú cenu."
+      ]
+    },
+    {
+      "key": "buyer.counter_offer",
+      "lines": [
+        "To je priveľa. Čo povieš na {counterTotal} za všetkých {sellAmount}?",
+        "Tá cena je vysoká. Môžem dať {counterTotal} za všetkých {sellAmount}.",
+        "Za tú cenu to nepredám. Prijmeš {counterTotal} za {sellAmount}?"
+      ]
+    },
+    {
+      "key": "buyer.counter_accepted",
+      "lines": [
+        "Dobre, tak za tvoju cenu.",
+        "Fajn. Tentoraz pristúpim na tvoju sumu.",
+        "Dohodnuté. Uzavrieme to za tvoju cenu."
+      ]
+    },
+    {
+      "key": "buyer.counter_refused",
+      "lines": [
+        "Tak na to zabudni.",
+        "Za tú cenu obchod nebude.",
+        "Nechajme to tak. To sa mi neoplatí."
+      ]
+    },
+    {
+      "key": "buyer.declined",
+      "lines": [
+        "Dobre, možno nabudúce.",
+        "Žiadny problém. Vráť sa, keď budeš pripravený.",
+        "Fajn. Nabudúce prines lepšiu ponuku."
+      ]
+    },
+    {
+      "key": "buyer.deal",
+      "lines": [
+        "Platí! Beriem {amount} za {totalPrice}.",
+        "Hotovo. {amount} za {totalPrice}.",
+        "Dohodnuté: {amount} za {totalPrice}."
+      ]
+    },
+    {
+      "key": "recruit.inventory_header",
+      "lines": [
+        "Hej, šéfe. Tu je môj stav:\nPeniaze: ${money}\n",
+        "Aktuálna tržba, šéfe:\nPeniaze: ${money}\n",
+        "Doterajšie vyúčtovanie:\nPeniaze: ${money}\n"
+      ]
+    },
+    {
+      "key": "recruit.inventory_item",
+      "lines": [
+        "- {item} x{amount}\n"
+      ]
+    },
+    {
+      "key": "recruit.take_all",
+      "lines": [
+        "Nemáš už čo vybrať, šéfe.",
+        "To je celá tržba. Teraz je v tvojich rukách.",
+        "Všetko vybraté, šéfe. Zásoby sú tvoje."
+      ]
+    },
+    {
+      "key": "recruit.cannot_take",
+      "lines": [
+        "Nemôžem prevziať niečo, čo neviem predať.\nChceš odovzdať niečo iné?"
+      ]
+    },
+    {
+      "key": "recruit.not_enough_item",
+      "lines": [
+        "Momentálne nemáš dosť položiek {item}."
+      ]
+    },
+    {
+      "key": "recruit.quantity_prompt",
+      "lines": [
+        "Koľko kusov {item} chceš odovzdať? (Max. {available})"
+      ]
+    },
+    {
+      "key": "recruit.selected_item",
+      "lines": [
+        "Vybral si {item}. Pokračuj stlačením Odovzdať."
+      ]
+    },
+    {
+      "key": "recruit.not_enough_quantity",
+      "lines": [
+        "Nemáš dosť kusov {item} na odovzdanie."
+      ]
+    },
+    {
+      "key": "recruit.invalid_quantity",
+      "lines": [
+        "Zadaj kladné množstvo."
+      ]
+    },
+    {
+      "key": "recruit.accept_item",
+      "lines": [
+        "Jasné, šéfe! Vezmem {amount}.",
+        "Rozumiem. {amount} rozpredám na trase.",
+        "Prevzal som {amount}. Postarám sa o predaj."
+      ]
+    },
+    {
+      "key": "recruit.goodbye",
+      "lines": [
+        "Maj sa, šéfe.",
+        "Vraciam sa do práce.",
+        "Uvidíme sa na trase."
+      ]
+    },
+    {
+      "key": "police.greet",
+      "lines": [
+        "Dobrý deň, občan.",
+        "Dobrý deň. Nechajte priechod voľný.",
+        "Dobré ráno. Pokračujte v ceste a neblokujte chodník."
+      ]
+    },
+    {
+      "key": "police.warn",
+      "lines": [
+        "Dodržiavajte, prosím, pravidlá.",
+        "Dávajte si pozor na správanie. Papierovania mám už dosť.",
+        "Udržujte poriadok. Nechcem o tom spisovať hlásenie."
+      ]
+    },
+    {
+      "key": "police.arrest",
+      "lines": [
+        "Ste zatknutý!",
+        "Ruky za chrbát!",
+        "Zadržiavam vás. Ruky nechajte tam, kde na ne vidím."
+      ]
+    },
+    {
+      "key": "police.arrest_demand",
+      "lines": [
+        "Odovzdajte mi všetko nelegálne, čo máte pri sebe..."
+      ]
+    },
+    {
+      "key": "police.move_along",
+      "lines": [
+        "Pokračujte ďalej.",
+        "Neblokujte chodník.",
+        "Môžete ísť. Udržujte poriadok."
+      ]
+    },
+    {
+      "key": "police.greeting.first",
+      "lines": [
+        "Rozprávame sa prvýkrát. Nech je to jednoduché a ruky držte na očiach.",
+        "Ešte sme spolu nehovorili. Zachovajte pokoj a povedzte mi, čo sa deje.",
+        "Hovoríme spolu prvýkrát? Ruky na očiach a jasné odpovede."
+      ]
+    },
+    {
+      "key": "police.greeting.return",
+      "lines": [
+        "Už sme spolu hovorili. Nenúťte ma opakovať pravidlá.",
+        "Znovu sa stretávame. Poďme priamo k veci.",
+        "Postup už poznáte. Vybavme to stručne."
+      ]
+    },
+    {
+      "key": "police.explain",
+      "lines": [
+        "Preverujem oznámenie. Odpovedajte jasne a zostane to rutinná kontrola.",
+        "Overujem hlásenie. Dajte mi jasnú odpoveď.",
+        "Toto je bežná kontrola. Vysvetlite, čo sa stalo, a uvidíme."
+      ]
+    },
+    {
+      "key": "police.cooperate",
+      "lines": [
+        "Dobre. Spolupráca šetrí čas všetkým.",
+        "Ďakujem. Takto to bude jednoduché.",
+        "Dobre. Toto je najrýchlejší spôsob, ako to vybaviť."
+      ]
+    },
+    {
+      "key": "police.challenge",
+      "lines": [
+        "Pozor. Sebavedomie ešte neznamená beztrestnosť.",
+        "Miernite tón. Položil som jednoduchú otázku.",
+        "Zachovajte pokoj. Keď to budete komplikovať, potrvá to dlhšie."
+      ]
+    },
+    {
+      "key": "police.greeting.cooperative",
+      "lines": [
+        "Minule ste spolupracovali. Pokračujte v tom a nebude problém.",
+        "Poslednú kontrolu ste zvládli dobre. Zopakujme si to aj dnes.",
+        "Minule to bola rutinná kontrola. Pomôžte mi, aby to tak zostalo."
+      ]
+    },
+    {
+      "key": "police.greeting.hostile",
+      "lines": [
+        "Minule ste to komplikovali. Druhú šancu vám len tak nedám.",
+        "Naposledy ste robili zbytočné problémy. Dnes odpovedajte jasne.",
+        "Minule ste nespolupracovali. Nepredlžujte toto zastavenie."
+      ]
+    },
+    {
+      "key": "police.leave",
+      "lines": [
+        "Tak pokračujte ďalej.",
+        "Vyhýbajte sa problémom.",
+        "Dobre. Nedostaňte sa do problémov."
+      ]
+    },
+    {
+      "key": "steal.started",
+      "lines": [
+        "Začínaš vykrádať vrecká... buď potichu!"
+      ]
+    },
+    {
+      "key": "steal.collect_hint",
+      "lines": [
+        "Zober, čo si našiel — klikaj opatrne!"
+      ]
+    },
+    {
+      "key": "steal.empty_hint",
+      "lines": [
+        "Zdá sa, že toho pri sebe veľa nemajú..."
+      ]
+    },
+    {
+      "key": "steal.found_nothing",
+      "lines": [
+        "Nič si nenašiel... NPC si ťa všimlo!"
+      ]
+    },
+    {
+      "key": "steal.inventory_hint",
+      "lines": [
+        "Vo vreckách vidíš vydutiny... možno {itemTypes} druhov predmetov (spolu {totalItems})."
+      ]
+    },
+    {
+      "key": "choice.anything_happening_around_here",
+      "lines": [
+        "Deje sa tu niečo?"
+      ]
+    },
+    {
+      "key": "choice.ask_about_teaming_up",
+      "lines": [
+        "Spýtať sa na spoluprácu"
+      ]
+    },
+    {
+      "key": "choice.ask_directly",
+      "lines": [
+        "Spýtať sa priamo"
+      ]
+    },
+    {
+      "key": "choice.ask_one_direct_question",
+      "lines": [
+        "Položiť jednu priamu otázku"
+      ]
+    },
+    {
+      "key": "choice.ask_one_more_question",
+      "lines": [
+        "Položiť ešte jednu otázku"
+      ]
+    },
+    {
+      "key": "choice.back_off",
+      "lines": [
+        "Ustúpiť"
+      ]
+    },
+    {
+      "key": "choice.continue",
+      "lines": [
+        "Pokračovať"
+      ]
+    },
+    {
+      "key": "choice.cooperate",
+      "lines": [
+        "Spolupracovať"
+      ]
+    },
+    {
+      "key": "choice.discuss_the_price",
+      "lines": [
+        "Prediskutovať cenu"
+      ]
+    },
+    {
+      "key": "choice.explain_that",
+      "lines": [
+        "Vysvetliť to"
+      ]
+    },
+    {
+      "key": "choice.explain_the_situation",
+      "lines": [
+        "Vysvetliť situáciu"
+      ]
+    },
+    {
+      "key": "choice.how_s_business_going",
+      "lines": [
+        "Ako idú obchody?"
+      ]
+    },
+    {
+      "key": "choice.keep_it_casual",
+      "lines": [
+        "Nezáväzne sa porozprávať"
+      ]
+    },
+    {
+      "key": "choice.keep_this_professional",
+      "lines": [
+        "Zostať profesionálny"
+      ]
+    },
+    {
+      "key": "choice.keep_your_distance",
+      "lines": [
+        "Držať si odstup"
+      ]
+    },
+    {
+      "key": "choice.leave",
+      "lines": [
+        "Odísť"
+      ]
+    },
+    {
+      "key": "choice.make_conversation",
+      "lines": [
+        "Porozprávať sa"
+      ]
+    },
+    {
+      "key": "choice.make_offer",
+      "lines": [
+        "Predložiť ponuku"
+      ]
+    },
+    {
+      "key": "choice.make_the_deal",
+      "lines": [
+        "Uzavrieť obchod"
+      ]
+    },
+    {
+      "key": "choice.make_the_offer",
+      "lines": [
+        "Podať ponuku"
+      ]
+    },
+    {
+      "key": "choice.not_today",
+      "lines": [
+        "Dnes nie"
+      ]
+    },
+    {
+      "key": "choice.please_select_an_item_first",
+      "lines": [
+        "Najprv vyber predmet."
+      ]
+    },
+    {
+      "key": "choice.show_me_the_inventory",
+      "lines": [
+        "Ukáž mi zásoby"
+      ]
+    },
+    {
+      "key": "choice.show_me_the_numbers",
+      "lines": [
+        "Ukáž mi čísla"
+      ]
+    },
+    {
+      "key": "choice.show_me_the_order",
+      "lines": [
+        "Ukáž mi objednávku"
+      ]
+    },
+    {
+      "key": "choice.stay_silent",
+      "lines": [
+        "Zostať ticho"
+      ]
+    },
+    {
+      "key": "choice.talk_business",
+      "lines": [
+        "Hovoriť o obchode"
+      ]
+    },
+    {
+      "key": "choice.talk_through_the_order",
+      "lines": [
+        "Prejsť si objednávku"
+      ]
+    },
+    {
+      "key": "choice.that_s_enough",
+      "lines": [
+        "To stačí"
+      ]
+    },
+    {
+      "key": "choice.try_another_pitch",
+      "lines": [
+        "Skúsiť inú ponuku"
+      ]
+    },
+    {
+      "key": "choice.walk_away",
+      "lines": [
+        "Odísť preč"
+      ]
+    },
+    {
+      "key": "choice.what_are_you_looking_for",
+      "lines": [
+        "Čo hľadáš?"
+      ]
+    },
+    {
+      "key": "choice.what_can_you_handle",
+      "lines": [
+        "Čo dokážeš zvládnuť?"
+      ]
+    },
+    {
+      "key": "choice.what_comes_next",
+      "lines": [
+        "Čo bude nasledovať?"
+      ]
+    },
+    {
+      "key": "choice.what_have_you_heard",
+      "lines": [
+        "Čo si počul?"
+      ]
+    },
+    {
+      "key": "choice.what_is_this_about",
+      "lines": [
+        "O čo tu ide?"
+      ]
+    },
+    {
+      "key": "choice.what_stock_do_you_have",
+      "lines": [
+        "Aký tovar máš?"
+      ]
+    },
+    {
+      "key": "city.contract.first_delivery.title",
+      "lines": [
+        "01 / Prvý dojem"
+      ]
+    },
+    {
+      "key": "city.contract.first_delivery.description",
+      "lines": [
+        "Dostaň sa do podniku The Jade Room a dokonči svoju prvú donášku."
+      ]
+    },
+    {
+      "key": "city.contract.first_delivery.step.0.objective",
+      "lines": [
+        "Porozprávaj sa s Marou a prijmi donášku."
+      ]
+    },
+    {
+      "key": "city.contract.first_delivery.step.1.objective",
+      "lines": [
+        "Vyzdvihni zapečatený balík v severnom prístave."
+      ]
+    },
+    {
+      "key": "city.contract.first_delivery.step.2.objective",
+      "lines": [
+        "Otvor dvere kaviarne a doruč balík Tomasovi VNÚTRI."
+      ]
+    },
+    {
+      "key": "city.contract.first_delivery.step.3.objective",
+      "lines": [
+        "Vráť sa k Mare po odmenu."
+      ]
+    },
+    {
+      "key": "city.contract.power_cut.title",
+      "lines": [
+        "02 / Výpadok prúdu"
+      ]
+    },
+    {
+      "key": "city.contract.power_cut.description",
+      "lines": [
+        "Prehľadaj dielňu a oprav jej elektrický rozvádzač v správnom poradí."
+      ]
+    },
+    {
+      "key": "city.contract.power_cut.step.0.objective",
+      "lines": [
+        "Spýtaj sa Mary na výpadok prúdu v dielni."
+      ]
+    },
+    {
+      "key": "city.contract.power_cut.step.1.objective",
+      "lines": [
+        "Vojdi do dielne a zober náhradnú poistku."
+      ]
+    },
+    {
+      "key": "city.contract.power_cut.step.2.objective",
+      "lines": [
+        "Prečítaj si servisnú poznámku v dielni."
+      ]
+    },
+    {
+      "key": "city.contract.power_cut.step.3.objective",
+      "lines": [
+        "Oprav rozvádzač. Použi postup z poznámky."
+      ]
+    },
+    {
+      "key": "city.contract.power_cut.step.4.objective",
+      "lines": [
+        "Oznám Mare, že prúd je obnovený."
+      ]
+    },
+    {
+      "key": "city.contract.paper_trail.title",
+      "lines": [
+        "03 / Papierová stopa"
+      ]
+    },
+    {
+      "key": "city.contract.paper_trail.description",
+      "lines": [
+        "Vojdi do skladu, získaj účtovnú knihu a zbav sa prenasledovateľov."
+      ]
+    },
+    {
+      "key": "city.contract.paper_trail.step.0.objective",
+      "lines": [
+        "Vypočuj si Maru o skladovej účtovnej knihe."
+      ]
+    },
+    {
+      "key": "city.contract.paper_trail.step.1.objective",
+      "lines": [
+        "Otvor sklad a nájdi účtovnú knihu. Ada ti môže dať kód skrinky."
+      ]
+    },
+    {
+      "key": "city.contract.paper_trail.step.2.objective",
+      "lines": [
+        "Stras zo seba políciu a potom zostaň 5 sekúnd VNÚTRI úkrytu v dielni."
+      ]
+    },
+    {
+      "key": "city.contract.paper_trail.step.3.objective",
+      "lines": [
+        "Prines účtovnú knihu Mare."
+      ]
+    },
+    {
+      "key": "city.contract.cross_check.title",
+      "lines": [
+        "04 / Krížová kontrola"
+      ]
+    },
+    {
+      "key": "city.contract.cross_check.description",
+      "lines": [
+        "Over údaje z účtovnej knihy pomocou prepravného manifestu, faktúry z kaviarne a svedka."
+      ]
+    },
+    {
+      "key": "city.contract.cross_check.step.0.objective",
+      "lines": [
+        "Prijmi od Mary úlohu zozbierať dôkazy."
+      ]
+    },
+    {
+      "key": "city.contract.cross_check.step.1.objective",
+      "lines": [
+        "Preskúmaj prepravný manifest vo vnútri skladu."
+      ]
+    },
+    {
+      "key": "city.contract.cross_check.step.2.objective",
+      "lines": [
+        "Nájdi zodpovedajúcu faktúru na pulte kaviarne."
+      ]
+    },
+    {
+      "key": "city.contract.cross_check.step.3.objective",
+      "lines": [
+        "Presvedč Adu, aby svedčila na základe zhodného čísla zásielky."
+      ]
+    },
+    {
+      "key": "city.contract.cross_check.step.4.objective",
+      "lines": [
+        "Vráť overené dôkazy Mare."
+      ]
+    },
+    {
+      "key": "city.contract.last_broadcast.title",
+      "lines": [
+        "05 / Posledné vysielanie"
+      ]
+    },
+    {
+      "key": "city.contract.last_broadcast.description",
+      "lines": [
+        "Pomocou rádiového domu zverejni dôkazy a potom uteč na miesto vyzdvihnutia."
+      ]
+    },
+    {
+      "key": "city.contract.last_broadcast.step.0.objective",
+      "lines": [
+        "Prijmi od Mary úlohu posledného vysielania."
+      ]
+    },
+    {
+      "key": "city.contract.last_broadcast.step.1.objective",
+      "lines": [
+        "Vyzdvihni kľúč od rádiového domu u Ady."
+      ]
+    },
+    {
+      "key": "city.contract.last_broadcast.step.2.objective",
+      "lines": [
+        "Vojdi do rádiového domu a nalaď správnu frekvenciu."
+      ]
+    },
+    {
+      "key": "city.contract.last_broadcast.step.3.objective",
+      "lines": [
+        "Vysielanie spustilo poplach. Strias sa polície a vydrž 6 sekúnd na mieste vyzdvihnutia."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery.speaker",
+      "lines": [
+        "Mara / Sprostredkovateľka"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery.text",
+      "lines": [
+        "Prvá práca: zapečatený balík v severnom prístave. Dones ho Tomasovi DOVNÚTRA The Jade Room. Dvere otvoríš klávesom E a potom sa ku mne vráť po 150 $. Máš štyri minúty. Pripravený?"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery.choice.0.text",
+      "lines": [
+        "Prijať prácu."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery.choice.1.text",
+      "lines": [
+        "Čo je v balíku?"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery.choice.2.text",
+      "lines": [
+        "Ešte nie."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.directions.speaker",
+      "lines": [
+        "Mara / Sprostredkovateľka"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.directions.text",
+      "lines": [
+        "Severovýchodný prístav, potom vchod do kaviarne smerom na bulvár. Kláves E otvorí dvere; vojdi dnu a porozprávaj sa s Tomasom. Maják a mapa ukazujú tvoj aktuálny cieľ."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.directions.choice.0.text",
+      "lines": [
+        "Už idem."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.parcel_question.speaker",
+      "lines": [
+        "Mara / Sprostredkovateľka"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.parcel_question.text",
+      "lines": [
+        "Súčiastky do kávovaru. Nudná práca platí tú zaujímavú. Najprv dokáž, že zvládneš aj tú nudnú."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.parcel_question.choice.0.text",
+      "lines": [
+        "Fajn. Beriem to."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.parcel_question.choice.1.text",
+      "lines": [
+        "Dnes nie."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.delivery.speaker",
+      "lines": [
+        "Tomas / The Jade Room"
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.delivery.text",
+      "lines": [
+        "Konečne! Mlynček nefunguje celé ráno. Ak ťa poslala Mara, povedz jej, že sme vyrovnaní. A že stále robím najlepšiu kávu na tejto strane rieky."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.delivery.choice.0.text",
+      "lines": [
+        "Tu je tvoj balík. Dám jej vedieť."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.delivery.choice.1.text",
+      "lines": [
+        "Daj mi chvíľku."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery_done.speaker",
+      "lines": [
+        "Mara / Sprostredkovateľka"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery_done.text",
+      "lines": [
+        "Tomas volal. Dobrá práca: 150 $. Teraz potrebujem niekoho, kto dokáže viac než nosiť krabice. V dielni vypadol prúd."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery_done.choice.0.text",
+      "lines": [
+        "Prevziať odmenu."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.delivery_done.choice.1.text",
+      "lines": [
+        "Chvíľku."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger.speaker",
+      "lines": [
+        "Mara / Sprostredkovateľka"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger.text",
+      "lines": [
+        "Účtovná kniha v juhovýchodnom sklade obsahuje mená ľudí, ktorí vydierajú naše obchody. Dvere skladu sú teraz prístupné. Ada pozná kód SKRINKY. Bez neho spustíš poplach. Získaj knihu, stras sa polície a ukry sa v dielni."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger.choice.0.text",
+      "lines": [
+        "Prijať úlohu s účtovnou knihou."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger.choice.1.text",
+      "lines": [
+        "Prečo nezavolať políciu?"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger.choice.2.text",
+      "lines": [
+        "Ešte nie."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.police_question.speaker",
+      "lines": [
+        "Mara / Sprostredkovateľka"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.police_question.text",
+      "lines": [
+        "Novak sa riadi poplachom, nie dokumentmi. Najprv potrebujem dôkazy, až potom verejnosť. Dokážeš to potichu. Najprv sa porozprávaj s Adou."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.police_question.choice.0.text",
+      "lines": [
+        "Dobre. Urobím to."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.police_question.choice.1.text",
+      "lines": [
+        "Premyslím si to."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.escape_tip.speaker",
+      "lines": [
+        "Mara / Sprostredkovateľka"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.escape_tip.text",
+      "lines": [
+        "Za rohmi budov sa stratíš policajtovi z dohľadu. Prehľadáva miesto, kde ťa videl naposledy. Úkryt je VNÚTRI dielne, vzadu. Keď bude oblasť čistá, zostaň päť sekúnd na nefritovej podložke."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.escape_tip.choice.0.text",
+      "lines": [
+        "Rozumiem."
+      ]
+    },
+    {
+      "key": "city.conversation.ada.route.speaker",
+      "lines": [
+        "Ada / Prístavná pracovníčka"
+      ]
+    },
+    {
+      "key": "city.conversation.ada.route.text",
+      "lines": [
+        "Kód skrinky: 0417. S ním sa alarm pri účtovnej knihe nespustí. Vchod do skladu je od cesty. Ak neskôr nájdeš prepravné dokumenty, hľadaj zhodné číslo zásielky a never len menu."
+      ]
+    },
+    {
+      "key": "city.conversation.ada.route.choice.0.text",
+      "lines": [
+        "Použiť kód."
+      ]
+    },
+    {
+      "key": "city.conversation.ada.route.choice.1.text",
+      "lines": [
+        "Ako môžem utiecť policajtovi?"
+      ]
+    },
+    {
+      "key": "city.conversation.ada.route.choice.2.text",
+      "lines": [
+        "Len idem okolo."
+      ]
+    },
+    {
+      "key": "city.conversation.ada.police.speaker",
+      "lines": [
+        "Ada / Prístavná pracovníčka"
+      ]
+    },
+    {
+      "key": "city.conversation.ada.police.text",
+      "lines": [
+        "Cez steny nevidí, ale pamätá si, kde si bol. Zmizni mu za budovami z dohľadu a pokračuj ďalej. Pred vstupom do úkrytu počkaj, kým bude oblasť čistá. A zapamätaj si kód: 0417."
+      ]
+    },
+    {
+      "key": "city.conversation.ada.police.choice.0.text",
+      "lines": [
+        "Rozumiem. Lepšie je zostať nenápadný."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger_done.speaker",
+      "lines": [
+        "Mara / Sprostredkovateľka"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger_done.text",
+      "lines": [
+        "Účtovná kniha je pravá, ale jeden dokument sa dá ľahko spochybniť. Potrebujeme manifest, faktúru a svedka. Najprv tvojich 350 $ za jej získanie."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger_done.choice.0.text",
+      "lines": [
+        "Prevziať odmenu."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.ledger_done.choice.1.text",
+      "lines": [
+        "Chvíľku."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.idle.speaker",
+      "lines": [
+        "Mara / Sprostredkovateľka"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.idle.text",
+      "lines": [
+        "Najprv dokonči cieľ na paneli úloh. Mapa označuje ďalšie miesto. Pri úlohách vo vnútri budov musíš otvoriť dvere správnej budovy a vojsť dnu."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.idle.choice.0.text",
+      "lines": [
+        "Pracujem na tom."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.idle.speaker",
+      "lines": [
+        "Tomas / The Jade Room"
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.idle.text",
+      "lines": [
+        "Mara ti dáva prácu, ja ti dávam kávu. Len jeden z nás potrebuje štvorminútový termín. Ak hľadáš prácu, nájdeš ju pri západnej dielni."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.idle.choice.0.text",
+      "lines": [
+        "Spýtam sa jej."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.idle.choice.1.text",
+      "lines": [
+        "Nejaká miestna rada?"
+      ]
+    },
+    {
+      "key": "city.conversation.officer.idle.speaker",
+      "lines": [
+        "Policajt Novak"
+      ]
+    },
+    {
+      "key": "city.conversation.officer.idle.text",
+      "lines": [
+        "Dobré popoludnie. Neblokujte priechody a nechajte skladové skrinky na pokoji. Ak začujete alarm, nenúťte ma bežať. Ja aj moje kolená máme ťažký týždeň."
+      ]
+    },
+    {
+      "key": "city.conversation.officer.idle.choice.0.text",
+      "lines": [
+        "Len sa prechádzam, pán policajt."
+      ]
+    },
+    {
+      "key": "city.conversation.officer.idle.choice.1.text",
+      "lines": [
+        "Mal by som niečo vedieť?"
+      ]
+    },
+    {
+      "key": "city.conversation.officer.advice.speaker",
+      "lines": [
+        "Policajt Novak"
+      ]
+    },
+    {
+      "key": "city.conversation.officer.advice.text",
+      "lines": [
+        "Rozlišujte medzi skratkou a neoprávneným vstupom. A ak vám Mara ponúkne ľahké peniaze, spýtajte sa, prečo sú také ľahké."
+      ]
+    },
+    {
+      "key": "city.conversation.officer.advice.choice.0.text",
+      "lines": [
+        "Budem na to pamätať."
+      ]
+    },
+    {
+      "key": "city.conversation.local.rumor.speaker",
+      "lines": [
+        "Obyvateľ Starej štvrte"
+      ]
+    },
+    {
+      "key": "city.conversation.local.rumor.text",
+      "lines": [
+        "Kaviareň je otvorená zákazníkom. Dielňa potrebuje opravy. Sklad a rádiový dom sa odomknú, keď ti Mara začne dôverovať s náročnejšími úlohami. Hľadaj nefritové označenia dverí."
+      ]
+    },
+    {
+      "key": "city.conversation.local.rumor.choice.0.text",
+      "lines": [
+        "Dobre vedieť."
+      ]
+    },
+    {
+      "key": "city.conversation.local.rumor.choice.1.text",
+      "lines": [
+        "Nejaká rada o uličkách?"
+      ]
+    },
+    {
+      "key": "city.conversation.local.alleys.speaker",
+      "lines": [
+        "Obyvateľ Starej štvrte"
+      ]
+    },
+    {
+      "key": "city.conversation.local.alleys.text",
+      "lines": [
+        "Medzery medzi budovami spájajú zadné uličky. Ak sa ponáhľaš, rohy sú tvoji priatelia. Slepé uličky nie. Najprv sa pozri, kam ideš."
+      ]
+    },
+    {
+      "key": "city.conversation.local.alleys.choice.0.text",
+      "lines": [
+        "Vďaka za radu."
+      ]
+    },
+    {
+      "key": "city.conversation.menu.pause.speaker",
+      "lines": [
+        "HighStakes / Pozastavené"
+      ]
+    },
+    {
+      "key": "city.conversation.menu.pause.text",
+      "lines": [
+        "Dokončené úrovne a ich skóre sa ukladajú. Reštart aktuálnej úrovne sa počíta ako ďalší pokus; predchádzajúce odmeny zostávajú. Kampaň sa končí po piatej úrovni."
+      ]
+    },
+    {
+      "key": "city.conversation.menu.pause.choice.0.text",
+      "lines": [
+        "Pokračovať."
+      ]
+    },
+    {
+      "key": "city.conversation.menu.pause.choice.1.text",
+      "lines": [
+        "Zopakovať aktuálnu úroveň."
+      ]
+    },
+    {
+      "key": "city.conversation.menu.pause.choice.2.text",
+      "lines": [
+        "Nová kampaň od prvej úrovne."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power.speaker",
+      "lines": [
+        "Mara / Sprostredkovateľka"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power.text",
+      "lines": [
+        "V dielni vyhorela poistka. Nájdi náhradnú poistku vo vnútri, prečítaj si servisnú poznámku a potom zapni rozvádzač v správnom poradí. Nesprávne prepínače poškodia zariadenie a znížia skóre. Za opravu dostaneš 220 $."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power.choice.0.text",
+      "lines": [
+        "Obnovím napájanie."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power.choice.1.text",
+      "lines": [
+        "Vrátim sa neskôr."
+      ]
+    },
+    {
+      "key": "city.conversation.power.note.speaker",
+      "lines": [
+        "Servisná poznámka"
+      ]
+    },
+    {
+      "key": "city.conversation.power.note.text",
+      "lines": [
+        "POSTUP REŠTARTU: vlož náhradnú poistku a potom stlač MODRÝ, ŽLTÝ, ZELENÝ. Nikdy nezačínaj zeleným prepínačom. Pred dotykom rozvádzača si zapamätaj poradie."
+      ]
+    },
+    {
+      "key": "city.conversation.power.note.choice.0.text",
+      "lines": [
+        "Zapamätať: MODRÝ – ŽLTÝ – ZELENÝ."
+      ]
+    },
+    {
+      "key": "city.conversation.power.panel.speaker",
+      "lines": [
+        "Rozvádzač dielne"
+      ]
+    },
+    {
+      "key": "city.conversation.power.panel.text",
+      "lines": [
+        "Náhradná poistka je vložená. Ktorý prepínač je PRVÝ?"
+      ]
+    },
+    {
+      "key": "city.conversation.power.panel.choice.0.text",
+      "lines": [
+        "Modrý."
+      ]
+    },
+    {
+      "key": "city.conversation.power.panel.choice.1.text",
+      "lines": [
+        "Žltý."
+      ]
+    },
+    {
+      "key": "city.conversation.power.panel.choice.2.text",
+      "lines": [
+        "Zelený."
+      ]
+    },
+    {
+      "key": "city.conversation.power.second.speaker",
+      "lines": [
+        "Rozvádzač dielne"
+      ]
+    },
+    {
+      "key": "city.conversation.power.second.text",
+      "lines": [
+        "Modrý je zapnutý. Ktorý prepínač je DRUHÝ?"
+      ]
+    },
+    {
+      "key": "city.conversation.power.second.choice.0.text",
+      "lines": [
+        "Zelený."
+      ]
+    },
+    {
+      "key": "city.conversation.power.second.choice.1.text",
+      "lines": [
+        "Žltý."
+      ]
+    },
+    {
+      "key": "city.conversation.power.second.choice.2.text",
+      "lines": [
+        "Znova modrý."
+      ]
+    },
+    {
+      "key": "city.conversation.power.third.speaker",
+      "lines": [
+        "Rozvádzač dielne"
+      ]
+    },
+    {
+      "key": "city.conversation.power.third.text",
+      "lines": [
+        "Modrý a žltý sú zapnuté. Dokonči postup reštartu."
+      ]
+    },
+    {
+      "key": "city.conversation.power.third.choice.0.text",
+      "lines": [
+        "Zelený."
+      ]
+    },
+    {
+      "key": "city.conversation.power.third.choice.1.text",
+      "lines": [
+        "Červený."
+      ]
+    },
+    {
+      "key": "city.conversation.power.third.choice.2.text",
+      "lines": [
+        "Modrý."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power_done.speaker",
+      "lines": [
+        "Mara / Sprostredkovateľka"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power_done.text",
+      "lines": [
+        "Svetlá opäť svietia. Riadil si sa pokynmi namiesto hádania. Tu máš 220 $. Teraz môžeme riešiť skladové záznamy."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power_done.choice.0.text",
+      "lines": [
+        "Prevziať odmenu."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.power_done.choice.1.text",
+      "lines": [
+        "Chvíľku."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence.speaker",
+      "lines": [
+        "Mara / Sprostredkovateľka"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence.text",
+      "lines": [
+        "Porovnaj skladový manifest s Tomasovou faktúrou z kaviarne. Zapamätaj si spoločné ID zásielky. Potom presvedč Adu, aby svedčila. Čítaj pozorne: nesprávne ID ti zníži skóre. Za dôkazy, ktoré obstoja, dostaneš 420 $."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence.choice.0.text",
+      "lines": [
+        "Zostaviť dôkazný materiál."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence.choice.1.text",
+      "lines": [
+        "Ešte nie."
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.manifest.speaker",
+      "lines": [
+        "Skladový manifest"
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.manifest.text",
+      "lines": [
+        "Zásielka J-417. Miesto určenia: The Jade Room. Obsah: súčiastky do strojov. V účtovnej knihe je druhá platba bez potvrdenia. Priložená poznámka k rádiu uvádza núdzový verejný kanál 108.4."
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.manifest.choice.0.text",
+      "lines": [
+        "Zapísať zásielku J-417."
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.invoice.speaker",
+      "lines": [
+        "The Jade Room / Faktúra"
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.invoice.text",
+      "lines": [
+        "Faktúra J-417 zodpovedá skladovému manifestu. Tomas zaplatil bežný poplatok za prepravu; ďalšia platba bola požadovaná osobitne. Ručne písaná poznámka potvrdzuje rádiový kanál: 108.4."
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.invoice.choice.0.text",
+      "lines": [
+        "Ponechať faktúru ako dôkaz."
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.witness.speaker",
+      "lines": [
+        "Ada / Prístavná pracovníčka"
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.witness.text",
+      "lines": [
+        "Môžem svedčiť, ale svoje meno nepodpíšem pod klebetu. Ktorá zásielka je uvedená na OBOCH dokumentoch?"
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.witness.choice.0.text",
+      "lines": [
+        "J-147."
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.witness.choice.1.text",
+      "lines": [
+        "J-417."
+      ]
+    },
+    {
+      "key": "city.conversation.evidence.witness.choice.2.text",
+      "lines": [
+        "J-471."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence_done.speaker",
+      "lines": [
+        "Mara / Sprostredkovateľka"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence_done.text",
+      "lines": [
+        "Manifest, faktúra, svedok: teraz máme prípad. Tu máš 420 $. Zostáva posledný krok. Rádiový dom to môže odvysielať skôr, než záznamy zmiznú."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence_done.choice.0.text",
+      "lines": [
+        "Prevziať odmenu."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.evidence_done.choice.1.text",
+      "lines": [
+        "Chvíľku."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.final.speaker",
+      "lines": [
+        "Mara / Sprostredkovateľka"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.final.text",
+      "lines": [
+        "Posledná práca. Vezmi si od Ady kľúč od rádiového domu, vojdi do budovy severozápadne od križovatky a vysielaj na kanáli uvedenom v dokumentoch. URČITE to priláka políciu. Uteč späť na miesto vyzdvihnutia pred mojou dielňou. Tým dokončíš kampaň."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.final.choice.0.text",
+      "lines": [
+        "Dokončiť, čo sme začali."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.final.choice.1.text",
+      "lines": [
+        "Potrebujem chvíľku."
+      ]
+    },
+    {
+      "key": "city.conversation.final.key.speaker",
+      "lines": [
+        "Ada / Prístavná pracovníčka"
+      ]
+    },
+    {
+      "key": "city.conversation.final.key.text",
+      "lines": [
+        "Tu je kľúč od rádiového domu. Kanál si videl v dokumentoch. Nalaď ho správne, odvysielaj správu a vypadni odtiaľ. Marin kontakt na vyzdvihnutie bude čakať pri jej dielni, keď sa polícia vzdá pátrania."
+      ]
+    },
+    {
+      "key": "city.conversation.final.key.choice.0.text",
+      "lines": [
+        "Vziať kľúč."
+      ]
+    },
+    {
+      "key": "city.conversation.final.radio.speaker",
+      "lines": [
+        "Rádiový dom / Vysielač"
+      ]
+    },
+    {
+      "key": "city.conversation.final.radio.text",
+      "lines": [
+        "Dôkazy sú načítané. Vyber verejnú núdzovú frekvenciu zo skladových a kaviarenských dokumentov."
+      ]
+    },
+    {
+      "key": "city.conversation.final.radio.choice.0.text",
+      "lines": [
+        "104.8 FM."
+      ]
+    },
+    {
+      "key": "city.conversation.final.radio.choice.1.text",
+      "lines": [
+        "108.4 FM."
+      ]
+    },
+    {
+      "key": "city.conversation.final.radio.choice.2.text",
+      "lines": [
+        "107.4 FM."
+      ]
+    },
+    {
+      "key": "ui.pause.title",
+      "lines": [
+        "POZASTAVENÉ"
+      ]
+    },
+    {
+      "key": "ui.pause.resume",
+      "lines": [
+        "POKRAČOVAŤ V HRE"
+      ]
+    },
+    {
+      "key": "ui.pause.main_menu",
+      "lines": [
+        "HLAVNÉ MENU"
+      ]
+    },
+    {
+      "key": "ui.pause.quit",
+      "lines": [
+        "UKONČIŤ HRU"
+      ]
+    },
+    {
+      "key": "ui.settings.title",
+      "lines": [
+        "NASTAVENIA"
+      ]
+    },
+    {
+      "key": "ui.settings.minimap",
+      "lines": [
+        "MINIMAPA"
+      ]
+    },
+    {
+      "key": "ui.settings.language",
+      "lines": [
+        "JAZYK"
+      ]
+    },
+    {
+      "key": "ui.settings.back",
+      "lines": [
+        "SPÄŤ"
+      ]
+    },
+    {
+      "key": "ui.language.english",
+      "lines": [
+        "ANGLIČTINA"
+      ]
+    },
+    {
+      "key": "ui.language.slovak",
+      "lines": [
+        "SLOVENČINA"
+      ]
+    },
+    {
+      "key": "ui.minimap.on",
+      "lines": [
+        "ZAPNUTÉ"
+      ]
+    },
+    {
+      "key": "ui.minimap.off",
+      "lines": [
+        "VYPNUTÉ"
+      ]
+    },
+    {
+      "key": "ui.choice.yes",
+      "lines": [
+        "Áno"
+      ]
+    },
+    {
+      "key": "ui.choice.no",
+      "lines": [
+        "Nie"
+      ]
+    },
+    {
+      "key": "ui.choice.collect",
+      "lines": [
+        "Zobrať"
+      ]
+    },
+    {
+      "key": "ui.choice.close",
+      "lines": [
+        "Zavrieť"
+      ]
+    },
+    {
+      "key": "ui.choice.drop_item",
+      "lines": [
+        "Odovzdať predmet"
+      ]
+    },
+    {
+      "key": "ui.choice.recruit",
+      "lines": [
+        "Naverbovať"
+      ]
+    },
+    {
+      "key": "ui.menu.subtitle",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.menu.status",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.menu.start",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.menu.quit",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.menu.footer",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.game_over.title",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.game_over.restart",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.game_over.main_menu",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.city.brand",
+      "lines": [
+        "HIGHSTAKES"
+      ]
+    },
+    {
+      "key": "ui.city.subtitle",
+      "lines": [
+        "STARÁ ŠTVRŤ  /  ZMLUVY"
+      ]
+    },
+    {
+      "key": "ui.city.current_contract",
+      "lines": [
+        "AKTUÁLNA ZMLUVA"
+      ]
+    },
+    {
+      "key": "ui.city.old_quarter",
+      "lines": [
+        "STARÁ ŠTVRŤ"
+      ]
+    },
+    {
+      "key": "ui.city.free_roam",
+      "lines": [
+        "VOĽNÝ REŽIM"
+      ]
+    },
+    {
+      "key": "ui.city.case_closed",
+      "lines": [
+        "Prípad je uzavretý. Voľne preskúmaj štvrť."
+      ]
+    },
+    {
+      "key": "ui.city.next_story",
+      "lines": [
+        "Ďalšia príbehová misia je dostupná u Mary."
+      ]
+    },
+    {
+      "key": "ui.city.score",
+      "lines": [
+        "SKÓRE"
+      ]
+    },
+    {
+      "key": "ui.city.rep",
+      "lines": [
+        "REPUTÁCIA"
+      ]
+    },
+    {
+      "key": "ui.city.remaining",
+      "lines": [
+        "Zostáva {seconds} s"
+      ]
+    },
+    {
+      "key": "ui.city.level",
+      "lines": [
+        "ÚROVEŇ"
+      ]
+    },
+    {
+      "key": "ui.city.base",
+      "lines": [
+        "ZÁKLAD"
+      ]
+    },
+    {
+      "key": "ui.city.time",
+      "lines": [
+        "ČAS"
+      ]
+    },
+    {
+      "key": "ui.city.clean",
+      "lines": [
+        "ČISTÁ HRA"
+      ]
+    },
+    {
+      "key": "ui.city.penalty",
+      "lines": [
+        "TREST"
+      ]
+    },
+    {
+      "key": "ui.city.total",
+      "lines": [
+        "SPOLU"
+      ]
+    },
+    {
+      "key": "ui.city.case_closed_title",
+      "lines": [
+        "PRÍPAD UZAVRETÝ / KAMPAŇ DOKONČENÁ"
+      ]
+    },
+    {
+      "key": "ui.city.level_complete",
+      "lines": [
+        "ÚROVEŇ {level} DOKONČENÁ"
+      ]
+    },
+    {
+      "key": "ui.city.points_rank",
+      "lines": [
+        "{points} BODOV  /  HODNOSŤ {rank}"
+      ]
+    },
+    {
+      "key": "ui.city.points_gained",
+      "lines": [
+        "+{points} BODOV"
+      ]
+    },
+    {
+      "key": "ui.city.summary",
+      "lines": [
+        "{completed}/{total} úrovní   /   {retries} opakovaní   /   {mistakes} chýb   /   {minutes} min {seconds} s"
+      ]
+    },
+    {
+      "key": "ui.city.best_score",
+      "lines": [
+        "NAJLEPŠIE SKÓRE: {score}  /  Tvoje dôkazy sa dostali na verejnosť. Štvrť je v bezpečí."
+      ]
+    },
+    {
+      "key": "ui.city.campaign_score",
+      "lines": [
+        "SKÓRE KAMPANE: {score}  /  ĎALEJ: {next}"
+      ]
+    },
+    {
+      "key": "ui.city.time_bonus_rules",
+      "lines": [
+        "Časový bonus: 2 body za každú zostávajúcu sekundu. Čistá hra: +300. Opakovanie: -200. Zlá odpoveď: -75."
+      ]
+    },
+    {
+      "key": "ui.city.continue_free_roam",
+      "lines": [
+        "POKRAČOVAŤ VO VOĽNOM REŽIME"
+      ]
+    },
+    {
+      "key": "ui.city.continue_free_roam_enter",
+      "lines": [
+        "POKRAČOVAŤ VO VOĽNOM REŽIME  [ ENTER ]"
+      ]
+    },
+    {
+      "key": "ui.city.new_campaign",
+      "lines": [
+        "NOVÁ KAMPAŇ"
+      ]
+    },
+    {
+      "key": "ui.city.quit_game",
+      "lines": [
+        "UKONČIŤ HRU"
+      ]
+    },
+    {
+      "key": "ui.notice.level_start",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.radio_key",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.room_locked",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.locker_code",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.wrong_answer",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.evidence_on_air",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.alarm",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.code_accepted",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.power_restored",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.level_unlocked",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.campaign_complete",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.time_ran_out",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.caught",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.no_police",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.need_greenbud",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.select_watering_can",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.watering_can_empty",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.nothing_here",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.watering",
+      "lines": [
+        "POLIEVANIE"
+      ]
+    },
+    {
+      "key": "ui.inventory.items",
+      "lines": [
+        "PREDMETY  [1-8]"
+      ]
+    },
+    {
+      "key": "ui.inventory.empty",
+      "lines": [
+        "PRÁZDNE"
+      ]
+    },
+    {
+      "key": "ui.inventory.select_item",
+      "lines": [
+        "VYBER PREDMET"
+      ]
+    },
+    {
+      "key": "ui.inventory.selected",
+      "lines": [
+        "VYBRANÉ  •  {item}"
+      ]
+    },
+    {
+      "key": "ui.inventory.water",
+      "lines": [
+        "VODA"
+      ]
+    },
+    {
+      "key": "ui.inventory.watering_can",
+      "lines": [
+        "POLIEVACIA KANVA"
+      ]
+    },
+    {
+      "key": "ui.inventory.full",
+      "lines": [
+        "PLNÁ"
+      ]
+    },
+    {
+      "key": "ui.inventory.select_can",
+      "lines": [
+        "vyber kanvu"
+      ]
+    },
+    {
+      "key": "item.Seed.name",
+      "lines": [
+        "Semeno"
+      ]
+    },
+    {
+      "key": "item.WateringCan.name",
+      "lines": [
+        "Polievacia kanva"
+      ]
+    },
+    {
+      "key": "item.Pruner.name",
+      "lines": [
+        "Záhradnícke nožnice"
+      ]
+    },
+    {
+      "key": "item.Rake.name",
+      "lines": [
+        "Hrable"
+      ]
+    },
+    {
+      "key": "item.PackEmpty.name",
+      "lines": [
+        "Prázdne vrece"
+      ]
+    },
+    {
+      "key": "item.GreenBud.name",
+      "lines": [
+        "Zelený kvet"
+      ]
+    },
+    {
+      "key": "item.Pack.name",
+      "lines": [
+        "Zabalený produkt"
+      ]
+    },
+    {
+      "key": "ui.safehouse.grow_room",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.safehouse.packing",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.growth",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.stage",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.network.steam_unavailable",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.network.steam_id",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.network.waiting_connection",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.network.share_id",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.network.connected",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.network.host",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.network.client",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.network.start_game",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.network.waiting_host",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.network.play_old_quarter",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.network.connected_players",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.network.controls",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.network.share_friend",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.title",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.transition",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_first_sale.title",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_first_sale.description",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_first_sale.progress",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_first_sale.hint",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_sell_stock.title",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_sell_stock.description",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_sell_stock.progress",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_sell_stock.hint",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_reach_clients.title",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_reach_clients.description",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_reach_clients.progress",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.starter.objective.starter_reach_clients.hint",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.small_dealer.title",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.small_dealer.transition",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.small_dealer.objective.small_dealer_recruit.title",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.small_dealer.objective.small_dealer_recruit.description",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.small_dealer.objective.small_dealer_recruit.progress",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.small_dealer.objective.small_dealer_recruit.hint",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.gang_leader.title",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.gang_leader.transition",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.gang_leader.objective.gang_leader_earnings.title",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.gang_leader.objective.gang_leader_earnings.description",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.gang_leader.objective.gang_leader_earnings.progress",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.gang_leader.objective.gang_leader_earnings.hint",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.crime_boss.title",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.crime_boss.transition",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.crime_boss.objective.crime_boss_expand.title",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.crime_boss.objective.crime_boss_expand.description",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.crime_boss.objective.crime_boss_expand.progress",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.crime_boss.objective.crime_boss_expand.hint",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.mafia.title",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.mafia.transition",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.mafia.objective.mafia_content_unavailable.title",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.mafia.objective.mafia_content_unavailable.description",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.mafia.objective.mafia_content_unavailable.progress",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "guidance.stage.mafia.objective.mafia_content_unavailable.hint",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.inventory.selected_marker",
+      "lines": [
+        "VYBRANÉ"
+      ]
+    },
+    {
+      "key": "ui.action.open_door",
+      "lines": [
+        "Otvoriť dvere"
+      ]
+    },
+    {
+      "key": "ui.action.close_door",
+      "lines": [
+        "Zatvoriť dvere"
+      ]
+    },
+    {
+      "key": "ui.action.toggle_lamp",
+      "lines": [
+        "Zapnúť/vypnúť lampu"
+      ]
+    },
+    {
+      "key": "ui.action.harvest",
+      "lines": [
+        "Zozbierať"
+      ]
+    },
+    {
+      "key": "ui.action.pick_up",
+      "lines": [
+        "Zobrať {item}"
+      ]
+    },
+    {
+      "key": "ui.action.pack_crop",
+      "lines": [
+        "Zabaliť úrodu"
+      ]
+    },
+    {
+      "key": "ui.action.clear_pot",
+      "lines": [
+        "Vyčistiť kvetináč"
+      ]
+    },
+    {
+      "key": "ui.action.water",
+      "lines": [
+        "Poliať"
+      ]
+    },
+    {
+      "key": "ui.action.plant_seed",
+      "lines": [
+        "Zasiať semeno"
+      ]
+    },
+    {
+      "key": "ui.action.turn_on_water",
+      "lines": [
+        "Zapnúť vodu"
+      ]
+    },
+    {
+      "key": "ui.action.fill_watering_can",
+      "lines": [
+        "Naplniť polievaciu kanvu"
+      ]
+    },
+    {
+      "key": "ui.notice.police_calling",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.hud.live_operation",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.notice.break_sight",
+      "lines": [
+        ""
+      ]
+    },
+    {
+      "key": "ui.city.district_clear",
+      "lines": [
+        "OKRSOK / ČISTÝ"
+      ]
+    },
+    {
+      "key": "ui.city.police_searching",
+      "lines": [
+        "POLÍCIA / HĽADÁ"
+      ]
+    },
+    {
+      "key": "ui.city.police_pursuit",
+      "lines": [
+        "POLÍCIA / STÍHANIE"
+      ]
+    },
+    {
+      "key": "city.actor.door_workshop_safehouse.name",
+      "lines": [
+        "Dvere / Dielňa / Bezpečný dom"
+      ]
+    },
+    {
+      "key": "city.actor.door_the_jade_room_cafe.name",
+      "lines": [
+        "Dvere / Jadeová izba / Kaviareň"
+      ]
+    },
+    {
+      "key": "city.actor.door_warehouse_records.name",
+      "lines": [
+        "Dvere / Sklad / Archív"
+      ]
+    },
+    {
+      "key": "city.actor.door_radio_house_studio.name",
+      "lines": [
+        "Dvere / Rádiový dom / Štúdio"
+      ]
+    },
+    {
+      "key": "city.actor.mara.name",
+      "lines": [
+        "Mara / Kontakt"
+      ]
+    },
+    {
+      "key": "city.actor.tomas.name",
+      "lines": [
+        "Tomas / Barista"
+      ]
+    },
+    {
+      "key": "city.actor.ada.name",
+      "lines": [
+        "Ada / Pracovníčka v prístave"
+      ]
+    },
+    {
+      "key": "city.actor.officer.name",
+      "lines": [
+        "Strážnik Novak"
+      ]
+    },
+    {
+      "key": "city.actor.local.name",
+      "lines": [
+        "Miestny obyvateľ"
+      ]
+    },
+    {
+      "key": "city.actor.parcel.name",
+      "lines": [
+        "Balík z prístavu"
+      ]
+    },
+    {
+      "key": "city.actor.ledger.name",
+      "lines": [
+        "Skladová skrinka"
+      ]
+    },
+    {
+      "key": "city.actor.safehouse.name",
+      "lines": [
+        "Bezpečný dom"
+      ]
+    },
+    {
+      "key": "city.actor.fuse.name",
+      "lines": [
+        "Dielňa / Náhradná poistka"
+      ]
+    },
+    {
+      "key": "city.actor.wiring.name",
+      "lines": [
+        "Dielňa / Údržbová poznámka"
+      ]
+    },
+    {
+      "key": "city.actor.switchboard.name",
+      "lines": [
+        "Dielňa / Rozvodná skriňa"
+      ]
+    },
+    {
+      "key": "city.actor.manifest.name",
+      "lines": [
+        "Sklad / Manifest"
+      ]
+    },
+    {
+      "key": "city.actor.invoice.name",
+      "lines": [
+        "Kaviareň / Faktúra"
+      ]
+    },
+    {
+      "key": "city.actor.radio.name",
+      "lines": [
+        "Rádiový dom / Vysielač"
+      ]
+    },
+    {
+      "key": "city.actor.extraction.name",
+      "lines": [
+        "Konečný odvoz"
+      ]
+    }
+  ]
+}

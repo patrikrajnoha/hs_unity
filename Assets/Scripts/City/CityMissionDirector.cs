@@ -16,31 +16,81 @@ namespace HighStakes.City
         private ContractProgress progress;
         private Conversation conversation;
         private CityActor speakingTo;
-        private Transform marker;
+        private GameObject objectiveGroundGlow;
+        private MeshRenderer objectiveGroundGlowRenderer;
+        private Material objectiveGroundGlowMaterial;
+        private Texture2D objectiveGroundGlowTexture;
         private float safeTime;
-        private bool paused, betweenLevels, ended;
+        private bool betweenLevels, ended;
         private Vector3 spawn;
         public ContractProgress Progress => progress;
         public bool HasEnded => ended;
         public bool IsBetweenLevels => betweenLevels;
+        // The inventory should hide only behind a visible conversation panel.
+        // The data object can remain populated after a prompt has closed.
+        public bool IsConversationActive => hud != null && hud.IsDialogueVisible;
+
+        /// <summary>
+        /// Story interactions use the same E key as world pickups. Expose the
+        /// priority decision so a nearby pickup cannot consume the keypress
+        /// intended for Mara, a door, or the current mission target.
+        /// </summary>
+        public bool HasPriorityInteraction(GameObject candidate)
+        {
+            if (candidate == null || candidate != player || progress == null ||
+                conversation != null || betweenLevels || ended)
+                return false;
+
+            return NearestInteractable() != null;
+        }
 
         public void Initialize(PlayerController localPlayer, Dictionary<string, CityActor> districtActors, CityHud cityHud)
         {
             player = localPlayer; actors = districtActors; hud = cityHud; spawn = player.transform.position;
             TextAsset source = Resources.Load<TextAsset>("City/old_quarter_story");
-            if (source == null) { Debug.LogError("Old Quarter story JSON is missing."); enabled = false; return; }
+            if (source == null)
+            {
+                GameLogger.LogError("story", "story_missing", "Old Quarter story JSON is missing.");
+                Debug.LogError("Old Quarter story JSON is missing.");
+                enabled = false;
+                return;
+            }
             StoryFile story = JsonUtility.FromJson<StoryFile>(source.text);
+            LocalizationManager.LocalizeStory(story);
             CampaignSave saved = null;
-            try { if (PlayerPrefs.HasKey(SaveKey)) saved = JsonUtility.FromJson<CampaignSave>(PlayerPrefs.GetString(SaveKey)); }
-            catch (Exception) { Debug.LogWarning("Campaign checkpoint could not be read; starting a new campaign."); }
+            try
+            {
+                if (PlayerPrefs.HasKey(SaveKey))
+                    saved = JsonUtility.FromJson<CampaignSave>(PlayerPrefs.GetString(SaveKey));
+            }
+            catch (Exception ex)
+            {
+                GameLogger.LogWarning("save_system", "checkpoint_load_failed", "Campaign checkpoint could not be read: " + ex.Message);
+                Debug.LogWarning("Campaign checkpoint could not be read; starting a new campaign.");
+            }
             progress = new ContractProgress(story, saved);
             hud.Choose = Choose;
-            marker = GameObject.CreatePrimitive(PrimitiveType.Sphere).transform;
-            marker.name = "Objective beacon"; marker.localScale = Vector3.one * 0.3f;
-            var collider = marker.GetComponent<Collider>(); collider.enabled = false; Destroy(collider);
-            marker.GetComponent<Renderer>().sharedMaterial = actors["safehouse"].GetComponent<Renderer>().sharedMaterial;
+            CreateObjectiveGroundGlow();
+            GameLogger.LogInfo("campaign", "campaign_started", $"Campaign initialized at contract {progress.ContractIndex + 1}/{story.contracts.Length}");
             if (progress.Finished) ShowResults();
-            else hud.Notify($"Level {progress.ContractIndex + 1}/{story.contracts.Length}. Talk to Mara to begin.");
+            else hud.Notify(LocalizationManager.GetOrFallback("ui.notice.level_start",
+                "Level {level}/{total}. Talk to Mara to begin.",
+                "level", (progress.ContractIndex + 1).ToString(), "total", story.contracts.Length.ToString()));
+        }
+
+        private void OnEnable()
+        {
+            LocalizationManager.LanguageChanged += RefreshLocalization;
+        }
+
+        private void RefreshLocalization()
+        {
+            if (progress == null)
+                return;
+
+            LocalizationManager.LocalizeStory(progress.Story);
+            if (conversation != null && hud != null)
+                hud.Show(conversation);
         }
 
         private void Update()
@@ -54,10 +104,6 @@ namespace HighStakes.City
                 if (keyboard != null && keyboard.enterKey.wasPressedThisFrame) ContinueCampaign();
                 return;
             }
-            if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame)
-            {
-                if (conversation != null) CloseConversation(); else OpenPause();
-            }
             if (conversation != null)
             {
                 if (keyboard != null)
@@ -68,22 +114,24 @@ namespace HighStakes.City
                 }
                 return;
             }
-            if (progress.Tick(Time.deltaTime)) { Fail("Time ran out. Retry the briefing with Mara. -200 score."); return; }
+            if (progress.Tick(Time.deltaTime))
+            {
+                Fail(LocalizationManager.GetOrFallback("ui.notice.time_ran_out",
+                    "Time ran out. Retry the briefing with Mara. -200 score."));
+                return;
+            }
             bool pursued = IsPursued();
             foreach (var officer in PoliceHeatRegistry.ActivePolice)
             {
                 if (officer == null || !officer.isChasing || !officer.HasVisualContact) continue;
                 if (Vector3.Distance(player.transform.position, officer.transform.position) < 1.5f)
-                { Fail("Caught. This level restarts; earlier scores stay. -200 score."); return; }
+                { Fail(LocalizationManager.GetOrFallback("ui.notice.caught",
+                    "Caught. This level restarts; earlier scores stay. -200 score.")); return; }
             }
             CityActor target = ObjectiveTarget();
             float distance = target != null ? Vector3.Distance(player.transform.position, target.transform.position) : 0;
-            if (marker != null)
-            {
-                marker.gameObject.SetActive(target != null);
-                if (target != null) marker.position = new Vector3(target.transform.position.x,
-                    Mathf.Min(target.transform.position.y + 1.8f, 3.1f) + Mathf.Sin(Time.time * 2) * 0.1f, target.transform.position.z);
-            }
+            bool objectiveVisible = target != null && target.gameObject.activeInHierarchy;
+            UpdateObjectiveGroundGlow(target, objectiveVisible);
             ContractStep step = progress.Step;
             if (step != null && step.holdSeconds > 0)
             {
@@ -92,10 +140,17 @@ namespace HighStakes.City
                 if (safeTime >= step.holdSeconds) { Signal(step.signal); safeTime = 0; if (betweenLevels || ended) return; }
             }
             CityActor nearby = NearestInteractable();
-            string prompt = nearby != null ? "[ E ]  " + nearby.displayName : "";
-            if (pursued) prompt = "Break sight around buildings. Officers can open doors during a chase.";
+            string nearbyName = nearby != null
+                ? LocalizationManager.GetCityActorName(nearby.id, nearby.displayName)
+                : "";
+            string prompt = nearby != null ? "[ E ]  " + nearbyName : "";
+            if (pursued)
+                prompt = LocalizationManager.GetOrFallback("ui.notice.break_sight",
+                    "Break sight around buildings. Officers can open doors during a chase.");
             if (safeTime > 0 && progress.Step != null) prompt = $"Hold position... {Mathf.CeilToInt(progress.Step.holdSeconds - safeTime)}s";
-            string heading = target != null ? target.displayName : "";
+            string heading = target != null
+                ? LocalizationManager.GetCityActorName(target.id, target.displayName)
+                : "";
             if (target != null && player.playerCamera != null)
             {
                 float angle = Vector3.SignedAngle(Vector3.ProjectOnPlane(player.playerCamera.forward, Vector3.up),
@@ -142,11 +197,18 @@ namespace HighStakes.City
             if (door != null)
             {
                 if (door.minimumLevel == 5 && progress.ContractIndex == 4 && progress.StepIndex < 2)
-                { hud.Notify("Ada has the radio house key. Complete the current objective first."); return; }
-                if (!door.Toggle(progress.ContractIndex + 1)) hud.Notify($"This room opens in level {door.minimumLevel}.");
+                { hud.Notify(LocalizationManager.GetOrFallback("ui.notice.radio_key", "Ada has the radio house key. Complete the current objective first.")); return; }
+                if (!door.Toggle(progress.ContractIndex + 1))
+                    hud.Notify(LocalizationManager.GetOrFallback("ui.notice.room_locked", "This room opens in level {level}.",
+                        "level", door.minimumLevel.ToString()));
                 return;
             }
-            if (actor == ObjectiveTarget() && progress.Step != null)
+            if (actor.id == "mara" && !progress.Active && !progress.Finished)
+            {
+                // Mara offers the next contract from Free Roam; declining simply closes the conversation.
+                OpenConversation(progress.Step.dialogue, actor);
+            }
+            else if (actor == ObjectiveTarget() && progress.Step != null)
             {
                 if (progress.Step.holdSeconds > 0) return;
                 if (string.IsNullOrEmpty(progress.Step.dialogue)) Signal(progress.Step.signal);
@@ -157,7 +219,12 @@ namespace HighStakes.City
         private void OpenConversation(string id, CityActor actor)
         {
             Conversation next = progress.FindConversation(id);
-            if (next == null) { Debug.LogError("Missing conversation: " + id); return; }
+            if (next == null)
+            {
+                GameLogger.LogError("story", "missing_conversation", "Missing conversation: " + id);
+                Debug.LogError("Missing conversation: " + id);
+                return;
+            }
             speakingTo = actor;
             var wander = actor != null ? actor.GetComponent<NPCWanderRoadOnly>() : null;
             if (wander != null) { wander.canMove = false; wander.StopAgent(); }
@@ -176,9 +243,9 @@ namespace HighStakes.City
             if (choice.signal == "restart") { Fail("Level restarted. -200 score. Earlier results remain saved."); return; }
             if (choice.signal == "new_campaign") { NewCampaign(); return; }
             if (choice.signal == "learn_route")
-            { progress.KnowsRoute = true; hud.Notify("Locker code learned. The ledger can be taken without an alarm."); }
+            { progress.KnowsRoute = true; hud.Notify(LocalizationManager.GetOrFallback("ui.notice.locker_code", "Locker code learned. The ledger can be taken without an alarm.")); }
             else if (choice.signal == "mistake")
-            { progress.RecordMistake(); SaveCheckpoint(); hud.Notify("Wrong answer. -75 score. Check the clue and try again."); }
+            { progress.RecordMistake(); SaveCheckpoint(); hud.Notify(LocalizationManager.GetOrFallback("ui.notice.wrong_answer", "Wrong answer. -75 score. Check the clue and try again.")); }
             else if (choice.signal != "puzzle_click" && !string.IsNullOrEmpty(choice.signal)) Signal(choice.signal);
             if (betweenLevels || ended) return;
             if (string.IsNullOrEmpty(choice.next)) CloseConversation();
@@ -195,16 +262,19 @@ namespace HighStakes.City
             bool quiet = progress.KnowsRoute;
             CityActor oldTarget = ObjectiveTarget();
             if (!progress.Signal(signal)) return;
+            GameLogger.LogInfo("campaign", "objective_signaled", $"Signal '{signal}' completed in contract {completed + 1}");
             if (signal.StartsWith("collect_") && oldTarget != null) oldTarget.gameObject.SetActive(false);
             if ((signal == "collect_ledger" && !quiet) || signal == "broadcast")
             {
                 progress.RaiseAlarm();
                 GameMaster.Instance.ReportCrime(player.gameObject);
                 actors["officer"].GetComponent<PoliceBehavior>().isCalled = true;
-                hud.Notify(signal == "broadcast" ? "Evidence is on air! Lose the officer, then reach extraction." : "Alarm! Lose the officer before entering the safehouse.");
+                hud.Notify(signal == "broadcast"
+                    ? LocalizationManager.GetOrFallback("ui.notice.evidence_on_air", "Evidence is on air! Lose the officer, then reach extraction.")
+                    : LocalizationManager.GetOrFallback("ui.notice.alarm", "Alarm! Lose the officer before entering the safehouse."));
             }
-            else if (signal == "collect_ledger") hud.Notify("Code accepted. Ledger secured without an alarm.");
-            else if (signal == "restore_power") hud.Notify("Power restored. Tell Mara the workshop is working again.");
+            else if (signal == "collect_ledger") hud.Notify(LocalizationManager.GetOrFallback("ui.notice.code_accepted", "Code accepted. Ledger secured without an alarm."));
+            else if (signal == "restore_power") hud.Notify(LocalizationManager.GetOrFallback("ui.notice.power_restored", "Power restored. Tell Mara the workshop is working again."));
             SaveCheckpoint();
             if (completed != progress.ContractIndex) ShowResults();
         }
@@ -212,21 +282,33 @@ namespace HighStakes.City
         {
             CloseConversation(); safeTime = 0;
             ended = progress.Finished; betweenLevels = !ended;
+            GameLogger.LogInfo("campaign", "contract_completed", $"Contract {progress.ContractIndex + 1} completed. Score: {progress.Score}, Finished: {ended}");
             if (ended)
             {
                 PlayerPrefs.SetInt(BestKey, Mathf.Max(PlayerPrefs.GetInt(BestKey), progress.Score));
                 PlayerPrefs.Save();
+                GameLogger.LogInfo("campaign", "campaign_finished", $"Campaign finished with total score {progress.Score}");
             }
-            if (marker != null) marker.gameObject.SetActive(false);
+            if (objectiveGroundGlow != null) objectiveGroundGlow.SetActive(false);
             Time.timeScale = 0; player.SetDialogueInputLocked(true); player.UnlockMouse();
-            hud.ShowResults(progress, PlayerPrefs.GetInt(BestKey), ContinueCampaign, NewCampaign, QuitGame);
+            hud.ShowResults(progress, PlayerPrefs.GetInt(BestKey), ContinueCampaign, ContinueFreeRoam, NewCampaign, QuitGame);
         }
         public void ContinueCampaign()
         {
             if (!betweenLevels || ended) return;
             betweenLevels = false; hud.HideResults(); Time.timeScale = 1;
             player.SetDialogueInputLocked(false); player.LockMouse();
-            hud.Notify($"Level {progress.ContractIndex + 1}/{progress.Story.contracts.Length} unlocked. Return to Mara.");
+            hud.Notify(LocalizationManager.GetOrFallback("ui.notice.level_unlocked",
+                "Level {level}/{total} unlocked. Return to Mara.",
+                "level", (progress.ContractIndex + 1).ToString(), "total", progress.Story.contracts.Length.ToString()));
+        }
+        public void ContinueFreeRoam()
+        {
+            if (!ended) return;
+            ended = false; betweenLevels = false; hud.HideResults(); Time.timeScale = 1;
+            player.SetDialogueInputLocked(false); player.LockMouse();
+            hud.Notify(LocalizationManager.GetOrFallback("ui.notice.campaign_complete",
+                "Campaign complete. Free Roam remains open; explore the Old Quarter."));
         }
         public void NewCampaign()
         {
@@ -246,6 +328,7 @@ namespace HighStakes.City
         {
             if (ended || betweenLevels) return;
             CloseConversation(); progress.Fail(); safeTime = 0;
+            GameLogger.LogWarning("campaign", "contract_failed", $"Contract {progress.ContractIndex + 1} failed: {reason}");
             GameMaster gm = GameMaster.Instance;
             if (gm != null) { gm.arrest = false; gm.ClearPoliceChase(player.gameObject); }
             var controller = player.GetComponent<CharacterController>();
@@ -263,14 +346,159 @@ namespace HighStakes.City
         {
             foreach (var officer in PoliceHeatRegistry.ActivePolice)
                 if (officer != null && (officer.isChasing || officer.isCalled))
-                    return officer.State == PoliceBehavior.PursuitState.Searching ? "POLICE / Searching" : "POLICE / Pursuit";
-            return "DISTRICT / Clear";
+                    return officer.State == PoliceBehavior.PursuitState.Searching
+                        ? LocalizationManager.GetOrFallback("ui.city.police_searching", "POLICE / Searching")
+                        : LocalizationManager.GetOrFallback("ui.city.police_pursuit", "POLICE / Pursuit");
+            return LocalizationManager.GetOrFallback("ui.city.district_clear", "DISTRICT / Clear");
         }
-        private void SaveCheckpoint() { PlayerPrefs.SetString(SaveKey, JsonUtility.ToJson(progress.Capture())); PlayerPrefs.Save(); }
-        private void OpenPause() { paused = true; Time.timeScale = 0; OpenConversation("menu.pause", null); }
+
+        private void CreateObjectiveGroundGlow()
+        {
+            objectiveGroundGlow = new GameObject("Objective ground glow", typeof(MeshFilter), typeof(MeshRenderer));
+            objectiveGroundGlow.transform.SetParent(transform, false);
+            objectiveGroundGlow.transform.localScale = new Vector3(4.2f, 1f, 4.2f);
+
+            var mesh = new Mesh { name = "Objective ground glow plane" };
+            mesh.vertices = new[] {
+                new Vector3(-0.5f, 0f, -0.5f), new Vector3(0.5f, 0f, -0.5f),
+                new Vector3(0.5f, 0f, 0.5f), new Vector3(-0.5f, 0f, 0.5f)
+            };
+            mesh.uv = new[] {
+                new Vector2(0f, 0f), new Vector2(1f, 0f),
+                new Vector2(1f, 1f), new Vector2(0f, 1f)
+            };
+            mesh.triangles = new[] { 0, 2, 1, 0, 3, 2 };
+            objectiveGroundGlow.GetComponent<MeshFilter>().sharedMesh = mesh;
+
+            objectiveGroundGlowTexture = CreateRadialGlowTexture(64);
+            objectiveGroundGlowMaterial = CreateGroundGlowMaterial(objectiveGroundGlowTexture);
+            objectiveGroundGlowRenderer = objectiveGroundGlow.GetComponent<MeshRenderer>();
+            objectiveGroundGlowRenderer.sharedMaterial = objectiveGroundGlowMaterial;
+            objectiveGroundGlowRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            objectiveGroundGlowRenderer.receiveShadows = false;
+            objectiveGroundGlowRenderer.enabled = false;
+        }
+
+        private void UpdateObjectiveGroundGlow(CityActor target, bool visible)
+        {
+            if (objectiveGroundGlow == null || objectiveGroundGlowMaterial == null)
+                return;
+
+            objectiveGroundGlow.SetActive(visible);
+            if (!visible)
+                return;
+
+            objectiveGroundGlow.transform.position = FindGroundPoint(target) + Vector3.up * 0.025f;
+            objectiveGroundGlowRenderer.enabled = true;
+
+            // Breathe only through opacity; the footprint never changes size.
+            float pulse = 0.78f + Mathf.Sin(Time.time * 1.35f) * 0.10f;
+            SetGlowOpacity(pulse);
+        }
+
+        private Vector3 FindGroundPoint(CityActor target)
+        {
+            Vector3 fallback = target.transform.position;
+            RaycastHit[] hits = Physics.RaycastAll(
+                target.transform.position + Vector3.up * 2f, Vector3.down, 8f,
+                Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+            float closest = float.MaxValue;
+            foreach (RaycastHit hit in hits)
+            {
+                if (hit.transform == target.transform || hit.transform.IsChildOf(target.transform))
+                    continue;
+                if (hit.distance < closest)
+                {
+                    closest = hit.distance;
+                    fallback = hit.point;
+                }
+            }
+            return fallback;
+        }
+
+        private Texture2D CreateRadialGlowTexture(int size)
+        {
+            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false, true);
+            texture.name = "Objective radial glow";
+            texture.wrapMode = TextureWrapMode.Clamp;
+            texture.filterMode = FilterMode.Bilinear;
+            for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                {
+                    float dx = (x + 0.5f) / size * 2f - 1f;
+                    float dy = (y + 0.5f) / size * 2f - 1f;
+                    float distance = Mathf.Clamp01(Mathf.Sqrt(dx * dx + dy * dy));
+                    float falloff = 1f - Mathf.SmoothStep(0f, 1f, distance);
+                    float alpha = Mathf.Pow(falloff, 2.2f) * 0.16f;
+                    texture.SetPixel(x, y, new Color(1f, 0.57f, 0.12f, alpha));
+                }
+            texture.Apply(false, true);
+            return texture;
+        }
+
+        private Material CreateGroundGlowMaterial(Texture2D texture)
+        {
+            Shader shader = Shader.Find("Universal Render Pipeline/Unlit") ?? Shader.Find("Unlit/Transparent");
+            if (shader == null)
+                shader = Shader.Find("Sprites/Default");
+            var material = new Material(shader) { name = "Objective radial glow material" };
+            material.mainTexture = texture;
+            if (material.HasProperty("_BaseMap"))
+                material.SetTexture("_BaseMap", texture);
+            if (material.HasProperty("_MainTex"))
+                material.SetTexture("_MainTex", texture);
+            if (material.HasProperty("_BaseColor"))
+                material.SetColor("_BaseColor", Color.white);
+            if (material.HasProperty("_Color"))
+                material.SetColor("_Color", Color.white);
+            if (material.HasProperty("_Surface"))
+                material.SetFloat("_Surface", 1f);
+            if (material.HasProperty("_Blend"))
+                material.SetFloat("_Blend", 0f);
+            if (material.HasProperty("_SrcBlend"))
+                material.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            if (material.HasProperty("_DstBlend"))
+                material.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            if (material.HasProperty("_ZWrite"))
+                material.SetFloat("_ZWrite", 0f);
+            if (material.HasProperty("_Cull"))
+                material.SetFloat("_Cull", 0f);
+            material.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+            material.renderQueue = 3000;
+            return material;
+        }
+
+        private void SetGlowOpacity(float opacity)
+        {
+            Color color = new Color(1f, 1f, 1f, opacity);
+            if (objectiveGroundGlowMaterial.HasProperty("_BaseColor"))
+                objectiveGroundGlowMaterial.SetColor("_BaseColor", color);
+            if (objectiveGroundGlowMaterial.HasProperty("_Color"))
+                objectiveGroundGlowMaterial.SetColor("_Color", color);
+        }
+
+        private void SaveCheckpoint()
+        {
+            PlayerPrefs.SetString(SaveKey, JsonUtility.ToJson(progress.Capture()));
+            PlayerPrefs.Save();
+            GameLogger.LogDebug("save_system", "checkpoint_saved", $"Checkpoint saved at contract {progress.ContractIndex}");
+        }
+        public bool HandleEscape()
+        {
+            // Results and between-level screens own their input. Do not open a
+            // second pause panel over those screens.
+            if (ended || betweenLevels)
+                return true;
+
+            if (conversation == null)
+                return false;
+
+            CloseConversation();
+            return true;
+        }
+
         private void CloseConversation()
         {
-            if (paused) { Time.timeScale = 1; paused = false; }
             var wander = speakingTo != null ? speakingTo.GetComponent<NPCWanderRoadOnly>() : null;
             if (wander != null) wander.ResumeMovement();
             speakingTo = null; conversation = null;
@@ -279,8 +507,11 @@ namespace HighStakes.City
         }
         private void OnDestroy()
         {
+            LocalizationManager.LanguageChanged -= RefreshLocalization;
             Time.timeScale = 1;
-            if (marker != null) Destroy(marker.gameObject);
+            if (objectiveGroundGlow != null) Destroy(objectiveGroundGlow);
+            if (objectiveGroundGlowMaterial != null) Destroy(objectiveGroundGlowMaterial);
+            if (objectiveGroundGlowTexture != null) Destroy(objectiveGroundGlowTexture);
             Cursor.lockState = CursorLockMode.None; Cursor.visible = true;
         }
     }

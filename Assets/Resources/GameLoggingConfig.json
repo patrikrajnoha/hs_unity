@@ -1,0 +1,16 @@
+{
+  "enableFileLogging": true,
+  "enableUnityConsoleLogging": true,
+  "captureUnityErrors": true,
+  "minimumLogLevel": 20,
+  "maxFileSizeMB": 10,
+  "maxLogFiles": 10,
+  "maxStorageMB": 100,
+  "flushIntervalSeconds": 2.0,
+  "enableFirebaseLogging": false,
+  "enableJsonlLogging": false,
+  "apiKey": "",
+  "projectId": "",
+  "collection": "gameLogs",
+  "playerId": "anonymous"
+}

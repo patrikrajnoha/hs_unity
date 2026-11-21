@@ -24,7 +24,7 @@ public class Inventory : MonoBehaviour
     public KeyCode useKey = KeyCode.Mouse0;
     public float spawnDistance = 2f;
 
-    private int inventoryLimit = 8;
+    private int inventoryLimit = 12;
     private InventorySlot[] inventoryItems;
     private int currentItemCount = 0;
     private int selectedIndex = 0;
@@ -54,6 +54,15 @@ public class Inventory : MonoBehaviour
         inventoryItems = new InventorySlot[inventoryLimit];
         EnsureSlotVisuals();
         ClearInventoryUI();
+
+        // The safehouse has a dedicated, readable status line beside its
+        // inventory slots. Do not draw the legacy "SELECT ITEM" label over
+        // the world interaction prompt as well.
+        if (selectedItemLabel != null && selectedItemLabel.transform.parent != null &&
+            selectedItemLabel.transform.parent.name == "Inventory Panel")
+        {
+            selectedItemLabel.gameObject.SetActive(false);
+        }
 
         /*
         borderPanels = new Image[inventorySlots.Length];
@@ -151,7 +160,7 @@ public class Inventory : MonoBehaviour
             {
                 inventoryItems[i].quantity++;
                 UpdateSlotUI(i);
-                FirebaseGameLogger.LogInfo("inventory", "item_added", "Stacked " + item.itemName + " (x" + inventoryItems[i].quantity + ")");
+                GameLogger.LogInfo("inventory", "item_added", "Stacked " + item.itemName + " (x" + inventoryItems[i].quantity + ")");
                 return true;
             }
         }
@@ -159,14 +168,14 @@ public class Inventory : MonoBehaviour
         // 2. If new item, check space
         if (currentItemCount >= inventoryLimit)
         {
-            FirebaseGameLogger.LogWarning("inventory", "inventory_full", "Could not add " + item.itemName);
+            GameLogger.LogWarning("inventory", "inventory_full", "Could not add " + item.itemName);
             return false;
         }
 
         inventoryItems[currentItemCount] = new InventorySlot(item, 1);
         UpdateSlotUI(currentItemCount);
         currentItemCount++;
-        FirebaseGameLogger.LogInfo("inventory", "item_added", "Added " + item.itemName + " (x1)");
+        GameLogger.LogInfo("inventory", "item_added", "Added " + item.itemName + " (x1)");
         return true;
     }
 
@@ -182,7 +191,10 @@ public class Inventory : MonoBehaviour
             // Keep the count visible even when it is one. This makes every
             // occupied slot immediately readable instead of relying on a
             // scene-authored TMP child being present.
-            SetQuantityLabel(index, "x" + slot.quantity, true);
+            // Show a quantity only when it adds information. A single item
+            // needs no badge and keeps the icon fully readable.
+            SetQuantityLabel(index, slot.quantity > 1 ? "x" + slot.quantity : string.Empty,
+                slot.quantity > 1);
         }
         else
         {
@@ -290,8 +302,8 @@ public class Inventory : MonoBehaviour
             selectionMarkers[i] = EnsureSelectionMarker(slotRoot);
         }
 
-        if (inventoryRoot != null)
-            selectedItemLabel = EnsureSelectedItemLabel(inventoryRoot);
+        // Keep the safehouse inventory minimalist: selection is shown by the
+        // slot highlight, so no extra text label is created above the panel.
     }
 
     private static Image EnsureSelectionBackdrop(Transform slotRoot)
@@ -339,14 +351,14 @@ public class Inventory : MonoBehaviour
         badgeRect.anchorMin = new Vector2(1f, 0f);
         badgeRect.anchorMax = new Vector2(1f, 0f);
         badgeRect.pivot = new Vector2(1f, 0f);
-        badgeRect.anchoredPosition = new Vector2(-3f, 3f);
-        badgeRect.sizeDelta = new Vector2(36f, 25f);
+        badgeRect.anchoredPosition = new Vector2(-2f, 2f);
+        badgeRect.sizeDelta = new Vector2(24f, 14f);
 
         Outline badgeOutline = badge.GetComponent<Outline>();
         if (badgeOutline == null)
             badgeOutline = badge.AddComponent<Outline>();
         badgeOutline.effectColor = new Color(0f, 0f, 0f, 0.9f);
-        badgeOutline.effectDistance = new Vector2(1f, -1f);
+        badgeOutline.effectDistance = new Vector2(0.5f, -0.5f);
         badgeOutline.useGraphicAlpha = true;
 
         Transform textTransform = badge.transform.Find("Text");
@@ -357,8 +369,7 @@ public class Inventory : MonoBehaviour
             textObject.transform.SetParent(badge.transform, false);
 
         TextMeshProUGUI text = textObject.GetComponent<TextMeshProUGUI>();
-        text.font = TMP_Settings.defaultFontAsset;
-        text.fontSize = 16f;
+        text.fontSize = 8.5f;
         text.fontStyle = FontStyles.Bold;
         text.alignment = TextAlignmentOptions.Center;
         text.color = Color.white;
@@ -384,12 +395,11 @@ public class Inventory : MonoBehaviour
             marker.transform.SetParent(slotRoot, false);
 
         TextMeshProUGUI text = marker.GetComponent<TextMeshProUGUI>();
-        text.font = TMP_Settings.defaultFontAsset;
         text.fontSize = 11f;
         text.fontStyle = FontStyles.Bold;
         text.alignment = TextAlignmentOptions.Center;
         text.color = SelectionGlow;
-        text.text = "SELECTED";
+        text.text = LocalizationManager.GetOrFallback("ui.inventory.selected_marker", "SELECTED");
         text.textWrappingMode = TextWrappingModes.NoWrap;
         text.raycastTarget = false;
 
@@ -422,13 +432,12 @@ public class Inventory : MonoBehaviour
             label.transform.SetParent(inventoryRoot, false);
 
         TextMeshProUGUI text = label.GetComponent<TextMeshProUGUI>();
-        text.font = TMP_Settings.defaultFontAsset;
         text.fontSize = 14f;
         text.fontStyle = FontStyles.Bold;
         text.alignment = TextAlignmentOptions.Left;
         text.color = SelectionGlow;
         text.textWrappingMode = TextWrappingModes.NoWrap;
-        text.overflowMode = TextOverflowModes.Ellipsis;
+        text.overflowMode = TextOverflowModes.Truncate;
         text.raycastTarget = false;
 
         RectTransform rect = label.GetComponent<RectTransform>();
@@ -464,15 +473,14 @@ public class Inventory : MonoBehaviour
         Item selectedItem = GetSelectedItem();
         if (selectedItem == null)
         {
-            selectedItemLabel.text = "SELECT ITEM";
+            selectedItemLabel.text = LocalizationManager.GetOrFallback("ui.inventory.select_item", "SELECT ITEM");
             selectedItemLabel.color = new Color32(157, 173, 198, 255);
             return;
         }
 
-        string itemName = string.IsNullOrWhiteSpace(selectedItem.itemName)
-            ? selectedItem.name
-            : selectedItem.itemName;
-        selectedItemLabel.text = "SELECTED  •  " + itemName;
+        string itemName = LocalizationManager.GetItemName(selectedItem);
+        selectedItemLabel.text = LocalizationManager.GetOrFallback("ui.inventory.selected", "SELECTED  •  {item}",
+            "item", itemName);
         selectedItemLabel.color = SelectionGlow;
     }
 
@@ -520,10 +528,21 @@ public class Inventory : MonoBehaviour
         if (item != null && item.prefab != null)
         {
             Vector3 spawnPos = transform.position + transform.forward * spawnDistance;
-            Instantiate(item.prefab, spawnPos, Quaternion.identity);
+            GameObject dropped = Instantiate(item.prefab, spawnPos, Quaternion.identity);
+            dropped.SetActive(true);
+
+            PickableObject pickable = dropped.GetComponent<PickableObject>();
+            if (pickable != null)
+            {
+                pickable.EnableWorldPhysics();
+                Rigidbody body = dropped.GetComponent<Rigidbody>();
+                if (body != null)
+                    body.AddForce(transform.forward * 1.2f + Vector3.up * 0.35f, ForceMode.Impulse);
+            }
+            GameLogger.LogInfo("inventory", "item_dropped", "Dropped " + item.itemName);
         }
 
-        FirebaseGameLogger.LogInfo("inventory", "item_used", "Used " + (item != null ? item.itemName : "unknown item"));
+        GameLogger.LogInfo("inventory", "item_used", "Used " + (item != null ? item.itemName : "unknown item"));
         RemoveItem(index);
     }
 
@@ -701,7 +720,7 @@ public class Inventory : MonoBehaviour
             selectedIndex++;
 
         UpdateSlotColors();
-        FirebaseGameLogger.LogDebug("inventory", "items_reordered", "Moved slot " + fromIndex + " to " + toIndex);
+        GameLogger.LogDebug("inventory", "items_reordered", "Moved slot " + fromIndex + " to " + toIndex);
     }
 
     public bool RemoveItemByName(string itemName, int amount = 1)
@@ -737,11 +756,52 @@ public class Inventory : MonoBehaviour
                     UpdateSlotUI(i);
                 }
 
-                FirebaseGameLogger.LogInfo("inventory", "item_removed", "Removed " + itemName + " (x" + amount + ")");
+                GameLogger.LogInfo("inventory", "item_removed", "Removed " + itemName + " (x" + amount + ")");
                 return true; // removed successfully
             }
         }
         return false; // not found
+    }
+
+    public bool RemoveItem(Item item, int amount = 1)
+    {
+        if (item == null || amount <= 0)
+            return false;
+
+        for (int i = 0; i < currentItemCount; i++)
+        {
+            if (inventoryItems[i] != null && inventoryItems[i].item == item)
+            {
+                inventoryItems[i].quantity -= amount;
+
+                if (inventoryItems[i].quantity <= 0)
+                {
+                    for (int j = i; j < currentItemCount - 1; j++)
+                    {
+                        inventoryItems[j] = inventoryItems[j + 1];
+                        UpdateSlotUI(j);
+                    }
+
+                    inventoryItems[currentItemCount - 1] = null;
+                    inventorySlots[currentItemCount - 1].sprite = null;
+                    inventorySlots[currentItemCount - 1].enabled = true;
+                    inventorySlots[currentItemCount - 1].raycastTarget = true;
+                    SetQuantityLabel(currentItemCount - 1, string.Empty, false);
+                    currentItemCount--;
+                    selectedIndex = currentItemCount > 0 ? Mathf.Clamp(selectedIndex, 0, currentItemCount - 1) : 0;
+                    UpdateSlotColors();
+                }
+                else
+                {
+                    UpdateSlotUI(i);
+                }
+
+                GameLogger.LogInfo("inventory", "item_removed", "Removed " + item.itemName + " (x" + amount + ")");
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
@@ -755,6 +815,20 @@ public class Inventory : MonoBehaviour
             {
                 total += inventoryItems[i].quantity;
             }
+        }
+        return total;
+    }
+
+    public int GetItemAmount(Item item)
+    {
+        if (item == null)
+            return 0;
+
+        int total = 0;
+        for (int i = 0; i < currentItemCount; i++)
+        {
+            if (inventoryItems[i] != null && inventoryItems[i].item == item)
+                total += inventoryItems[i].quantity;
         }
         return total;
     }

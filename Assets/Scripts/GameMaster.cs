@@ -119,6 +119,7 @@ public class GameMaster : MonoBehaviour
             gameOverController = GameOverController.GetOrCreate();
 
         gameOverController.Show(suspect);
+        GameLogger.LogWarning("police", "player_arrested", $"Player caught: {suspect.name}");
         Debug.Log($"[GameMaster] Player caught selling drugs: {suspect.name}");
         return true;
     }
@@ -135,6 +136,7 @@ public class GameMaster : MonoBehaviour
         crimeHappened = true;
         criminal = suspect;
         isChasingSomeone = true;
+        GameLogger.LogWarning("police", "pursuit_started", $"Police pursuit started for {suspect.name}");
         Debug.Log($"[GameMaster] Police pursuit started for {suspect.name}.");
         return true;
     }
@@ -147,6 +149,7 @@ public class GameMaster : MonoBehaviour
         crimeHappened = false;
         criminal = null;
         isChasingSomeone = false;
+        GameLogger.LogInfo("police", "pursuit_cleared", "Police pursuit cleared");
     }
 
     public bool HeDoes()
@@ -196,7 +199,7 @@ public class GameMaster : MonoBehaviour
         else
         {
             if (puim != null)
-                puim.ShowPopup("No police nearby!");
+                puim.ShowPopup(LocalizationManager.GetOrFallback("ui.notice.no_police", "No police nearby!"));
         }
     }
 
@@ -210,7 +213,8 @@ public class GameMaster : MonoBehaviour
 
         // show initial message
         puim.ShowWantedPanel(true); // activate wanted panel
-        puim.UpdateWantedCountdown("What are you doing man? I'm calling the police...");
+        puim.UpdateWantedCountdown(LocalizationManager.GetOrFallback("ui.notice.police_calling",
+            "What are you doing man? I'm calling the police..."));
 
         int countdown = 10;
         while (countdown > 0)

@@ -54,17 +54,21 @@ public sealed class GameOverController : MonoBehaviour
         }
 
         EnsureEventSystem();
+        LocalizationManager.EnsureLoaded();
         BuildOverlay();
+        GameLogger.LogInfo("gameplay", "game_over_shown", "Game over overlay displayed: " + GameOverMessage);
     }
 
     public void RestartCurrentScene()
     {
+        GameLogger.LogInfo("gameplay", "restart_scene", "Restarting scene: " + SceneManager.GetActiveScene().name);
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void ReturnToMainMenu()
     {
+        GameLogger.LogInfo("gameplay", "return_to_main_menu", "Returning to main menu scene: " + mainMenuSceneName);
         Time.timeScale = 1f;
         SceneManager.LoadScene(mainMenuSceneName);
     }
@@ -111,19 +115,20 @@ public sealed class GameOverController : MonoBehaviour
 
         GameObject title = CreateUiObject("GameOverText", card.transform);
         SetCentered(title.GetComponent<RectTransform>(), new Vector2(660f, 110f), new Vector2(0f, 105f));
-        CreateText(title, GameOverMessage, 42f, TextAlignmentOptions.Center);
+        CreateText(title, LocalizationManager.GetOrFallback("ui.game_over.title", GameOverMessage), 42f,
+            TextAlignmentOptions.Center);
 
         GameObject restartButton = CreateButton(
             "RestartButton",
             card.transform,
-            "Restart",
+            LocalizationManager.GetOrFallback("ui.game_over.restart", "Restart"),
             new Vector2(0f, -35f),
             RestartCurrentScene);
 
         CreateButton(
             "MainMenuButton",
             card.transform,
-            "Main Menu",
+            LocalizationManager.GetOrFallback("ui.game_over.main_menu", "Main Menu"),
             new Vector2(0f, -145f),
             ReturnToMainMenu);
 

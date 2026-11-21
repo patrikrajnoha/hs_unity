@@ -181,7 +181,8 @@ public class PlayerUIManager : MonoBehaviour
         if (wateringCountdownText == null)
             return;
 
-        wateringCountdownText.text = "Polievanie: " + Mathf.CeilToInt(Mathf.Max(0f, seconds)) + " s";
+        wateringCountdownText.text = LocalizationManager.GetOrFallback("ui.watering", "WATERING") + ": " +
+            Mathf.CeilToInt(Mathf.Max(0f, seconds)) + " s";
         wateringCountdownText.gameObject.SetActive(true);
     }
 

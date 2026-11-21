@@ -117,7 +117,12 @@ public class PlayerStats : MonoBehaviour
     // Methods to update stats
     public void ChangeHealth(float amount)
     {
+        float prevHealth = health;
         health = Mathf.Clamp(health + amount, 0f, 100f);
+        if (health <= 0f && prevHealth > 0f)
+        {
+            GameLogger.LogWarning("player", "player_downed", "Player health depleted to 0");
+        }
     }
 
     public void ChangeEnergy(float amount)

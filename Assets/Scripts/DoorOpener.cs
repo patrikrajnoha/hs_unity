@@ -41,7 +41,9 @@ public class DoorInteract : MonoBehaviour
                 {
                     puim = player != null ? player.GetComponent<PlayerUIManager>() : null;
                     // Show correct message depending on state
-                    puim.ShowInteractionPrompt(KeyCode.E, isOpen ? "Close door" : "Open door");
+                    puim.ShowInteractionPrompt(KeyCode.E, isOpen
+                        ? LocalizationManager.GetOrFallback("ui.action.close_door", "Close door")
+                        : LocalizationManager.GetOrFallback("ui.action.open_door", "Open door"));
 
                     if (Input.GetKeyDown(KeyCode.E))
                     {
