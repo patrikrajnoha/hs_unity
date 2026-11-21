@@ -65,6 +65,9 @@ public sealed class GameLogger : MonoBehaviour
 
     // Thread-safe event queue and background worker
     private readonly ConcurrentQueue<LogEntry> eventQueue = new ConcurrentQueue<LogEntry>();
+    // Synchronization objects
+    private readonly object fileLock = new object();
+    private readonly object queueLock = new object();
     private Thread writerThread;
     private readonly AutoResetEvent wakeEvent = new AutoResetEvent(false);
     private volatile bool isWorkerRunning;
@@ -486,46 +489,51 @@ public sealed class GameLogger : MonoBehaviour
 
     private void ProcessEventQueue()
     {
-        if (fileLoggingUnavailable || activeLogWriter == null)
-            return;
-
-        int dropped = Interlocked.Exchange(ref droppedEventCount, 0);
-        if (dropped > 0)
+        // Ensure exclusive access to file I/O and queue processing
+        lock (fileLock)
         {
-            WriteDirectToFile(new LogEntry
+            if (fileLoggingUnavailable || activeLogWriter == null)
+                return;
+
+            // Reset dropped count atomically
+            int dropped = Interlocked.Exchange(ref droppedEventCount, 0);
+            if (dropped > 0)
             {
-                TimestampUtc = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"),
-                Level = GameLogLevel.Warning,
-                Category = "LOG_SYSTEM",
-                Action = "queue_overflow",
-                Message = $"Dropped {dropped} log events due to full queue buffer.",
-                Scene = cachedCurrentScene,
-                SessionId = sessionId,
-                PlayerId = cachedPlayerId,
-                BuildVersion = cachedAppVersion
-            });
-        }
+                WriteDirectToFile(new LogEntry
+                {
+                    TimestampUtc = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                    Level = GameLogLevel.Warning,
+                    Category = "LOG_SYSTEM",
+                    Action = "queue_overflow",
+                    Message = $"Dropped {dropped} log events due to full queue buffer.",
+                    Scene = cachedCurrentScene,
+                    SessionId = sessionId,
+                    PlayerId = cachedPlayerId,
+                    BuildVersion = cachedAppVersion
+                });
+            }
 
-        while (eventQueue.TryDequeue(out LogEntry entry))
-        {
-            WriteDirectToFile(entry);
-        }
+            while (eventQueue.TryDequeue(out LogEntry entry))
+            {
+                WriteDirectToFile(entry);
+            }
 
-        try
-        {
-            if (activeLogWriter != null)
-                activeLogWriter.Flush();
-            if (activeLogStream != null)
-                activeLogStream.Flush();
+            try
+            {
+                if (activeLogWriter != null)
+                    activeLogWriter.Flush();
+                if (activeLogStream != null)
+                    activeLogStream.Flush();
 
-            if (activeJsonlWriter != null)
-                activeJsonlWriter.Flush();
-            if (activeJsonlStream != null)
-                activeJsonlStream.Flush();
-        }
-        catch (Exception ex)
-        {
-            Debug.LogWarning($"[GameLogger] Disk flush warning: {ex.Message}");
+                if (activeJsonlWriter != null)
+                    activeJsonlWriter.Flush();
+                if (activeJsonlStream != null)
+                    activeJsonlStream.Flush();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[GameLogger] Disk flush warning: {ex.Message}");
+            }
         }
     }
 
