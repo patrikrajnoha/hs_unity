@@ -1,3 +1,5 @@
+using System.Reflection;
+using System.Threading.Tasks;
 using System;
 using System.IO;
 using System.Text;
@@ -9,6 +11,13 @@ using UnityEngine;
 /// </summary>
 public static class GameLoggerTests
 {
+    // Batch entry point without -quit: the campaign check exits after Play Mode.
+    public static void RunAllAndCampaign()
+    {
+        RunAllTests();
+        CampaignRuntimeChecks.Start();
+    }
+
     private static int testsPassed = 0;
     private static int testsFailed = 0;
 
@@ -30,6 +39,9 @@ public static class GameLoggerTests
         Test5_LogRotationLogic();
         Test6_RetentionCleanupLogic();
         Test7_CompatibilityFacade();
+        Test8_QueueCapacityRecovery();
+        Test9_ConcurrentProducers();
+        Test10_ShutdownDrainsAndCloses();
 
         Debug.Log("==================================================");
         if (testsFailed == 0)
@@ -41,6 +53,7 @@ public static class GameLoggerTests
             Debug.LogError($"[GameLoggerTests] TESTS FINISHED WITH FAILURES: {testsPassed} passed, {testsFailed} failed.");
         }
         Debug.Log("==================================================");
+        if (testsFailed > 0) throw new InvalidOperationException("GameLogger verification failed: " + testsFailed);
     }
 
     private static void Assert(bool condition, string testName, string details = "")
@@ -122,71 +135,135 @@ public static class GameLoggerTests
         Assert(content.Contains("[WARNING] [UNITY]"), "Test 4.2: Unity message tagged as [WARNING] [UNITY]");
     }
 
-using System.Reflection;
 
     private static void Test5_LogRotationLogic()
     {
-        // Reduce max file size to force rotation quickly
-        GameLogger logger = GameLogger.EnsureInstance();
-        logger.config.maxFileSizeMB = 0; // 0 MB => any write triggers rotation
-
-        // Write a log entry that will exceed size and cause rotation
-        GameLogger.LogInfo("TEST", "rotation_trigger", "First entry before rotation");
         GameLogger.Flush();
-
-        // Invoke rotation explicitly to ensure it occurs
-        MethodInfo rotate = typeof(GameLogger).GetMethod("RotateLogFile", BindingFlags.NonPublic | BindingFlags.Instance);
-        rotate.Invoke(logger, null);
-
-        string dir = GameLogger.LogDirectory;
-        var files = Directory.GetFiles(dir, "game_*.log");
-        Assert(files.Length >= 2, "Test 5.1: Rotation should create a second log file", string.Join(", ", files));
+        var config = GameLogger.Config;
+        int oldSize = config.maxFileSizeMB;
+        int oldFiles = config.maxLogFiles;
+        bool oldEcho = config.enableUnityConsoleLogging;
+        string marker = "rotation_" + Guid.NewGuid().ToString("N");
+        string firstPath = GameLogger.CurrentLogFilePath;
+        try
+        {
+            config.enableUnityConsoleLogging = false;
+            config.maxFileSizeMB = 1;
+            config.maxLogFiles = 100;
+            string payload = new string('x', 16384);
+            for (int i = 0; i < 80; i++) GameLogger.LogInfo("TEST", marker + "_" + i, payload);
+            GameLogger.Flush();
+            Assert(firstPath != GameLogger.CurrentLogFilePath, "Test 5.1: Size threshold rotated the active file");
+            string content = ReadSessionLogs();
+            Assert(content.Contains(marker + "_0 |") && content.Contains(marker + "_79 |"), "Test 5.2: Events survive automatic rotation");
+        }
+        finally { config.maxFileSizeMB = oldSize; config.maxLogFiles = oldFiles; config.enableUnityConsoleLogging = oldEcho; }
     }
 
     private static void Test6_RetentionCleanupLogic()
     {
         string testDir = Path.Combine(Path.GetTempPath(), "HighStakesTest_Retention_" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(testDir);
+        var logger = GameLogger.EnsureInstance();
+        var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+        var directory = typeof(GameLogger).GetField("resolvedLogDirectory", flags);
+        object fileLock = typeof(GameLogger).GetField("fileLock", flags).GetValue(logger);
+        int oldLimit = GameLogger.Config.maxLogFiles;
+        GameLogger.Flush();
+        lock (fileLock)
+        {
+            string originalDirectory = (string)directory.GetValue(logger);
+            try
+            {
+                File.WriteAllText(Path.Combine(testDir, "user_notes.txt"), "keep me");
+                for (int i = 0; i < 15; i++) File.WriteAllText(Path.Combine(testDir, "game_test_" + i + ".log"), "old");
+                directory.SetValue(logger, testDir);
+                GameLogger.Config.maxLogFiles = 5;
+                typeof(GameLogger).GetMethod("EnforceRetentionCleanup", flags).Invoke(logger, null);
+                Assert(Directory.GetFiles(testDir, "game_*.log").Length == 5, "Test 6.1: Production retention keeps five historical files");
+                Assert(File.Exists(Path.Combine(testDir, "user_notes.txt")), "Test 6.2: Unrelated files survive retention");
+            }
+            finally
+            {
+                directory.SetValue(logger, originalDirectory);
+                GameLogger.Config.maxLogFiles = oldLimit;
+                Directory.Delete(testDir, true);
+            }
+        }
+    }
 
+    private static string ReadSessionLogs()
+    {
+        var text = new StringBuilder();
+        foreach (string path in Directory.GetFiles(GameLogger.LogDirectory, "*" + GameLogger.SessionId + "*.log"))
+            text.Append(ReadFileWithRetry(path));
+        return text.ToString();
+    }
+
+    private static void Test8_QueueCapacityRecovery()
+    {
+        string marker = "queue_recovery_" + Guid.NewGuid().ToString("N");
+        bool echo = GameLogger.Config.enableUnityConsoleLogging;
+        GameLogger.Config.enableUnityConsoleLogging = false;
         try
         {
-            // Create dummy user file that must NOT be deleted
-            string userDoc = Path.Combine(testDir, "user_notes.txt");
-            File.WriteAllText(userDoc, "important player notes");
-
-            // Create 15 fake historical log files
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 5000; i++)
             {
-                string logName = Path.Combine(testDir, $"game_2026-11-20_{i:D2}_dummy.log");
-                File.WriteAllText(logName, new string('A', 1024)); // 1 KB each
-                // Stagger timestamps
-                File.SetCreationTimeUtc(logName, DateTime.UtcNow.AddMinutes(i - 30));
+                GameLogger.LogInfo("TEST", marker + "_" + i, "capacity recovery");
+                if (i % 100 == 99) GameLogger.Flush();
             }
-
-            Assert(Directory.GetFiles(testDir, "game_*.log").Length == 15, "Test 6.1: Created 15 test log files");
-
-            // Simulate retention cleanup to retain max 5 files
-            DirectoryInfo dir = new DirectoryInfo(testDir);
-            FileInfo[] files = dir.GetFiles("game_*.log");
-            Array.Sort(files, (a, b) => a.CreationTimeUtc.CompareTo(b.CreationTimeUtc));
-
-            int maxFiles = 5;
-            int deleted = 0;
-            for (int i = 0; i < files.Length - maxFiles; i++)
-            {
-                files[i].Delete();
-                deleted++;
-            }
-
-            FileInfo[] remainingLogs = dir.GetFiles("game_*.log");
-            Assert(remainingLogs.Length == 5, "Test 6.2: Exactly 5 log files retained after cleanup");
-            Assert(File.Exists(userDoc), "Test 6.3: Unrelated user file was preserved and NOT deleted");
+            GameLogger.Flush();
+            string content = ReadSessionLogs();
+            int count = 0;
+            for (int i = 0; i < 5000; i++) if (content.Contains(marker + "_" + i + " |")) count++;
+            Assert(count == 5000, "Test 8.1: All 5000 events survive repeated drain", "Recorded " + count);
         }
-        finally
+        finally { GameLogger.Config.enableUnityConsoleLogging = echo; }
+    }
+
+    private static void Test9_ConcurrentProducers()
+    {
+        string marker = "parallel_" + Guid.NewGuid().ToString("N");
+        bool echo = GameLogger.Config.enableUnityConsoleLogging;
+        GameLogger.Config.enableUnityConsoleLogging = false;
+        try
         {
-            if (Directory.Exists(testDir))
-                Directory.Delete(testDir, true);
+            var callback = typeof(GameLogger).GetMethod("OnUnityLogMessageReceived", BindingFlags.Instance | BindingFlags.NonPublic);
+            var logger = GameLogger.EnsureInstance();
+            Parallel.For(0, 4, worker =>
+            {
+                for (int i = 0; i < 500; i++)
+                {
+                    string id = marker + "_" + worker + "_" + i;
+                    if (worker % 2 == 0) GameLogger.LogInfo("TEST", id, "parallel producer");
+                    else callback.Invoke(logger, new object[] { id + " | callback", "", LogType.Warning });
+                    if (i % 100 == 0) GameLogger.Flush();
+                }
+            });
+            GameLogger.Flush();
+            string content = ReadSessionLogs();
+            int count = 0;
+            for (int w = 0; w < 4; w++) for (int i = 0; i < 500; i++)
+                if (content.Contains(marker + "_" + w + "_" + i + " |")) count++;
+            Assert(count == 2000, "Test 9.1: Concurrent producers and Flush preserve all events", "Recorded " + count);
         }
+        finally { GameLogger.Config.enableUnityConsoleLogging = echo; }
+    }
+
+    private static void Test10_ShutdownDrainsAndCloses()
+    {
+        string marker = "shutdown_tail_" + Guid.NewGuid().ToString("N");
+        GameLogger.LogInfo("TEST", marker, "must survive shutdown");
+        var logger = GameLogger.EnsureInstance();
+        var shutdown = typeof(GameLogger).GetMethod("Shutdown", BindingFlags.Instance | BindingFlags.NonPublic);
+        shutdown.Invoke(logger, null);
+        GameLogger.Flush();
+        shutdown.Invoke(logger, null);
+        Assert(ReadSessionLogs().Contains(marker + " |"), "Test 10.1: Shutdown drains the last event and is idempotent");
+        using (File.Open(GameLogger.CurrentLogFilePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            Assert(true, "Test 10.2: Shutdown releases the physical file handle");
+        // Permit another test run from the editor menu without keeping a stopped singleton.
+        UnityEngine.Object.DestroyImmediate(logger.gameObject);
     }
 
     private static void Test7_CompatibilityFacade()

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
 using HighStakes.City;
@@ -132,6 +133,14 @@ public static class CampaignRuntimeChecks
         director.ContinueCampaign();
         Require(director.HasEnded && Time.timeScale == 0 && director.Progress.Score == score, "Completed game resumed or paid twice");
         Require(PlayerPrefs.GetInt(CityMissionDirector.BestKey) == score, "Best score did not save");
+        GameLogger.Flush();
+        Require(File.Exists(GameLogger.CurrentLogFilePath), "Gameplay log file does not exist");
+        string content = "";
+        foreach (string path in Directory.GetFiles(GameLogger.LogDirectory, "*" + GameLogger.SessionId + "*.log"))
+            content += File.ReadAllText(path);
+        Require(content.Contains("campaign_started |") && content.Contains("objective_signaled |") &&
+                content.Contains("campaign_finished |"), "Campaign events were not physically written to disk");
+        Debug.Log("CAMPAIGN FILE LOG PASS: start, objective and completion events found on disk.");
     }
     private static void Require(bool condition, string message) { if (!condition) throw new InvalidOperationException(message); }
 }
