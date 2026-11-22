@@ -12,7 +12,7 @@ V safehouse vyzdvihni ingrediencie a plodinu, pri MIXING STATION stlač E a vybe
 Päť postupne odomykaných levelov sa odohráva v jednej rozšírenej štvrti:
 1. Zásielka: prevezmi zákazku od Mary, nájdi balík a odnes ho Tomášovi do kaviarne.
 2. Výpadok prúdu: nájdi poistku a poznámku v dielni, oprav rozvádzač v správnom poradí.
-3. Účtovná kniha: prenikni do skladu, získaj knihu a ukry sa v dielni pred políciou.
+3. Účtovná kniha: vyber si tichý postup s Adiným kódom alebo rýchle vylomenie skrinky s poplachom. Získaj knihu a ukry sa v dielni pred políciou. Zelená plocha úkrytu je v prístupnej stredovej uličke pred zásobovacou policou.
 4. Dôkazy: porovnaj dokument zo skladu, faktúru z kaviarne a výpoveď Ady.
 5. Posledné vysielanie: získaj prístup do rádiovej miestnosti, odošli správu a unikni na miesto vyzdvihnutia.
 
@@ -22,7 +22,10 @@ Výrobný prototyp obsahuje tri pestovateľné línie (Green Bud, Mushrooms, Coc
 
 ## Výsledok a koniec
 Po každom leveli sa zobrazí výsledok. Skóre = základ misie + 2 body za každú zostávajúcu sekundu + 300 za misiu bez poplachu − 200 za opakovanie − 75 za nesprávnu odpoveď; minimum je nula. Poplach sa v rámci opakovaného levelu pamätá.
-Po piatom leveli sa hranie zastaví a zobrazí sa konečné skóre, hodnotenie S/A/B/C, časy, chyby a najlepší výsledok. Môžeš začať novú kampaň alebo skončiť. V editore Skončiť ukončí Play Mode. Najlepší výsledok ostáva uložený. Medzi dokončenými levelmi sa ukladá postup; rozpracovaný level sa po opätovnom spustení začína od začiatku.
+Po piatom leveli sa hranie zastaví a zobrazí sa konečné skóre, hodnotenie S/A/B/C, časy, chyby a najlepší výsledok. Môžeš pokračovať vo voľnom režime, začať novú kampaň alebo skončiť. Voľný režim zachováva rozhovory, inventár aj výrobu. Nová kampaň je dostupná aj v pauze. V editore Skončiť ukončí Play Mode. Najlepší výsledok ostáva uložený. Medzi dokončenými levelmi sa ukladá postup; rozpracovaný level sa po opätovnom spustení začína od začiatku. Dokončený uložený postup obnoví výsledky bez ďalšej odmeny.
+
+## Lokálna analytika
+JSONL záznamy sa ukladajú automaticky a ostávajú v počítači. V editore otvor **HighStakes > Analytics > Gameplay Sessions**, stlač **Reload** a vyber reláciu pre zobrazenie pohybu, zlyhaní a policajných odhalení na pôdoryse štvrte. Súhrny obsahujú misie, kroky, rozhodnutia, skóre a opakované pokusy. Vo výsledkoch je stručná efektivita poslednej misie, čas presunu a počet odhalení. Podrobná schéma a význam metrík sú v [TELEMETRY.md](TELEMETRY.md). Nejde o dotazník ani online službu.
 
 ## Rozsah balíka
 Ide o samostatný Unity projekt s funkčnou prototypovou mapou a jednoduchými vlastnými modelmi. Neobsahuje chýbajúce Git LFS modely a textúry pôvodného repozitára. Päť levelov sú kapitoly v jednej mape, nie päť samostatných máp. Dialógy a misie sú v Assets/Resources/City/old_quarter_story.json.

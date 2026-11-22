@@ -35,7 +35,7 @@ public sealed class GameLoggingConfig
     public bool enableFirebaseLogging = false;
 
     [Tooltip("Optional secondary JSON Lines (.jsonl) structured log format output.")]
-    public bool enableJsonlLogging = false;
+    public bool enableJsonlLogging = true;
 
     [Header("Optional Firebase Configuration")]
     public string apiKey = string.Empty;

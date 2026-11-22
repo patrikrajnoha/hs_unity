@@ -29,6 +29,9 @@ namespace HighStakes.City
         public string contractId, title;
         public int baseScore, timeBonus, stealthBonus, penalties, score, failures, mistakes;
         public float seconds;
+        public float navigationSeconds, efficiency;
+        public int detections, measurementsVersion;
+        public string strategy;
     }
     [Serializable] public sealed class CampaignSave
     {
@@ -37,6 +40,8 @@ namespace HighStakes.City
         public int currentFailures, currentMistakes;
         public float currentTotalTime;
         public bool currentAlarm;
+        public float currentNavigationTime;
+        public int currentDetections;
     }
 
     // Gameplay state and score calculations do not depend on scene objects.
@@ -58,6 +63,9 @@ namespace HighStakes.City
         public int CurrentMistakes { get; private set; }
         public float CurrentTotalTime { get; private set; }
         public float Elapsed { get; private set; }
+        public float NavigationTime { get; private set; }
+        public int Detections { get; private set; }
+        public string Strategy { get; set; }
         public bool KnowsRoute { get; set; }
         public bool AlarmRaised { get; private set; }
         public int Failures { get { int sum = CurrentFailures; foreach (var result in results) sum += result.failures; return sum; } }
@@ -86,6 +94,8 @@ namespace HighStakes.City
                 CurrentMistakes = Mathf.Max(0, save.currentMistakes);
                 CurrentTotalTime = Mathf.Max(0, save.currentTotalTime);
                 AlarmRaised = save.currentAlarm;
+                NavigationTime = Mathf.Max(0, save.currentNavigationTime);
+                Detections = Mathf.Max(0, save.currentDetections);
             }
         }
 
@@ -103,12 +113,15 @@ namespace HighStakes.City
                     contractId = level.id, title = level.title, baseScore = level.baseScore,
                     timeBonus = timeBonus, stealthBonus = stealthBonus, penalties = penalties,
                     score = Mathf.Max(0, level.baseScore + timeBonus + stealthBonus - penalties),
-                    failures = CurrentFailures, mistakes = CurrentMistakes, seconds = CurrentTotalTime
+                    failures = CurrentFailures, mistakes = CurrentMistakes, seconds = CurrentTotalTime,
+                    navigationSeconds = NavigationTime, detections = Detections, strategy = Strategy, measurementsVersion = 1,
+                    efficiency = CurrentTotalTime > 0 ? Mathf.Clamp01(Elapsed / CurrentTotalTime) : 1f
                 };
                 results.Add(result); Score += result.score;
                 Money += level.reward; Reputation += level.reputation;
                 StepIndex = 0; Elapsed = 0; CurrentTotalTime = 0;
                 CurrentFailures = 0; CurrentMistakes = 0; KnowsRoute = false; AlarmRaised = false;
+                NavigationTime = 0; Detections = 0; Strategy = null;
             }
             return true;
         }
@@ -124,14 +137,17 @@ namespace HighStakes.City
         public void Fail()
         {
             if (Finished) return;
-            CurrentFailures++; StepIndex = 0; Elapsed = 0; KnowsRoute = false;
+            CurrentFailures++; StepIndex = 0; Elapsed = 0; KnowsRoute = false; Strategy = null;
             // An alarm anywhere in an attempt forfeits the level's clean-run bonus.
         }
         public void RecordMistake() { if (!Finished) CurrentMistakes++; }
         public void RaiseAlarm() { if (!Finished) AlarmRaised = true; }
+        public void RecordDetection() { if (Active) Detections++; }
+        public void RecordNavigation(float delta) { if (Active) NavigationTime += Mathf.Max(0, delta); }
         public CampaignSave Capture() => new CampaignSave {
             results = new List<LevelResult>(results), currentFailures = CurrentFailures,
-            currentMistakes = CurrentMistakes, currentTotalTime = CurrentTotalTime, currentAlarm = AlarmRaised
+            currentMistakes = CurrentMistakes, currentTotalTime = CurrentTotalTime, currentAlarm = AlarmRaised,
+            currentNavigationTime = NavigationTime, currentDetections = Detections
         };
         public Conversation FindConversation(string id)
         {

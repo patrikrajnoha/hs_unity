@@ -23,6 +23,8 @@ namespace HighStakes.City
         private float safeTime;
         private bool betweenLevels, ended;
         private Vector3 spawn;
+        private float gameplayElapsed, sampleTime, objectiveElapsed;
+        public static CityMissionDirector TelemetryOwner { get; private set; }
         public ContractProgress Progress => progress;
         public bool HasEnded => ended;
         public bool IsBetweenLevels => betweenLevels;
@@ -37,7 +39,7 @@ namespace HighStakes.City
         /// </summary>
         public bool HasPriorityInteraction(GameObject candidate)
         {
-            if (candidate == null || candidate != player || progress == null ||
+            if (candidate == null || player == null || candidate != player.gameObject || progress == null ||
                 conversation != null || betweenLevels || ended)
                 return false;
 
@@ -69,9 +71,12 @@ namespace HighStakes.City
                 Debug.LogWarning("Campaign checkpoint could not be read; starting a new campaign.");
             }
             progress = new ContractProgress(story, saved);
+            TelemetryOwner = this;
+            GameLogger.CampaignCompleted |= progress.Finished;
             hud.Choose = Choose;
             CreateObjectiveGroundGlow();
-            GameLogger.LogInfo("campaign", "campaign_started", $"Campaign initialized at contract {progress.ContractIndex + 1}/{story.contracts.Length}");
+            GameLogger.LogInfo("campaign", progress.Finished ? "campaign_loaded" : "campaign_started", progress.Finished ? "Completed campaign loaded."
+                : $"Campaign initialized at contract {progress.ContractIndex + 1}/{story.contracts.Length}");
             if (progress.Finished) ShowResults();
             else hud.Notify(LocalizationManager.GetOrFallback("ui.notice.level_start",
                 "Level {level}/{total}. Talk to Mara to begin.",
@@ -104,6 +109,7 @@ namespace HighStakes.City
                 if (keyboard != null && keyboard.enterKey.wasPressedThisFrame) ContinueCampaign();
                 return;
             }
+            if (Time.timeScale <= 0 || GameMaster.GameOverActive) return;
             if (conversation != null)
             {
                 if (keyboard != null)
@@ -114,22 +120,32 @@ namespace HighStakes.City
                 }
                 return;
             }
+            gameplayElapsed += Time.deltaTime;
+            sampleTime += Time.deltaTime;
+            if (progress.Active) objectiveElapsed += Time.deltaTime;
+            if (sampleTime >= 1f)
+            {
+                sampleTime %= 1f;
+                var data = EventData(); data.elapsed = gameplayElapsed;
+                GameLogger.Track("player_position", data);
+            }
             if (progress.Tick(Time.deltaTime))
             {
                 Fail(LocalizationManager.GetOrFallback("ui.notice.time_ran_out",
-                    "Time ran out. Retry the briefing with Mara. -200 score."));
+                    "Time ran out. Retry the briefing with Mara. -200 score."), "timeout");
                 return;
             }
             bool pursued = IsPursued();
             foreach (var officer in PoliceHeatRegistry.ActivePolice)
             {
                 if (officer == null || !officer.isChasing || !officer.HasVisualContact) continue;
-                if (Vector3.Distance(player.transform.position, officer.transform.position) < 1.5f)
+                if (!progress.Finished && Vector3.Distance(player.transform.position, officer.transform.position) < 1.5f)
                 { Fail(LocalizationManager.GetOrFallback("ui.notice.caught",
-                    "Caught. This level restarts; earlier scores stay. -200 score.")); return; }
+                    "Caught. This level restarts; earlier scores stay. -200 score."), "caught"); return; }
             }
             CityActor target = ObjectiveTarget();
             float distance = target != null ? Vector3.Distance(player.transform.position, target.transform.position) : 0;
+            if (target != null && distance > 2.7f) progress.RecordNavigation(Time.deltaTime);
             bool objectiveVisible = target != null && target.gameObject.activeInHierarchy;
             UpdateObjectiveGroundGlow(target, objectiveVisible);
             ContractStep step = progress.Step;
@@ -158,7 +174,9 @@ namespace HighStakes.City
                 heading = (angle < -20 ? "<  " : angle > 20 ? ">  " : "^  ") + heading;
             }
             hud.Refresh(progress, distance, heading, PoliceStatus(), prompt, CityInterior.RoomAt(player.transform.position));
-            hud.UpdateMap(player.transform.position, target != null ? (Vector3?)target.transform.position : null, actors["officer"].transform.position);
+            actors.TryGetValue("officer", out CityActor mapOfficer);
+            hud.UpdateMap(player.transform.position, target != null ? (Vector3?)target.transform.position : null,
+                mapOfficer != null ? (Vector3?)mapOfficer.transform.position : null);
             if (keyboard != null && keyboard.eKey.wasPressedThisFrame && nearby != null)
             {
                 // Doors remain usable while escaping. Ordinary dialogue does not pause a pursuit.
@@ -211,6 +229,7 @@ namespace HighStakes.City
             else if (actor == ObjectiveTarget() && progress.Step != null)
             {
                 if (progress.Step.holdSeconds > 0) return;
+                if (actor.id == "ledger") { OpenConversation("ledger.open", actor); return; }
                 if (string.IsNullOrEmpty(progress.Step.dialogue)) Signal(progress.Step.signal);
                 else OpenConversation(progress.Step.dialogue, actor);
             }
@@ -218,6 +237,8 @@ namespace HighStakes.City
         }
         private void OpenConversation(string id, CityActor actor)
         {
+            if (progress.Finished && actor != null &&
+                (actor.id == "mara" || actor.id == "ada" || actor.id == "tomas")) id = actor.id + ".after_campaign";
             Conversation next = progress.FindConversation(id);
             if (next == null)
             {
@@ -239,11 +260,24 @@ namespace HighStakes.City
         {
             if (conversation == null || conversation.choices == null || index < 0 || index >= conversation.choices.Length) return;
             StoryChoice choice = conversation.choices[index];
+            var decision = EventData(); decision.dialogueId = conversation.id;
+            decision.choice = index.ToString(System.Globalization.CultureInfo.InvariantCulture); decision.signal = choice.signal;
+            GameLogger.Track("choice_selected", decision);
             if (choice.signal == "resume") { CloseConversation(); return; }
             if (choice.signal == "restart") { Fail("Level restarted. -200 score. Earlier results remain saved."); return; }
             if (choice.signal == "new_campaign") { NewCampaign(); return; }
+            if (choice.signal == "use_locker_code" || choice.signal == "force_locker")
+            {
+                if (progress.Step?.signal != "collect_ledger") { CloseConversation(); return; }
+                if (choice.signal == "use_locker_code" && !progress.KnowsRoute)
+                { hud.Notify(LocalizationManager.GetOrFallback("ui.notice.ask_ada", "Ask Ada at the docks for the code, or force the locker and trigger an alarm.")); return; }
+                if (choice.signal == "force_locker") progress.KnowsRoute = false;
+                Signal("collect_ledger"); CloseConversation(); return;
+            }
             if (choice.signal == "learn_route")
-            { progress.KnowsRoute = true; hud.Notify(LocalizationManager.GetOrFallback("ui.notice.locker_code", "Locker code learned. The ledger can be taken without an alarm.")); }
+            { if (progress.Current != null && progress.Current.id == "paper_trail" && progress.Active)
+                { progress.KnowsRoute = true; progress.Strategy = "locker_code"; }
+              hud.Notify(LocalizationManager.GetOrFallback("ui.notice.locker_code", "Locker code learned. The ledger can be taken without an alarm.")); }
             else if (choice.signal == "mistake")
             { progress.RecordMistake(); SaveCheckpoint(); hud.Notify(LocalizationManager.GetOrFallback("ui.notice.wrong_answer", "Wrong answer. -75 score. Check the clue and try again.")); }
             else if (choice.signal != "puzzle_click" && !string.IsNullOrEmpty(choice.signal)) Signal(choice.signal);
@@ -261,14 +295,26 @@ namespace HighStakes.City
             int completed = progress.ContractIndex;
             bool quiet = progress.KnowsRoute;
             CityActor oldTarget = ObjectiveTarget();
+            var data = EventData();
+            bool starting = !progress.Active && !progress.Finished;
+            data.objectiveSeconds = objectiveElapsed;
+            if (signal == "collect_ledger" && progress.Step?.signal == signal) progress.Strategy = quiet ? "locker_code" : "forced_locker";
+            data.strategy = progress.Strategy;
             if (!progress.Signal(signal)) return;
+            GameLogger.Track("objective_complete", data); objectiveElapsed = 0;
+            if (starting) { data.mode = "mission"; GameLogger.Track("mission_start", data); }
+            if (signal.StartsWith("collect_"))
+            {
+                data.itemId = signal.Substring("collect_".Length);
+                GameLogger.Track("item_collected", data);
+            }
             GameLogger.LogInfo("campaign", "objective_signaled", $"Signal '{signal}' completed in contract {completed + 1}");
             if (signal.StartsWith("collect_") && oldTarget != null) oldTarget.gameObject.SetActive(false);
             if ((signal == "collect_ledger" && !quiet) || signal == "broadcast")
             {
                 progress.RaiseAlarm();
-                GameMaster.Instance.ReportCrime(player.gameObject);
-                actors["officer"].GetComponent<PoliceBehavior>().isCalled = true;
+                if (GameMaster.Instance != null) GameMaster.Instance.ReportCrime(player.gameObject);
+                if (actors.TryGetValue("officer", out CityActor officer) && officer.TryGetComponent(out PoliceBehavior police)) police.isCalled = true;
                 hud.Notify(signal == "broadcast"
                     ? LocalizationManager.GetOrFallback("ui.notice.evidence_on_air", "Evidence is on air! Lose the officer, then reach extraction.")
                     : LocalizationManager.GetOrFallback("ui.notice.alarm", "Alarm! Lose the officer before entering the safehouse."));
@@ -276,18 +322,33 @@ namespace HighStakes.City
             else if (signal == "collect_ledger") hud.Notify(LocalizationManager.GetOrFallback("ui.notice.code_accepted", "Code accepted. Ledger secured without an alarm."));
             else if (signal == "restore_power") hud.Notify(LocalizationManager.GetOrFallback("ui.notice.power_restored", "Power restored. Tell Mara the workshop is working again."));
             SaveCheckpoint();
-            if (completed != progress.ContractIndex) ShowResults();
+            if (completed != progress.ContractIndex)
+            {
+                LevelResult result = progress.Results[completed];
+                data.duration = result.seconds; data.score = result.score; data.totalScore = progress.Score;
+                data.penalties = result.penalties; data.failures = result.failures; data.mistakes = result.mistakes;
+                data.navigationSeconds = result.navigationSeconds; data.detections = result.detections;
+                data.efficiency = result.efficiency; data.strategy = result.strategy;
+                GameLogger.Track("mission_complete", data);
+                GameLogger.LogInfo("campaign", "contract_completed", $"Contract {completed + 1} ({result.contractId}) completed. Mission score: {result.score}; campaign score: {progress.Score}; duration: {result.seconds:0.0}s; failures: {result.failures}; mistakes: {result.mistakes}");
+                if (progress.Finished)
+                {
+                    data.duration = progress.TotalTime; data.rank = progress.Rank; data.retries = progress.Failures;
+                    data.failures = progress.Failures; data.mistakes = progress.Mistakes; data.completed = true;
+                    GameLogger.Track("campaign_complete", data); GameLogger.CampaignCompleted = true;
+                    GameLogger.LogInfo("campaign", "campaign_finished", $"Campaign finished with total score {progress.Score}; rank {progress.Rank}; duration {progress.TotalTime:0.0}s; retries {progress.Failures}");
+                }
+                ShowResults();
+            }
         }
         private void ShowResults()
         {
             CloseConversation(); safeTime = 0;
             ended = progress.Finished; betweenLevels = !ended;
-            GameLogger.LogInfo("campaign", "contract_completed", $"Contract {progress.ContractIndex + 1} completed. Score: {progress.Score}, Finished: {ended}");
             if (ended)
             {
                 PlayerPrefs.SetInt(BestKey, Mathf.Max(PlayerPrefs.GetInt(BestKey), progress.Score));
                 PlayerPrefs.Save();
-                GameLogger.LogInfo("campaign", "campaign_finished", $"Campaign finished with total score {progress.Score}");
             }
             if (objectiveGroundGlow != null) objectiveGroundGlow.SetActive(false);
             Time.timeScale = 0; player.SetDialogueInputLocked(true); player.UnlockMouse();
@@ -298,6 +359,7 @@ namespace HighStakes.City
             if (!betweenLevels || ended) return;
             betweenLevels = false; hud.HideResults(); Time.timeScale = 1;
             player.SetDialogueInputLocked(false); player.LockMouse();
+            GameLogger.Track("free_roam_start", EventData());
             hud.Notify(LocalizationManager.GetOrFallback("ui.notice.level_unlocked",
                 "Level {level}/{total} unlocked. Return to Mara.",
                 "level", (progress.ContractIndex + 1).ToString(), "total", progress.Story.contracts.Length.ToString()));
@@ -307,11 +369,13 @@ namespace HighStakes.City
             if (!ended) return;
             ended = false; betweenLevels = false; hud.HideResults(); Time.timeScale = 1;
             player.SetDialogueInputLocked(false); player.LockMouse();
+            GameLogger.Track("free_roam_start", EventData());
             hud.Notify(LocalizationManager.GetOrFallback("ui.notice.campaign_complete",
                 "Campaign complete. Free Roam remains open; explore the Old Quarter."));
         }
         public void NewCampaign()
         {
+            GameLogger.Track("campaign_restart", EventData());
             PlayerPrefs.DeleteKey(SaveKey); PlayerPrefs.Save();
             Time.timeScale = 1; SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
@@ -324,9 +388,11 @@ namespace HighStakes.City
             Application.Quit();
 #endif
         }
-        private void Fail(string reason)
+        private void Fail(string reason, string reasonId = "restart")
         {
-            if (ended || betweenLevels) return;
+            if (ended || betweenLevels || progress.Finished) return;
+            var data = EventData(); data.reason = reasonId; data.objectiveSeconds = objectiveElapsed;
+            GameLogger.Track("mission_failed", data); objectiveElapsed = 0;
             CloseConversation(); progress.Fail(); safeTime = 0;
             GameLogger.LogWarning("campaign", "contract_failed", $"Contract {progress.ContractIndex + 1} failed: {reason}");
             GameMaster gm = GameMaster.Instance;
@@ -335,6 +401,28 @@ namespace HighStakes.City
             controller.enabled = false; player.transform.position = spawn; controller.enabled = true; player.ResetMotion();
             foreach (string id in new[] { "parcel", "fuse", "ledger" }) actors[id].gameObject.SetActive(true);
             SaveCheckpoint(); hud.Notify(reason);
+        }
+        private GameplayEventData EventData()
+        {
+            return new GameplayEventData {
+                missionId = progress?.Current?.id, objectiveId = progress?.Step?.signal,
+                missionNumber = progress != null && !progress.Finished ? progress.ContractIndex + 1 : 0,
+                attempt = (progress?.CurrentFailures ?? 0) + 1, elapsed = progress?.Elapsed ?? 0,
+                mode = progress != null && progress.Active ? "mission" : "free_roam",
+                hasPosition = player != null, position = player != null ? player.transform.position : Vector3.zero,
+                rotation = player != null ? player.transform.eulerAngles : Vector3.zero
+            };
+        }
+        public void RecordPoliceDetection(string reason, Vector3 position)
+        {
+            progress?.RecordDetection();
+            var data = EventData(); data.reason = reason; data.position = position; data.hasPosition = true;
+            GameLogger.Track("police_alert", data);
+        }
+        public void RecordItem(string itemId, Vector3 position)
+        {
+            var data = EventData(); data.itemId = itemId; data.position = position; data.hasPosition = true;
+            GameLogger.Track("item_collected", data);
         }
         private bool IsPursued()
         {
@@ -507,6 +595,7 @@ namespace HighStakes.City
         }
         private void OnDestroy()
         {
+            if (TelemetryOwner == this) TelemetryOwner = null;
             LocalizationManager.LanguageChanged -= RefreshLocalization;
             Time.timeScale = 1;
             if (objectiveGroundGlow != null) Destroy(objectiveGroundGlow);

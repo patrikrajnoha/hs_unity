@@ -129,7 +129,7 @@ namespace HighStakes.City
             mission.text = freeRoam ? LocalizationManager.GetOrFallback("ui.city.free_roam", "FREE ROAM") : progress.Current.title;
             objective.text = progress.Finished ? LocalizationManager.GetOrFallback("ui.city.case_closed", "The case is closed. Explore the district freely.") :
                 freeRoam ? LocalizationManager.GetOrFallback("ui.city.next_story", "Next story mission available from Mara.") : progress.Step.objective;
-            int secondsRemaining = Mathf.CeilToInt(Mathf.Max(0, progress.Current.timeLimit - progress.Elapsed));
+            int secondsRemaining = progress.Current == null ? 0 : Mathf.CeilToInt(Mathf.Max(0, progress.Current.timeLimit - progress.Elapsed));
             string clock = progress.Active
                 ? "  <color=#A0B5B7>◷</color> " + LocalizationManager.GetOrFallback(
                     "ui.city.remaining", "{seconds}s remaining", "seconds", secondsRemaining.ToString())
@@ -221,6 +221,14 @@ namespace HighStakes.City
                     "CAMPAIGN SCORE: {score}  /  Next: {next}",
                     "score", progress.Score.ToString("N0"), "next", progress.Current.title);
             Label(card, footer, 17, Mint, new Vector2(40, -492), new Vector2(920, 60));
+            if (progress.Results.Count > 0 && progress.Results[progress.Results.Count - 1].measurementsVersion > 0)
+            {
+                var last = progress.Results[progress.Results.Count - 1];
+                Label(card, LocalizationManager.GetOrFallback("ui.city.performance",
+                    "Last mission: {efficiency}% efficiency / {navigation}s navigating / {detections} detections",
+                    "efficiency", (last.efficiency * 100).ToString("0"), "navigation", last.navigationSeconds.ToString("0"),
+                    "detections", last.detections.ToString()), 13, Muted, new Vector2(40, -542), new Vector2(920, 24));
+            }
             Label(card, LocalizationManager.GetOrFallback("ui.city.time_bonus_rules",
                 "Time bonus: 2 points per second remaining. Clean run: +300. Retry: -200. Wrong answer: -75."), 13,
                 Muted, new Vector2(40, -562), new Vector2(920, 40));

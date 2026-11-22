@@ -316,7 +316,7 @@
     {
       "id": "mara.ledger",
       "speaker": "Mara / Fixer",
-      "text": "A ledger inside the south-east warehouse names the people squeezing our shops. The warehouse door is now accessible. Ada knows the LOCKER code. Without it you will trigger an alarm. Get the book, lose any police, then hide inside the workshop.",
+      "text": "The warehouse ledger names the people squeezing our shops. Choose your route: ask Ada for the locker code for a quiet recovery, or force the locker to save the detour and face an alarm. An alarm forfeits the +300 clean-run bonus. Then hide inside the workshop and return to me.",
       "choices": [
         {
           "text": "Take the ledger job.",
@@ -751,6 +751,54 @@
           "text": "107.4 FM.",
           "signal": "mistake",
           "next": "final.radio"
+        }
+      ]
+    },
+    {
+      "id": "ledger.open",
+      "speaker": "Warehouse locker",
+      "text": "Choose your approach. Ada at the docks can share the code: an extra conversation keeps the alarm quiet and protects the +300 clean-run bonus. Forcing the locker saves the detour, but summons police.",
+      "choices": [
+        {
+          "text": "Use Ada's code (requires speaking to Ada).",
+          "signal": "use_locker_code"
+        },
+        {
+          "text": "Force the locker (alarm and police pursuit).",
+          "signal": "force_locker"
+        },
+        {
+          "text": "Leave and ask Ada first."
+        }
+      ]
+    },
+    {
+      "id": "mara.after_campaign",
+      "speaker": "Mara / Fixer",
+      "text": "The broadcast reached everyone. Tomas can keep his cafe, and Ada no longer has to carry this alone. You made the evidence count. The workshop and the district are yours to explore.",
+      "choices": [
+        {
+          "text": "We did this together."
+        }
+      ]
+    },
+    {
+      "id": "ada.after_campaign",
+      "speaker": "Ada / Dock worker",
+      "text": "I heard our evidence on the radio. Thank you for standing with us. The docks feel like our neighbourhood again.",
+      "choices": [
+        {
+          "text": "Your testimony made the difference."
+        }
+      ]
+    },
+    {
+      "id": "tomas.after_campaign",
+      "speaker": "Tomas / The Jade Room",
+      "text": "People came in talking about the broadcast, instead of the next payment demand. That is a good morning. There will always be a place for you here.",
+      "choices": [
+        {
+          "text": "Keep the coffee coming, Tomas."
         }
       ]
     }

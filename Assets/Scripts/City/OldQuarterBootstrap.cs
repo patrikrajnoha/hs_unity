@@ -40,7 +40,8 @@ namespace HighStakes.City
             AddPerson("ada", "Ada / Dock worker", new Vector3(32, 0.3f, -9), trim, "ada.route", false);
             AddLocation("parcel", "Dock parcel", new Vector3(35, 0.3f, 9), new Vector3(0.7f, 0.6f, 0.7f));
             AddLocation("ledger", "Warehouse locker", new Vector3(35, 1.3f, -22), new Vector3(0.6f, 0.15f, 0.5f));
-            AddLocation("safehouse", "Safehouse", new Vector3(-17, 0.26f, -23), new Vector3(1.8f, 0.06f, 1.8f));
+            // Keep the hold pad in front of the supply shelf, on the reachable central aisle.
+            AddLocation("safehouse", "Safehouse", new Vector3(-17, 0.26f, -20), new Vector3(1.8f, 0.06f, 1.8f));
             AddLocation("fuse", "Workshop / Spare fuse", new Vector3(-20, 1.15f, -21), new Vector3(0.35f, 0.25f, 0.25f));
             AddLocation("wiring", "Workshop / Maintenance note", new Vector3(-14, 0.6f, -22), new Vector3(0.5f, 0.08f, 0.6f));
             AddLocation("switchboard", "Workshop / Switchboard", new Vector3(-13.65f, 1.1f, -19), new Vector3(0.25f, 0.7f, 0.9f));

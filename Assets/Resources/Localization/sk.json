@@ -1402,7 +1402,7 @@
     {
       "key": "city.conversation.mara.ledger.text",
       "lines": [
-        "Účtovná kniha v juhovýchodnom sklade obsahuje mená ľudí, ktorí vydierajú naše obchody. Dvere skladu sú teraz prístupné. Ada pozná kód SKRINKY. Bez neho spustíš poplach. Získaj knihu, stras sa polície a ukry sa v dielni."
+        "Záznamy v sklade odhalia ľudí, ktorí vydierajú naše obchody. Vyber si postup: požiadaj Adu o kód pre tichý prístup alebo vylom skrinku a čel poplachu. Poplach znamená stratu bonusu +300 za čistý priebeh. Potom sa ukry v dielni a vráť sa ku mne."
       ]
     },
     {
@@ -3113,6 +3113,102 @@
       "key": "city.actor.extraction.name",
       "lines": [
         "Konečný odvoz"
+      ]
+    },
+    {
+      "key": "city.conversation.ledger.open.speaker",
+      "lines": [
+        "Skrinka v sklade"
+      ]
+    },
+    {
+      "key": "city.conversation.ledger.open.text",
+      "lines": [
+        "Vyber si postup. Ada v dokoch pozná kód: rozhovor navyše zabráni poplachu a ochráni bonus +300 za čistý priebeh. Vylomenie skrinky ušetrí obchádzku, ale privolá políciu."
+      ]
+    },
+    {
+      "key": "city.conversation.ledger.open.choice.0.text",
+      "lines": [
+        "Použiť Adin kód (najprv sa porozprávaj s Adou)."
+      ]
+    },
+    {
+      "key": "city.conversation.ledger.open.choice.1.text",
+      "lines": [
+        "Vylomiť skrinku (poplach a policajné prenasledovanie)."
+      ]
+    },
+    {
+      "key": "city.conversation.ledger.open.choice.2.text",
+      "lines": [
+        "Odísť a najprv sa opýtať Ady."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.after_campaign.speaker",
+      "lines": [
+        "Mara / Sprostredkovateľka"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.after_campaign.text",
+      "lines": [
+        "Vysielanie počuli všetci. Tomas si udrží kaviareň a Ada už na to nie je sama. Vďaka tebe dôkazy zavážili. Dielňa aj štvrť sú ti otvorené."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.after_campaign.choice.0.text",
+      "lines": [
+        "Zvládli sme to spolu."
+      ]
+    },
+    {
+      "key": "city.conversation.ada.after_campaign.speaker",
+      "lines": [
+        "Ada / Pracovníčka dokov"
+      ]
+    },
+    {
+      "key": "city.conversation.ada.after_campaign.text",
+      "lines": [
+        "Počula som naše dôkazy v rádiu. Ďakujem, že si stál pri nás. Doky sú zase naším domovom."
+      ]
+    },
+    {
+      "key": "city.conversation.ada.after_campaign.choice.0.text",
+      "lines": [
+        "Tvoja výpoveď rozhodla."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.after_campaign.speaker",
+      "lines": [
+        "Tomas / Jade Room"
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.after_campaign.text",
+      "lines": [
+        "Ľudia dnes hovoria o vysielaní namiesto ďalších poplatkov. Tak vyzerá dobré ráno. U nás budeš mať vždy miesto."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.after_campaign.choice.0.text",
+      "lines": [
+        "Len nech je káva, Tomas."
+      ]
+    },
+    {
+      "key": "ui.notice.ask_ada",
+      "lines": [
+        "Požiadaj Adu v dokoch o kód alebo vylom skrinku a spusti poplach."
+      ]
+    },
+    {
+      "key": "ui.city.performance",
+      "lines": [
+        "Posledná misia: {efficiency}% efektivita / {navigation}s presun / {detections} odhalení"
       ]
     }
   ]

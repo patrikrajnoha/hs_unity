@@ -206,6 +206,7 @@ public class PoliceBehavior : MonoBehaviour, INpcBehavior
     private void StartChase(Transform target)
     {
         if (isChasing || target == null) return;
+        HighStakes.City.CityMissionDirector.TelemetryOwner?.RecordPoliceDetection(isCalled ? "alarm_call" : "visual_detection", target.position);
         GameLogger.LogWarning("police", "officer_pursuing", $"Officer {gameObject.name} pursuing {target.name}");
         isChasing = true;
         State = PursuitState.Pursuing;

@@ -12,6 +12,7 @@ public class PauseMenuController : MonoBehaviour
     [SerializeField] private Button quitButton;
 
     private Button settingsButton;
+    private Button newCampaignButton;
     private Button languageButton;
     private Button minimapToggleButton;
     private Button closeSettingsButton;
@@ -95,6 +96,7 @@ public class PauseMenuController : MonoBehaviour
 
         if (settingsButton != null)
             settingsButton.onClick.RemoveListener(OpenSettings);
+        if (newCampaignButton != null) newCampaignButton.onClick.RemoveAllListeners();
         if (languageButton != null)
             languageButton.onClick.RemoveListener(ToggleLanguage);
         if (minimapToggleButton != null)
@@ -181,6 +183,18 @@ public class PauseMenuController : MonoBehaviour
             new Color(0.376f, 0.835f, 0.91f, 0.92f));
         settingsButtonLabel = settingsButton.GetComponentInChildren<TMP_Text>(true);
         settingsButton.onClick.AddListener(OpenSettings);
+        if (FindAnyObjectByType<HighStakes.City.CityMissionDirector>() != null)
+        {
+            var cardRect = card.GetComponent<RectTransform>();
+            cardRect.sizeDelta = new Vector2(cardRect.sizeDelta.x, 500f);
+            newCampaignButton = CreateButton("NewCampaignButton", card, "", new Vector2(0f, -215f),
+                new Color(0.38f, 0.45f, 0.56f, 0.92f));
+            newCampaignButton.GetComponentInChildren<TMP_Text>(true).color = Color.white;
+            newCampaignButton.onClick.AddListener(() => {
+                var director = FindAnyObjectByType<HighStakes.City.CityMissionDirector>();
+                if (director != null) director.NewCampaign();
+            });
+        }
 
         settingsPanel = CreateUiObject("SettingsPanel", pausePanel.transform);
         RectTransform settingsPanelRect = settingsPanel.GetComponent<RectTransform>();
@@ -303,6 +317,8 @@ public class PauseMenuController : MonoBehaviour
 
     private void UpdateLocalizedUi()
     {
+        if (newCampaignButton != null)
+            newCampaignButton.GetComponentInChildren<TMP_Text>(true).text = LocalizationManager.GetOrFallback("ui.city.new_campaign", "NEW CAMPAIGN");
         if (pauseTitleLabel != null)
             pauseTitleLabel.text = LocalizationManager.GetOrFallback("ui.pause.title", "PAUSED");
         if (resumeLabel != null)

@@ -20,6 +20,7 @@ public static class GameLoggerTests
 
     private static int testsPassed = 0;
     private static int testsFailed = 0;
+    public static bool AllPassed => testsFailed == 0;
 
     [MenuItem("HighStakes/Tests/Run GameLogger Verification Tests", false, 200)]
     [MenuItem("Tools/HighStakes/Run GameLogger Tests", false, 200)]
@@ -41,6 +42,7 @@ public static class GameLoggerTests
         Test7_CompatibilityFacade();
         Test8_QueueCapacityRecovery();
         Test9_ConcurrentProducers();
+        Test11_QueueAccountingAndConcurrency();
         Test10_ShutdownDrainsAndCloses();
 
         Debug.Log("==================================================");
@@ -104,6 +106,8 @@ public static class GameLoggerTests
 
     private static void Test3_ExceptionWithStackTrace()
     {
+        bool echo = GameLogger.Config.enableUnityConsoleLogging;
+        GameLogger.Config.enableUnityConsoleLogging = false;
         string uniqueAction = "exception_test_" + Guid.NewGuid().ToString("N").Substring(0, 6);
         try
         {
@@ -113,6 +117,7 @@ public static class GameLoggerTests
         {
             GameLogger.LogError("TEST", uniqueAction, "Caught simulated exception", ex);
         }
+        finally { GameLogger.Config.enableUnityConsoleLogging = echo; }
 
         GameLogger.Flush();
 
@@ -295,5 +300,34 @@ public static class GameLoggerTests
             }
         }
         return string.Empty;
+    }
+    private static void Test11_QueueAccountingAndConcurrency()
+    {
+        var logger = GameLogger.EnsureInstance();
+        bool echo = GameLogger.Config.enableUnityConsoleLogging;
+        string marker = "queue_regression_" + Guid.NewGuid().ToString("N");
+        try
+        {
+            GameLogger.Config.enableUnityConsoleLogging = false;
+            // More than twice the capacity over sequential batches must remain admissible.
+            for (int batch = 0; batch < 18; batch++)
+            {
+                for (int i = 0; i < 512; i++) GameLogger.LogInfo("TEST", marker, "sequential");
+                GameLogger.Flush();
+            }
+            Parallel.For(0, 4, worker => {
+                for (int i = 0; i < 512; i++) GameLogger.LogInfo("TEST", marker, "concurrent");
+            });
+            Debug.LogWarning(marker + "_console");
+            GameLogger.Flush();
+            int queued = (int)typeof(GameLogger).GetField("queueSize", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(logger);
+            Assert(queued == 0, "Test 11.1: Both producer paths return queue accounting to zero", queued.ToString());
+            int count = 0;
+            foreach (string path in Directory.GetFiles(GameLogger.LogDirectory, "game_*.log"))
+                foreach (string line in ReadFileWithRetry(path).Split('\n'))
+                    if (line.Contains(marker) && line.Contains("[TEST]")) count++;
+            Assert(count == 11264, "Test 11.2: All 9,216 sequential and 2,048 concurrent events persisted", count.ToString());
+        }
+        finally { GameLogger.Config.enableUnityConsoleLogging = echo; }
     }
 }

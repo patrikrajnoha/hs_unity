@@ -96,8 +96,12 @@ public static class LocalizationManager
 
     public static string GetOrFallback(string key, string fallback, params string[] replacements)
     {
-        string value = Get(key, replacements);
-        return value == $"[{key}]" ? fallback : value;
+        EnsureLoaded();
+        if (!TryPick(currentLines, key, out string value) && !TryPick(englishLines, key, out value))
+            value = fallback;
+        // Explicit fallbacks are expected for runtime-generated product variants.
+        // Missing mandatory translations still report an error through Get.
+        return ApplyReplacements(value, replacements);
     }
 
     public static string GetCityActorName(string actorId, string fallback)

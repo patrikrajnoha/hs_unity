@@ -41,6 +41,8 @@ public sealed class GameLogger : MonoBehaviour
         public string SessionId;
         public string PlayerId;
         public string BuildVersion;
+        public string PayloadJson;
+        public string Source;
     }
 
     private static GameLogger instance;
@@ -67,16 +69,21 @@ public sealed class GameLogger : MonoBehaviour
     private readonly ConcurrentQueue<LogEntry> eventQueue = new ConcurrentQueue<LogEntry>();
     // Synchronization objects
     private readonly object fileLock = new object();
+    private readonly object queueGate = new object();
+    private readonly System.Diagnostics.Stopwatch sessionClock = System.Diagnostics.Stopwatch.StartNew();
+    private bool acceptingEvents = true;
+    public static bool CampaignCompleted { get; set; }
+    public static string GameplaySource { get; set; } = "player";
 
     // Track queue size for atomic capacity checks
     private int queueSize = 0;
-    private readonly object queueLock = new object();
-    private bool acceptingEvents = true;
     private Thread writerThread;
     private readonly AutoResetEvent wakeEvent = new AutoResetEvent(false);
     private volatile bool isWorkerRunning;
     private int droppedEventCount;
     private int shutdownExecuted;
+    private bool initialized;
+    private bool gameplaySession;
 
     // File I/O
     private FileStream activeLogStream;
@@ -84,9 +91,9 @@ public sealed class GameLogger : MonoBehaviour
     private FileStream activeJsonlStream;
     private StreamWriter activeJsonlWriter;
     private long currentLogFileSizeBytes;
+    private long currentJsonlFileSizeBytes;
     private readonly UTF8Encoding utf8Encoding = new UTF8Encoding(false);
     private bool fileLoggingUnavailable;
-    private bool initialized;
 
     // Optional Firebase state
     private string firebaseIdToken = string.Empty;
@@ -120,8 +127,8 @@ public sealed class GameLogger : MonoBehaviour
 
             GameObject root = new GameObject("GameLogger");
             instance = root.AddComponent<GameLogger>();
-            // Awake is not invoked for ordinary components in Edit Mode.
-            instance.InitializeSystem();
+            // Editor verification menus also use the logger outside Play Mode (Awake is not called there).
+            if (!instance.initialized) instance.InitializeSystem();
             if (Application.isPlaying)
                 DontDestroyOnLoad(root);
             return instance;
@@ -146,6 +153,9 @@ public sealed class GameLogger : MonoBehaviour
     {
         if (initialized) return;
         initialized = true;
+        gameplaySession = Application.isPlaying;
+        GameplaySource = gameplaySession ? "player" : "editor";
+        CampaignCompleted = false;
         LoadConfiguration();
 
         // Cache main-thread metadata
@@ -188,8 +198,12 @@ public sealed class GameLogger : MonoBehaviour
 
         AppDomain.CurrentDomain.ProcessExit -= OnProcessExit;
         AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
+#if UNITY_EDITOR
+        UnityEditor.AssemblyReloadEvents.beforeAssemblyReload += Shutdown;
+#endif
 
         LogInfo("GAME", "game_started", $"Game initialized - Version: {cachedAppVersion}, Unity: {cachedUnityVersion}, Platform: {cachedPlatform}");
+        if (gameplaySession) Track("session_start", new GameplayEventData());
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -346,6 +360,7 @@ public sealed class GameLogger : MonoBehaviour
                 activeJsonlFilePath = Path.Combine(resolvedLogDirectory, $"{baseFileName}.jsonl");
                 activeJsonlStream = new FileStream(activeJsonlFilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
                 activeJsonlWriter = new StreamWriter(activeJsonlStream, utf8Encoding) { AutoFlush = false };
+                currentJsonlFileSizeBytes = 0;
             }
         }
         catch (Exception ex)
@@ -484,7 +499,7 @@ public sealed class GameLogger : MonoBehaviour
 
     private void WriterWorkerLoop()
     {
-        int intervalMs = Math.Max(200, Math.Min(10000, (int)Math.Round(config.flushIntervalSeconds * 1000f)));
+        int intervalMs = Math.Max(200, Math.Min(10000, (int)(config.flushIntervalSeconds * 1000f)));
 
         while (isWorkerRunning)
         {
@@ -494,6 +509,7 @@ public sealed class GameLogger : MonoBehaviour
 
         // Final drain on exit
         ProcessEventQueue();
+        lock (fileLock) CloseCurrentFiles();
     }
 
     private void ProcessEventQueue()
@@ -501,9 +517,6 @@ public sealed class GameLogger : MonoBehaviour
         // Ensure exclusive access to file I/O and queue processing
         lock (fileLock)
         {
-            if (fileLoggingUnavailable || activeLogWriter == null)
-                return;
-
             // Reset dropped count atomically
             int dropped = Interlocked.Exchange(ref droppedEventCount, 0);
             if (dropped > 0)
@@ -554,6 +567,8 @@ public sealed class GameLogger : MonoBehaviour
         try
         {
             long maxBytes = (long)Math.Max(1, config.maxFileSizeMB) * 1024L * 1024L;
+            string jsonLine = config.enableJsonlLogging ? FormatJsonlEntry(entry) : null;
+            long jsonBytes = jsonLine == null ? 0 : Encoding.UTF8.GetByteCount(jsonLine) + 2L;
 
             // Formatted line: [2026-11-21 21:30:18.145 UTC] [INFO] [GAME] game_started | Game initialized
             string levelString = entry.Level.ToString().ToUpperInvariant();
@@ -566,7 +581,7 @@ public sealed class GameLogger : MonoBehaviour
             if (!string.IsNullOrEmpty(entry.StackTrace))
                 estimatedBytes += (long)Encoding.UTF8.GetByteCount(entry.StackTrace) + 30L;
 
-            if (currentLogFileSizeBytes + estimatedBytes > maxBytes)
+            if (currentLogFileSizeBytes + estimatedBytes > maxBytes || currentJsonlFileSizeBytes + jsonBytes > maxBytes)
             {
                 RotateLogFile();
                 if (activeLogWriter == null)
@@ -596,8 +611,8 @@ public sealed class GameLogger : MonoBehaviour
 
             if (config.enableJsonlLogging && activeJsonlWriter != null)
             {
-                string jsonLine = FormatJsonlEntry(entry);
                 activeJsonlWriter.WriteLine(jsonLine);
+                currentJsonlFileSizeBytes += jsonBytes;
             }
         }
         catch (Exception ex)
@@ -610,6 +625,8 @@ public sealed class GameLogger : MonoBehaviour
     {
         StringBuilder sb = new StringBuilder(256);
         sb.Append('{');
+        sb.Append("\"schemaVersion\":1,");
+        sb.Append("\"eventId\":\"").Append(EscapeJson(entry.EventId)).Append("\",");
         sb.Append("\"timestamp\":\"").Append(EscapeJson(entry.TimestampUtc)).Append("\",");
         sb.Append("\"level\":\"").Append(entry.Level.ToString().ToUpperInvariant()).Append("\",");
         sb.Append("\"category\":\"").Append(EscapeJson(entry.Category)).Append("\",");
@@ -619,7 +636,11 @@ public sealed class GameLogger : MonoBehaviour
             sb.Append("\"stackTrace\":\"").Append(EscapeJson(entry.StackTrace)).Append("\",");
         sb.Append("\"scene\":\"").Append(EscapeJson(entry.Scene)).Append("\",");
         sb.Append("\"sessionId\":\"").Append(EscapeJson(entry.SessionId)).Append("\",");
-        sb.Append("\"playerId\":\"").Append(EscapeJson(entry.PlayerId)).Append("\",");
+        if (!string.IsNullOrEmpty(entry.PayloadJson))
+        {
+            sb.Append("\"source\":\"").Append(EscapeJson(entry.Source)).Append("\",");
+            sb.Append("\"data\":").Append(entry.PayloadJson).Append(',');
+        }
         sb.Append("\"build\":\"").Append(EscapeJson(entry.BuildVersion)).Append("\"");
         sb.Append('}');
         return sb.ToString();
@@ -630,11 +651,13 @@ public sealed class GameLogger : MonoBehaviour
         if (string.IsNullOrEmpty(s))
             return string.Empty;
 
-        return s.Replace("\\", "\\\\")
-            .Replace("\"", "\\\"")
-            .Replace("\r", "\\r")
-            .Replace("\n", "\\n")
-            .Replace("\t", "\\t");
+        var escaped = new StringBuilder(s.Length);
+        foreach (char c in s)
+            if (c == '\\') escaped.Append("\\\\");
+            else if (c == '"') escaped.Append("\\\"");
+            else if (c < 32) escaped.Append("\\u").Append(((int)c).ToString("x4"));
+            else escaped.Append(c);
+        return escaped.ToString();
     }
 
     #endregion
@@ -680,8 +703,9 @@ public sealed class GameLogger : MonoBehaviour
 
     public static void Log(GameLogLevel level, string category, string action, string message = "", Exception exception = null, string stackTrace = null)
     {
-        GameLogger logger = EnsureInstance();
-        if (logger == null)
+        GameLogger logger = instance;
+        if (ReferenceEquals(logger, null)) logger = EnsureInstance();
+        if (ReferenceEquals(logger, null))
             return;
 
         if (level < logger.config.minimumLogLevel)
@@ -694,7 +718,44 @@ public sealed class GameLogger : MonoBehaviour
         logger.EnqueueLog(level, category, action, message, finalStackTrace);
     }
 
-    private void EnqueueLog(GameLogLevel level, string category, string action, string message, string stackTrace)
+    // Gameplay payloads are serialized on the calling main thread, never by the I/O worker.
+    public static void Track(string action, GameplayEventData data)
+    {
+        try
+        {
+            var logger = instance;
+            if (ReferenceEquals(logger, null) || data == null) return;
+            logger.EnqueueLog(GameLogLevel.Info, "gameplay", action, "", null, JsonUtility.ToJson(data), false);
+        }
+        catch { /* Optional telemetry must never interrupt gameplay. */ }
+    }
+
+    private bool TryQueueEntry(LogEntry entry)
+    {
+        // No disk I/O under this gate. It only coordinates admission with shutdown.
+        lock (queueGate)
+        {
+            if (!acceptingEvents || fileLoggingUnavailable || !config.enableFileLogging) return false;
+            if (Interlocked.Increment(ref queueSize) > MaxQueueCapacity)
+            {
+                Interlocked.Decrement(ref queueSize);
+                Interlocked.Increment(ref droppedEventCount);
+                return false;
+            }
+            eventQueue.Enqueue(entry);
+        }
+        wakeEvent.Set();
+        return true;
+    }
+
+    private bool TryDequeueEntry(out LogEntry entry)
+    {
+        if (!eventQueue.TryDequeue(out entry)) return false;
+        Interlocked.Decrement(ref queueSize);
+        return true;
+    }
+
+    private void EnqueueLog(GameLogLevel level, string category, string action, string message, string stackTrace, string payloadJson = null, bool echo = true)
     {
         string normCategory = string.IsNullOrWhiteSpace(category) ? "GAMEPLAY" : category.Trim();
         string normAction = string.IsNullOrWhiteSpace(action) ? "event" : action.Trim();
@@ -703,7 +764,7 @@ public sealed class GameLogger : MonoBehaviour
         LogEntry entry = new LogEntry
         {
             EventId = Guid.NewGuid().ToString("N"),
-            TimestampUtc = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+            TimestampUtc = DateTime.UtcNow.ToString("o"),
             Level = level,
             Category = normCategory,
             Action = normAction,
@@ -712,57 +773,26 @@ public sealed class GameLogger : MonoBehaviour
             Scene = cachedCurrentScene,
             SessionId = sessionId,
             PlayerId = cachedPlayerId,
-            BuildVersion = cachedAppVersion
+            BuildVersion = cachedAppVersion,
+            PayloadJson = payloadJson,
+            Source = GameplaySource
         };
 
         if (config.enableFileLogging)
         {
             TryQueueEntry(entry);
-
-            // Immediately wake writer on ERROR and CRITICAL
-            if (level >= GameLogLevel.Error)
-            {
-                wakeEvent.Set();
-            }
         }
 
         // Echo to Unity Console with recursion guard
-        if (config.enableUnityConsoleLogging)
+        if (echo && config.enableUnityConsoleLogging)
         {
             EchoToUnityConsole(entry);
         }
 
         // Optional secondary Firebase upload
-        if (config.enableFirebaseLogging && IsFirebaseConfigured())
+        if (payloadJson == null && config.enableFirebaseLogging && IsFirebaseConfigured())
         {
             EnqueueFirebaseEntry(entry);
-        }
-    }
-
-    // Both gameplay events and Unity callbacks use the same capacity accounting.
-    private bool TryQueueEntry(LogEntry entry)
-    {
-        lock (queueLock)
-        {
-            if (!acceptingEvents) return false;
-            if (queueSize >= MaxQueueCapacity)
-            {
-                Interlocked.Increment(ref droppedEventCount);
-                return false;
-            }
-            eventQueue.Enqueue(entry);
-            queueSize++;
-            return true;
-        }
-    }
-
-    private bool TryDequeueEntry(out LogEntry entry)
-    {
-        lock (queueLock)
-        {
-            if (!eventQueue.TryDequeue(out entry)) return false;
-            queueSize--;
-            return true;
         }
     }
 
@@ -857,11 +887,6 @@ public sealed class GameLogger : MonoBehaviour
         if (config.enableFileLogging)
         {
             TryQueueEntry(entry);
-
-            if (level >= GameLogLevel.Error)
-            {
-                wakeEvent.Set();
-            }
         }
     }
 
@@ -917,6 +942,7 @@ public sealed class GameLogger : MonoBehaviour
     private void OnDestroy()
     {
         Shutdown();
+        if (ReferenceEquals(instance, this)) instance = null;
     }
 
     private void OnProcessExit(object sender, EventArgs e)
@@ -934,12 +960,18 @@ public sealed class GameLogger : MonoBehaviour
             Application.logMessageReceivedThreaded -= OnUnityLogMessageReceived;
             SceneManager.sceneLoaded -= OnSceneLoaded;
             AppDomain.CurrentDomain.ProcessExit -= OnProcessExit;
+#if UNITY_EDITOR
+            UnityEditor.AssemblyReloadEvents.beforeAssemblyReload -= Shutdown;
+#endif
         }
         catch { }
 
-        LogInfo("GAME", "game_shutdown", "Application shutdown requested. Draining log queue.");
+        EnqueueLog(GameLogLevel.Info, "GAME", "game_shutdown", "Application shutdown requested. Draining log queue.", null, null, false);
+        if (gameplaySession) EnqueueLog(GameLogLevel.Info, "gameplay", "session_end", "", null,
+            "{\"duration\":" + sessionClock.Elapsed.TotalSeconds.ToString("F3", System.Globalization.CultureInfo.InvariantCulture) +
+            ",\"completed\":" + (CampaignCompleted ? "true" : "false") + "}", false);
+        lock (queueGate) acceptingEvents = false;
 
-        lock (queueLock) acceptingEvents = false;
         isWorkerRunning = false;
         wakeEvent.Set();
 
@@ -953,13 +985,8 @@ public sealed class GameLogger : MonoBehaviour
             catch { }
         }
 
-        // Serialize the last drain and close against Flush and the worker,
-        // including when the bounded Join timed out.
-        lock (fileLock)
-        {
-            ProcessEventQueue();
-            CloseCurrentFiles();
-        }
+        // The worker owns final drain/close, even when a slow disk exceeds the join timeout.
+        if (writerThread == null) { ProcessEventQueue(); lock (fileLock) CloseCurrentFiles(); }
     }
 
     #endregion
@@ -984,7 +1011,12 @@ public sealed class GameLogger : MonoBehaviour
             firebasePendingQueue.Enqueue(entry);
         }
 
-        TriggerFirebaseFlush();
+        // Producers may be worker threads. Unity coroutines are started only in Update.
+    }
+
+    private void Update()
+    {
+        if (config.enableFirebaseLogging && IsFirebaseConfigured()) TriggerFirebaseFlush();
     }
 
     private void TriggerFirebaseFlush()

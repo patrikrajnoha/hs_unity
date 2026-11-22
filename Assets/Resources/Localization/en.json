@@ -1402,7 +1402,7 @@
     {
       "key": "city.conversation.mara.ledger.text",
       "lines": [
-        "A ledger inside the south-east warehouse names the people squeezing our shops. The warehouse door is now accessible. Ada knows the LOCKER code. Without it you will trigger an alarm. Get the book, lose any police, then hide inside the workshop."
+        "The warehouse ledger names the people squeezing our shops. Choose your route: ask Ada for the locker code for a quiet recovery, or force the locker to save the detour and face an alarm. An alarm forfeits the +300 clean-run bonus. Then hide inside the workshop and return to me."
       ]
     },
     {
@@ -3113,6 +3113,102 @@
       "key": "city.actor.extraction.name",
       "lines": [
         "Final extraction"
+      ]
+    },
+    {
+      "key": "city.conversation.ledger.open.speaker",
+      "lines": [
+        "Warehouse locker"
+      ]
+    },
+    {
+      "key": "city.conversation.ledger.open.text",
+      "lines": [
+        "Choose your approach. Ada at the docks can share the code: an extra conversation keeps the alarm quiet and protects the +300 clean-run bonus. Forcing the locker saves the detour, but summons police."
+      ]
+    },
+    {
+      "key": "city.conversation.ledger.open.choice.0.text",
+      "lines": [
+        "Use Ada's code (requires speaking to Ada)."
+      ]
+    },
+    {
+      "key": "city.conversation.ledger.open.choice.1.text",
+      "lines": [
+        "Force the locker (alarm and police pursuit)."
+      ]
+    },
+    {
+      "key": "city.conversation.ledger.open.choice.2.text",
+      "lines": [
+        "Leave and ask Ada first."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.after_campaign.speaker",
+      "lines": [
+        "Mara / Fixer"
+      ]
+    },
+    {
+      "key": "city.conversation.mara.after_campaign.text",
+      "lines": [
+        "The broadcast reached everyone. Tomas can keep his cafe, and Ada no longer has to carry this alone. You made the evidence count. The workshop and the district are yours to explore."
+      ]
+    },
+    {
+      "key": "city.conversation.mara.after_campaign.choice.0.text",
+      "lines": [
+        "We did this together."
+      ]
+    },
+    {
+      "key": "city.conversation.ada.after_campaign.speaker",
+      "lines": [
+        "Ada / Dock worker"
+      ]
+    },
+    {
+      "key": "city.conversation.ada.after_campaign.text",
+      "lines": [
+        "I heard our evidence on the radio. Thank you for standing with us. The docks feel like our neighbourhood again."
+      ]
+    },
+    {
+      "key": "city.conversation.ada.after_campaign.choice.0.text",
+      "lines": [
+        "Your testimony made the difference."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.after_campaign.speaker",
+      "lines": [
+        "Tomas / The Jade Room"
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.after_campaign.text",
+      "lines": [
+        "People came in talking about the broadcast, instead of the next payment demand. That is a good morning. There will always be a place for you here."
+      ]
+    },
+    {
+      "key": "city.conversation.tomas.after_campaign.choice.0.text",
+      "lines": [
+        "Keep the coffee coming, Tomas."
+      ]
+    },
+    {
+      "key": "ui.notice.ask_ada",
+      "lines": [
+        "Ask Ada at the docks for the code, or force the locker and trigger an alarm."
+      ]
+    },
+    {
+      "key": "ui.city.performance",
+      "lines": [
+        "Last mission: {efficiency}% efficiency / {navigation}s navigating / {detections} detections"
       ]
     }
   ]

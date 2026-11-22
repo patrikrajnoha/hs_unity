@@ -88,6 +88,7 @@ public class PickableObject : MonoBehaviour
                 {
                     if (inventory.AddItem(item))
                     {
+                        CityMissionDirector.TelemetryOwner?.RecordItem(item != null ? item.itemName : "unknown", player.transform.position);
                         Destroy(gameObject);
                         spawned = false;
                     }
@@ -184,6 +185,7 @@ public class PickableObject : MonoBehaviour
                 {
                     if (inventory != null && inventory.AddItem(item))
                     {
+                        CityMissionDirector.TelemetryOwner?.RecordItem(item != null ? item.itemName : "unknown", player.transform.position);
                         if (CompareTag("bud"))
                             GameLogger.LogInfo("farming", "crop_harvested", "Harvested " + (item != null ? item.itemName : gameObject.name));
                         else
