@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// </summary>
 public sealed class MinimapController : MonoBehaviour
 {
-    private const string VisibilityPreferenceKey = "HighStakes.MinimapVisible";
+    internal const string VisibilityPreferenceKey = "HighStakes.MinimapVisible";
 
     [Header("Map")]
     [SerializeField, Min(8f)] private float worldViewSize = 36f;

@@ -10,12 +10,20 @@ namespace HighStakes.City
     {
         public const string SaveKey = "HighStakes.OldQuarter.Campaign.v2";
         public const string BestKey = "HighStakes.OldQuarter.BestScore.v2";
+        private const float InteractionRange = 2.7f;
+        private const int PoliceReportDelay = 8;
+        private const float SaleOfferCooldown = 25f;
         private PlayerController player;
+        private Inventory inventory;
+        private PlayerProductEffects productEffects;
         private Dictionary<string, CityActor> actors;
         private CityHud hud;
         private ContractProgress progress;
         private Conversation conversation;
         private CityActor speakingTo;
+        private CityStreetTrade streetTrade;
+        private float policeReportAt = -1f;
+        private Vector3 policeReportPosition;
         private GameObject objectiveGroundGlow;
         private MeshRenderer objectiveGroundGlowRenderer;
         private Material objectiveGroundGlowMaterial;
@@ -49,6 +57,9 @@ namespace HighStakes.City
         public void Initialize(PlayerController localPlayer, Dictionary<string, CityActor> districtActors, CityHud cityHud)
         {
             player = localPlayer; actors = districtActors; hud = cityHud; spawn = player.transform.position;
+            inventory = player.GetComponent<Inventory>();
+            productEffects = player.GetComponent<PlayerProductEffects>();
+            hud.TrackProductEffects(productEffects);
             TextAsset source = Resources.Load<TextAsset>("City/old_quarter_story");
             if (source == null)
             {
@@ -78,9 +89,6 @@ namespace HighStakes.City
             GameLogger.LogInfo("campaign", progress.Finished ? "campaign_loaded" : "campaign_started", progress.Finished ? "Completed campaign loaded."
                 : $"Campaign initialized at contract {progress.ContractIndex + 1}/{story.contracts.Length}");
             if (progress.Finished) ShowResults();
-            else hud.Notify(LocalizationManager.GetOrFallback("ui.notice.level_start",
-                "Level {level}/{total}. Talk to Mara to begin.",
-                "level", (progress.ContractIndex + 1).ToString(), "total", story.contracts.Length.ToString()));
         }
 
         private void OnEnable()
@@ -90,11 +98,14 @@ namespace HighStakes.City
 
         private void RefreshLocalization()
         {
-            if (progress == null)
+            if (progress == null || hud == null)
                 return;
 
             LocalizationManager.LocalizeStory(progress.Story);
-            if (conversation != null && hud != null)
+            hud.Refresh(progress, PoliceStatus(), ReportSecondsLeft());
+            if (streetTrade != null)
+                ShowTradeOffer();
+            else if (conversation != null)
                 hud.Show(conversation);
         }
 
@@ -110,8 +121,16 @@ namespace HighStakes.City
                 return;
             }
             if (Time.timeScale <= 0 || GameMaster.GameOverActive) return;
+            DispatchPoliceReport();
             if (conversation != null)
             {
+                if (policeReportAt >= 0)
+                    hud.Refresh(progress, PoliceStatus(), ReportSecondsLeft());
+                if (streetTrade != null && PoliceStatus() != CityPoliceStatus.Clear)
+                {
+                    CloseConversation();
+                    return;
+                }
                 if (keyboard != null)
                 {
                     if (keyboard.digit1Key.wasPressedThisFrame) Choose(0);
@@ -135,13 +154,21 @@ namespace HighStakes.City
                     "Time ran out. Retry the briefing with Mara. -200 score."), "timeout");
                 return;
             }
-            bool pursued = IsPursued();
+            CityPoliceStatus police = PoliceStatus();
+            bool pursued = police != CityPoliceStatus.Clear;
             foreach (var officer in PoliceHeatRegistry.ActivePolice)
             {
                 if (officer == null || !officer.isChasing || !officer.HasVisualContact) continue;
-                if (!progress.Finished && Vector3.Distance(player.transform.position, officer.transform.position) < 1.5f)
-                { Fail(LocalizationManager.GetOrFallback("ui.notice.caught",
-                    "Caught. This level restarts; earlier scores stay. -200 score."), "caught"); return; }
+                if (Vector3.Distance(player.transform.position, officer.transform.position) >= 1.5f) continue;
+                if (progress.Active)
+                    Fail(LocalizationManager.GetOrFallback("ui.notice.caught",
+                        "Caught. This level restarts; earlier scores stay. -200 score."), "caught");
+                else
+                {
+                    ClearPoliceAndRespawn();
+                    hud.Notify(LocalizationManager.Get("ui.street_trade.caught"));
+                }
+                return;
             }
             CityActor target = ObjectiveTarget();
             float distance = target != null ? Vector3.Distance(player.transform.position, target.transform.position) : 0;
@@ -156,32 +183,55 @@ namespace HighStakes.City
                 if (safeTime >= step.holdSeconds) { Signal(step.signal); safeTime = 0; if (betweenLevels || ended) return; }
             }
             CityActor nearby = NearestInteractable();
-            string nearbyName = nearby != null
-                ? LocalizationManager.GetCityActorName(nearby.id, nearby.displayName)
-                : "";
-            string prompt = nearby != null ? "[ E ]  " + nearbyName : "";
-            if (pursued)
-                prompt = LocalizationManager.GetOrFallback("ui.notice.break_sight",
-                    "Break sight around buildings. Officers can open doors during a chase.");
-            if (safeTime > 0 && progress.Step != null) prompt = $"Hold position... {Mathf.CeilToInt(progress.Step.holdSeconds - safeTime)}s";
+            var door = nearby != null ? nearby.GetComponent<CityDoor>() : null;
+            // Doors remain usable while escaping. Ordinary dialogue does not pause a pursuit.
+            bool canInteract = nearby != null && (door != null || !pursued);
+            string nearbyName = canInteract ? LocalizationManager.GetCityActorName(nearby.id, nearby.displayName) : "";
+            CityActor customer = !pursued && policeReportAt < 0 && inventory != null && safeTime <= 0
+                ? (nearby != null && nearby.IsPerson ? nearby : NearestActor(peopleOnly: true))
+                : null;
+            string customerName = customer != null ? LocalizationManager.GetCityActorName(customer.id, customer.displayName) : "";
             string heading = target != null
                 ? LocalizationManager.GetCityActorName(target.id, target.displayName)
                 : "";
-            if (target != null && player.playerCamera != null)
-            {
-                float angle = Vector3.SignedAngle(Vector3.ProjectOnPlane(player.playerCamera.forward, Vector3.up),
-                    Vector3.ProjectOnPlane(target.transform.position - player.transform.position, Vector3.up), Vector3.up);
-                heading = (angle < -20 ? "<  " : angle > 20 ? ">  " : "^  ") + heading;
-            }
-            hud.Refresh(progress, distance, heading, PoliceStatus(), prompt, CityInterior.RoomAt(player.transform.position));
+            Vector3 forward = player.playerCamera != null ? player.playerCamera.forward : player.transform.forward;
+            Vector3 facing = Vector3.ProjectOnPlane(forward, Vector3.up);
+            if (facing.sqrMagnitude < 0.001f) facing = player.transform.forward;
+            float angle = target == null ? 0 : Vector3.SignedAngle(facing,
+                Vector3.ProjectOnPlane(target.transform.position - player.transform.position, Vector3.up), Vector3.up);
+
+            hud.Refresh(progress, police, ReportSecondsLeft());
+            hud.UpdateNavigation(heading, distance, angle);
+            hud.UpdateInteraction(canInteract ? InteractionAction(nearby, door) : "", nearbyName, safeTime, step?.holdSeconds ?? 0, customerName);
             actors.TryGetValue("officer", out CityActor mapOfficer);
-            hud.UpdateMap(player.transform.position, target != null ? (Vector3?)target.transform.position : null,
+            hud.UpdateMap(player.transform.position, facing, target != null ? (Vector3?)target.transform.position : null,
                 mapOfficer != null ? (Vector3?)mapOfficer.transform.position : null);
-            if (keyboard != null && keyboard.eKey.wasPressedThisFrame && nearby != null)
+            if (keyboard != null && keyboard.eKey.wasPressedThisFrame && canInteract) Interact(nearby);
+            else if (keyboard != null && keyboard.gKey.wasPressedThisFrame && customer != null) OfferProduct(customer);
+            else if (keyboard != null && keyboard.xKey.wasPressedThisFrame && productEffects != null && inventory != null)
+                ConsumeSelectedProduct();
+        }
+
+        private void ConsumeSelectedProduct()
+        {
+            Item selected = inventory.GetSelectedItem();
+            if (productEffects.TryConsume(inventory, selected))
             {
-                // Doors remain usable while escaping. Ordinary dialogue does not pause a pursuit.
-                if (nearby.GetComponent<CityDoor>() != null || !pursued) Interact(nearby);
+                hud.Notify(LocalizationManager.Get("ui.product_effects.consumed", "item", LocalizationManager.GetItemName(selected)));
+                GameLogger.LogInfo("inventory", "product_consumed", $"Consumed {selected.name}");
             }
+            else hud.Notify(LocalizationManager.Get("ui.product_effects.select_product"));
+        }
+
+        private static string InteractionAction(CityActor actor, CityDoor door)
+        {
+            if (door != null)
+                return door.IsOpen
+                    ? LocalizationManager.GetOrFallback("ui.city.close_door", "Close door")
+                    : LocalizationManager.GetOrFallback("ui.city.open_door", "Open door");
+            if (!string.IsNullOrEmpty(actor.defaultDialogue))
+                return LocalizationManager.GetOrFallback("ui.city.talk", "Talk");
+            return LocalizationManager.GetOrFallback("ui.city.inspect", "Inspect");
         }
 
         private CityActor ObjectiveTarget()
@@ -189,14 +239,21 @@ namespace HighStakes.City
             string id = progress.Step != null ? progress.Step.target : "";
             return actors.TryGetValue(id, out CityActor actor) ? actor : null;
         }
-        private CityActor NearestInteractable()
+        private CityActor NearestInteractable() => NearestActor(peopleOnly: false);
+
+        private CityActor NearestActor(bool peopleOnly)
         {
-            CityActor closest = null; float best = 2.7f;
+            CityActor closest = null; float best = InteractionRange;
+            CityActor objective = ObjectiveTarget();
             foreach (CityActor actor in actors.Values)
             {
                 if (actor == null || !actor.gameObject.activeInHierarchy) continue;
-                if (actor.GetComponent<CityDoor>() == null && string.IsNullOrEmpty(actor.defaultDialogue) && actor != ObjectiveTarget()) continue;
-                if (actor.id == "safehouse" || actor.id == "extraction") continue;
+                if (peopleOnly)
+                {
+                    if (!actor.IsPerson) continue;
+                }
+                else if ((actor.GetComponent<CityDoor>() == null && string.IsNullOrEmpty(actor.defaultDialogue) && actor != objective) ||
+                    actor.id == "safehouse" || actor.id == "extraction") continue;
                 float distance = Vector3.Distance(player.transform.position, actor.transform.position);
                 if (distance >= best) continue;
                 Vector3 from = player.transform.position + Vector3.up * 1.3f;
@@ -246,6 +303,11 @@ namespace HighStakes.City
                 Debug.LogError("Missing conversation: " + id);
                 return;
             }
+            BeginConversation(actor, next);
+        }
+
+        private void BeginConversation(CityActor actor, Conversation next)
+        {
             speakingTo = actor;
             var wander = actor != null ? actor.GetComponent<NPCWanderRoadOnly>() : null;
             if (wander != null) { wander.canMove = false; wander.StopAgent(); }
@@ -256,9 +318,134 @@ namespace HighStakes.City
             }
             conversation = next; player.SetDialogueInputLocked(true); player.UnlockMouse(); hud.Show(next);
         }
+
+        private void OfferProduct(CityActor actor)
+        {
+            Item product = inventory.GetSelectedItem();
+            if (!CityStreetTrade.IsSaleProduct(product))
+            {
+                hud.Notify(LocalizationManager.Get("ui.street_trade.select_product"));
+                return;
+            }
+            if (Time.time < actor.NextSaleOfferTime)
+            {
+                hud.Notify(LocalizationManager.Get("ui.street_trade.cooldown"));
+                return;
+            }
+
+            actor.NextSaleOfferTime = Time.time + SaleOfferCooldown;
+            CityStreetTrade.Reaction reaction = CityStreetTrade.RollReaction(actor);
+            if (reaction == CityStreetTrade.Reaction.Negotiate)
+            {
+                streetTrade = new CityStreetTrade(product, inventory.GetItemAmount(product));
+                BeginConversation(actor, streetTrade.BuildConversation(actor));
+                return;
+            }
+
+            string name = LocalizationManager.GetCityActorName(actor.id, actor.displayName);
+            if (reaction == CityStreetTrade.Reaction.Report)
+            {
+                policeReportPosition = actor.transform.position;
+                policeReportAt = Time.time + PoliceReportDelay;
+                hud.Notify(LocalizationManager.Get("ui.street_trade.reported", "npc", name));
+            }
+            else hud.Notify(LocalizationManager.Get("ui.street_trade.ignored", "npc", name));
+        }
+
+        private int ReportSecondsLeft() => Mathf.CeilToInt(Mathf.Max(0, policeReportAt - Time.time));
+
+        private void DispatchPoliceReport()
+        {
+            if (policeReportAt < 0 || Time.time < policeReportAt) return;
+            policeReportAt = -1f;
+
+            PoliceBehavior closest = null;
+            float closestDistance = float.PositiveInfinity;
+            foreach (var officer in PoliceHeatRegistry.ActivePolice)
+            {
+                if (officer == null || officer.gameObject.scene != gameObject.scene) continue;
+                float distance = (officer.transform.position - policeReportPosition).sqrMagnitude;
+                if (distance >= closestDistance) continue;
+                closestDistance = distance;
+                closest = officer;
+            }
+
+            GameMaster gm = GameMaster.Instance;
+            if (closest == null || gm == null || !gm.BeginPoliceChase(player.gameObject))
+            {
+                hud.Notify(LocalizationManager.Get("ui.street_trade.no_response"));
+                return;
+            }
+
+            if (conversation != null) CloseConversation();
+            if (!closest.isChasing) closest.isCalled = true;
+            if (progress.Active)
+            {
+                progress.RaiseAlarm();
+                SaveCheckpoint();
+            }
+            hud.Notify(LocalizationManager.Get("ui.street_trade.pursuit"));
+        }
+
+        private void ShowTradeOffer()
+        {
+            conversation = streetTrade.BuildConversation(speakingTo);
+            hud.Show(conversation);
+        }
+
+        private void ChooseTrade(int index)
+        {
+            switch (streetTrade.CurrentStage)
+            {
+                case CityStreetTrade.Stage.Quantity when index < 2:
+                    streetTrade.SelectQuantity(wholeStack: index == 1);
+                    ShowTradeOffer();
+                    return;
+                case CityStreetTrade.Stage.InitialOffer when index == 1:
+                    if (streetTrade.MakeCounteroffer()) CompleteStreetSale();
+                    else ShowTradeOffer();
+                    return;
+                case CityStreetTrade.Stage.InitialOffer when index == 0:
+                case CityStreetTrade.Stage.FinalOffer when index == 0:
+                    CompleteStreetSale();
+                    return;
+                default:
+                    CloseConversation();
+                    return;
+            }
+        }
+
+        private void CompleteStreetSale()
+        {
+            CityStreetTrade sale = streetTrade;
+            if (speakingTo == null || !speakingTo.gameObject.activeInHierarchy ||
+                Vector3.Distance(player.transform.position, speakingTo.transform.position) >= InteractionRange ||
+                PoliceStatus() != CityPoliceStatus.Clear)
+            {
+                CloseConversation();
+                hud.Notify(LocalizationManager.Get("ui.street_trade.interrupted"));
+                return;
+            }
+            if (inventory.GetItemAmount(sale.Product) < sale.Quantity || !progress.CanCreditStreetSale(sale.Total) ||
+                !inventory.RemoveItem(sale.Product, sale.Quantity))
+            {
+                CloseConversation();
+                hud.Notify(LocalizationManager.Get("ui.street_trade.unavailable"));
+                return;
+            }
+
+            progress.CreditStreetSale(sale.Total);
+            SaveCheckpoint();
+            GameLogger.LogInfo("economy", "street_sale_completed", $"Sold {sale.Quantity} x {sale.Product.name} to {speakingTo.id} for ${sale.Total}");
+            CloseConversation();
+            hud.Notify(LocalizationManager.Get("ui.street_trade.sold", "count", sale.Quantity.ToString(),
+                "item", LocalizationManager.GetItemName(sale.Product), "price", sale.Total.ToString("N0")));
+        }
+
         private void Choose(int index)
         {
             if (conversation == null || conversation.choices == null || index < 0 || index >= conversation.choices.Length) return;
+            if (streetTrade != null) { ChooseTrade(index); return; }
             StoryChoice choice = conversation.choices[index];
             var decision = EventData(); decision.dialogueId = conversation.id;
             decision.choice = index.ToString(System.Globalization.CultureInfo.InvariantCulture); decision.signal = choice.signal;
@@ -395,12 +582,18 @@ namespace HighStakes.City
             GameLogger.Track("mission_failed", data); objectiveElapsed = 0;
             CloseConversation(); progress.Fail(); safeTime = 0;
             GameLogger.LogWarning("campaign", "contract_failed", $"Contract {progress.ContractIndex + 1} failed: {reason}");
+            ClearPoliceAndRespawn();
+            foreach (string id in new[] { "parcel", "fuse", "ledger" }) actors[id].gameObject.SetActive(true);
+            SaveCheckpoint(); hud.Notify(reason);
+        }
+
+        private void ClearPoliceAndRespawn()
+        {
+            policeReportAt = -1f;
             GameMaster gm = GameMaster.Instance;
             if (gm != null) { gm.arrest = false; gm.ClearPoliceChase(player.gameObject); }
             var controller = player.GetComponent<CharacterController>();
             controller.enabled = false; player.transform.position = spawn; controller.enabled = true; player.ResetMotion();
-            foreach (string id in new[] { "parcel", "fuse", "ledger" }) actors[id].gameObject.SetActive(true);
-            SaveCheckpoint(); hud.Notify(reason);
         }
         private GameplayEventData EventData()
         {
@@ -424,20 +617,16 @@ namespace HighStakes.City
             var data = EventData(); data.itemId = itemId; data.position = position; data.hasPosition = true;
             GameLogger.Track("item_collected", data);
         }
-        private bool IsPursued()
+        private static CityPoliceStatus PoliceStatus()
         {
+            var status = CityPoliceStatus.Clear;
             foreach (var officer in PoliceHeatRegistry.ActivePolice)
-                if (officer != null && (officer.isChasing || officer.isCalled)) return true;
-            return false;
-        }
-        private string PoliceStatus()
-        {
-            foreach (var officer in PoliceHeatRegistry.ActivePolice)
-                if (officer != null && (officer.isChasing || officer.isCalled))
-                    return officer.State == PoliceBehavior.PursuitState.Searching
-                        ? LocalizationManager.GetOrFallback("ui.city.police_searching", "POLICE / Searching")
-                        : LocalizationManager.GetOrFallback("ui.city.police_pursuit", "POLICE / Pursuit");
-            return LocalizationManager.GetOrFallback("ui.city.district_clear", "DISTRICT / Clear");
+            {
+                if (officer == null || (!officer.isChasing && !officer.isCalled)) continue;
+                if (officer.State != PoliceBehavior.PursuitState.Searching) return CityPoliceStatus.Pursuit;
+                status = CityPoliceStatus.Searching;
+            }
+            return status;
         }
 
         private void CreateObjectiveGroundGlow()
@@ -589,7 +778,7 @@ namespace HighStakes.City
         {
             var wander = speakingTo != null ? speakingTo.GetComponent<NPCWanderRoadOnly>() : null;
             if (wander != null) wander.ResumeMovement();
-            speakingTo = null; conversation = null;
+            speakingTo = null; conversation = null; streetTrade = null;
             if (hud != null) hud.Show(null);
             if (player != null) { player.SetDialogueInputLocked(false); player.LockMouse(); }
         }

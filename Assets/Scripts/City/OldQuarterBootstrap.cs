@@ -11,7 +11,11 @@ namespace HighStakes.City
         private readonly List<Material> materials = new List<Material>();
         private Transform geometry;
         private Material stone, asphalt, pavement, trim, glass, foliage, skin, navy, mint;
+        private Font signFont;
+        private Material signMaterial;
         private readonly Dictionary<string, CityActor> actors = new Dictionary<string, CityActor>();
+        private readonly List<Bounds> mapSidewalks = new List<Bounds>();
+        private readonly List<Bounds> mapBuildings = new List<Bounds>();
         private SafehouseFarmingSystem safehouseFarming;
 
         private void Awake()
@@ -21,7 +25,7 @@ namespace HighStakes.City
 
             CreatePalette();
             ConfigureLighting();
-            BuildDistrict();
+            Bounds districtBounds = BuildDistrict();
             // Bake static colliders before spawning agents. Render meshes need Read/Write in builds;
             // collider collection also works in standalone players.
             Physics.SyncTransforms();
@@ -56,7 +60,7 @@ namespace HighStakes.City
                 AddPerson("local" + i, "Local resident", new Vector3(x, 0.3f, -32 + i * 6), i % 2 == 0 ? trim : mint, "local.rumor", true);
             }
             var hud = gameObject.AddComponent<CityHud>();
-            hud.Build();
+            hud.Build(districtBounds, mapSidewalks, mapBuildings);
             var director = gameObject.AddComponent<CityMissionDirector>();
             director.Initialize(player, actors, hud);
         }
@@ -98,6 +102,11 @@ namespace HighStakes.City
             skin = Material("Skin", new Color32(199, 148, 111, 255));
             navy = Material("Police navy", new Color32(28, 47, 79, 255));
             mint = Material("Jade", new Color32(46, 121, 112, 255));
+            signFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            signMaterial = new Material(Resources.Load<Shader>("City/WorldSign")) { name = "Old Quarter signs" };
+            materials.Add(signMaterial);
+            RefreshSignTexture(signFont);
+            Font.textureRebuilt += RefreshSignTexture;
         }
 
         private Material Material(string name, Color color, bool emissive = false)
@@ -117,7 +126,6 @@ namespace HighStakes.City
 
         private void ConfigureLighting()
         {
-            RenderSettings.skybox = null;
             RenderSettings.ambientLight = new Color(0.5f, 0.56f, 0.64f);
             RenderSettings.fog = true;
             RenderSettings.fogColor = new Color32(99, 118, 131, 255);
@@ -130,17 +138,29 @@ namespace HighStakes.City
             sun.intensity = 1.5f;
             sun.shadows = LightShadows.Soft;
             sun.transform.rotation = Quaternion.Euler(38, -35, 0);
+            RenderSettings.sun = sun;
+            RenderSettings.skybox = CreateAtmosphereMaterial("City/OldQuarterSky", "Old Quarter afternoon sky");
         }
 
-        private void BuildDistrict()
+        private Material CreateAtmosphereMaterial(string shaderPath, string name)
+        {
+            var material = new Material(Resources.Load<Shader>(shaderPath)) { name = name };
+            material.SetColor("_FogColor", RenderSettings.fogColor);
+            material.SetVector("_SunDirection", -RenderSettings.sun.transform.forward);
+            materials.Add(material);
+            return material;
+        }
+
+        private Bounds BuildDistrict()
         {
             geometry = new GameObject("Modular District / Static Geometry").transform;
             geometry.SetParent(transform, false);
-            Box("Road foundation", geometry, new Vector3(0, -0.3f, 0), new Vector3(90, 0.6f, 90), asphalt);
+            var road = Box("Road foundation", geometry, new Vector3(0, -0.3f, 0), new Vector3(90, 0.6f, 90), asphalt);
             for (int x = -1; x <= 1; x += 2)
                 for (int z = -1; z <= 1; z += 2)
                 {
-                    Box("Raised sidewalk block", geometry, new Vector3(x * 23, 0.08f, z * 23), new Vector3(34, 0.16f, 34), pavement);
+                    var sidewalk = Box("Raised sidewalk block", geometry, new Vector3(x * 23, 0.08f, z * 23), new Vector3(34, 0.16f, 34), pavement);
+                    mapSidewalks.Add(sidewalk.GetComponent<Renderer>().bounds);
                     Building(new Vector3(x * 17, 0.16f, z * 19), 10, 12, 8, x < 0 ? stone : trim, z < 0 ? "WORKSHOP" : "CAFE");
                     Building(new Vector3(x * 32, 0.16f, z * 19), 10, 12, 6, x < 0 ? mint : stone, "MARKET");
                     Building(new Vector3(x * 17, 0.16f, z * 34), 10, 10, 12, stone, "RESIDENCES");
@@ -166,8 +186,17 @@ namespace HighStakes.City
             Box("Boundary south", geometry, new Vector3(0, 1, -44), new Vector3(90, 2, 1), stone);
             Box("Boundary west", geometry, new Vector3(-44, 1, 0), new Vector3(1, 2, 90), stone);
             Box("Boundary east", geometry, new Vector3(44, 1, 0), new Vector3(1, 2, 90), stone);
-            Sign("OLD QUARTER", geometry, new Vector3(-15, 3.3f, -12.91f), 0.16f);
-            Sign("THE JADE ROOM", geometry, new Vector3(17, 3.2f, 12.91f), 0.11f, 180);
+            CreateBoundaryFog(road.transform.localScale);
+            return road.GetComponent<Renderer>().bounds;
+        }
+
+        private void CreateBoundaryFog(Vector3 districtSize)
+        {
+            var material = CreateAtmosphereMaterial("City/BoundaryFog", "Old Quarter boundary fog");
+            // The inward faces conceal the exterior and blend into the sky above the horizon.
+            var fog = Box("District boundary fog", transform, new Vector3(0, 17, 0),
+                new Vector3(districtSize.x, 36, districtSize.z), material, false);
+            fog.GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         }
 
         private void Building(Vector3 position, float width, float depth, float height, Material wall, string sign)
@@ -183,7 +212,8 @@ namespace HighStakes.City
             {
                 var modifier = module.gameObject.AddComponent<NavMeshModifier>();
                 modifier.overrideArea = true; modifier.area = 1;
-                Box("Shell", module, Vector3.up * height * 0.5f, new Vector3(width, height, depth), wall);
+                var shell = Box("Shell", module, Vector3.up * height * 0.5f, new Vector3(width, height, depth), wall);
+                mapBuildings.Add(shell.GetComponent<Renderer>().bounds);
                 Box("Door", module, new Vector3(0, 1.15f, -depth / 2 - 0.025f), new Vector3(1.2f, 2.3f, 0.05f), navy, false);
             }
             else
@@ -191,7 +221,8 @@ namespace HighStakes.City
                 if (position.z < 0) module.localRotation = Quaternion.Euler(0, 180, 0);
                 var interior = module.gameObject.AddComponent<CityInterior>();
                 interior.roomName = room; interior.size = new Vector3(width - 0.8f, 3.8f, depth - 0.8f);
-                Box("Interior floor", module, Vector3.up * 0.04f, new Vector3(width, 0.08f, depth), stone);
+                var floor = Box("Interior floor", module, Vector3.up * 0.04f, new Vector3(width, 0.08f, depth), stone);
+                mapBuildings.Add(floor.GetComponent<Renderer>().bounds);
                 Box("Left wall", module, new Vector3(-width / 2 + 0.2f, 1.9f, 0), new Vector3(0.4f, 3.8f, depth), wall);
                 Box("Right wall", module, new Vector3(width / 2 - 0.2f, 1.9f, 0), new Vector3(0.4f, 3.8f, depth), wall);
                 Box("Back wall", module, new Vector3(0, 1.9f, depth / 2 - 0.2f), new Vector3(width, 3.8f, 0.4f), wall);
@@ -206,7 +237,9 @@ namespace HighStakes.City
                 if (room == "Workshop / Safehouse")
                 {
                     safehouseFarming = module.gameObject.AddComponent<SafehouseFarmingSystem>();
-                    safehouseFarming.Build(module, stone, trim, glass, navy, mint);
+                    safehouseFarming.Build(module, stone, trim, glass, navy, mint, signFont, signMaterial);
+                    CreateSign(module, "OLD QUARTER", new Vector3(0, 6.1f, -depth / 2 - 0.085f),
+                        0.12f, 48, Color.white, signFont, signMaterial);
                 }
                 AddDoor(module, room, unlockLevel, depth);
                 var lamp = new GameObject("Interior warm light").AddComponent<Light>();
@@ -240,7 +273,8 @@ namespace HighStakes.City
             Box("Door leaf", hinge, new Vector3(1.1f, 1.3f, 0), new Vector3(2.15f, 2.6f, 0.12f), navy);
             Box("Handle", hinge, new Vector3(1.9f, 1.2f, -0.1f), new Vector3(0.08f, 0.12f, 0.08f), glass, false);
             var door = go.AddComponent<CityDoor>(); door.leaf = hinge; door.minimumLevel = level; door.roomName = name;
-            Sign(name.Split('/')[0].ToUpperInvariant(), go.transform, new Vector3(0, 3.3f, -0.15f), 0.085f);
+            CreateSign(go.transform, name.Split('/')[0].Trim().ToUpperInvariant(), new Vector3(0, 3.3f, -0.15f),
+                0.085f, 48, Color.white, signFont, signMaterial);
         }
 
         private void FurnishRoom(Transform room, string name)
@@ -314,11 +348,12 @@ namespace HighStakes.City
             Puppet(go.transform, navy, false);
             var camera = new GameObject("MainCamera", typeof(Camera), typeof(AudioListener)).GetComponent<Camera>();
             camera.transform.SetParent(go.transform, false);
-            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.clearFlags = CameraClearFlags.Skybox;
             camera.backgroundColor = RenderSettings.fogColor;
             camera.nearClipPlane = 0.08f; camera.farClipPlane = 180; camera.fieldOfView = 62;
             var player = go.AddComponent<PlayerController>();
             player.playerCamera = camera.transform;
+            go.AddComponent<PlayerProductEffects>();
             // Keep the system cursor hidden for camera look, but show a small
             // in-game pointer at the centre of the player's view.
             go.AddComponent<PlayerAimReticle>();
@@ -343,7 +378,7 @@ namespace HighStakes.City
             var collider = go.AddComponent<CapsuleCollider>();
             collider.center = Vector3.up * 0.9f; collider.height = 1.8f; collider.radius = 0.28f;
             var actor = go.AddComponent<CityActor>();
-            actor.id = id; actor.displayName = name; actor.defaultDialogue = conversation;
+            actor.id = id; actor.displayName = name; actor.defaultDialogue = conversation; actor.IsPerson = true;
             actors.Add(id, actor);
             if (wander)
             {
@@ -407,17 +442,30 @@ namespace HighStakes.City
             }
             return go;
         }
-        private void Sign(string text, Transform parent, Vector3 position, float size, float yaw = 0)
+        internal static void CreateSign(Transform parent, string text, Vector3 position, float size, int fontSize,
+            Color color, Font font, Material material, float yaw = 0)
         {
             var go = new GameObject("Sign " + text, typeof(TextMesh));
             go.transform.SetParent(parent, false); go.transform.localPosition = position;
             go.transform.localRotation = Quaternion.Euler(0, yaw, 0);
             var sign = go.GetComponent<TextMesh>();
-            sign.text = text; sign.characterSize = size; sign.fontSize = 48; sign.anchor = TextAnchor.MiddleCenter;
-            sign.color = Color.white;
-            sign.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            go.GetComponent<MeshRenderer>().sharedMaterial = sign.font.material;
+            sign.text = text; sign.characterSize = size; sign.fontSize = fontSize; sign.anchor = TextAnchor.MiddleCenter;
+            sign.color = color;
+            sign.font = font;
+            go.GetComponent<MeshRenderer>().sharedMaterial = material;
         }
-        private void OnDestroy() { foreach (var material in materials) if (material != null) Destroy(material); }
+
+        private void RefreshSignTexture(Font font)
+        {
+            if (font == signFont)
+                signMaterial.mainTexture = font.material.mainTexture;
+        }
+
+        private void OnDestroy()
+        {
+            Font.textureRebuilt -= RefreshSignTexture;
+            foreach (var material in materials)
+                if (material != null) Destroy(material);
+        }
     }
 }

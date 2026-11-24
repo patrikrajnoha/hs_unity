@@ -42,6 +42,7 @@ namespace HighStakes.City
         public bool currentAlarm;
         public float currentNavigationTime;
         public int currentDetections;
+        public long streetSalesIncome;
     }
 
     // Gameplay state and score calculations do not depend on scene objects.
@@ -56,7 +57,9 @@ namespace HighStakes.City
         public Contract Current => Finished ? null : Story.contracts[ContractIndex];
         public ContractStep Step => Current == null ? null : Current.steps[StepIndex];
         public bool Active => !Finished && StepIndex > 0;
-        public int Money { get; private set; }
+        private int contractMoney;
+        private long streetSalesIncome;
+        public long Money => contractMoney + streetSalesIncome;
         public int Reputation { get; private set; }
         public int Score { get; private set; }
         public int CurrentFailures { get; private set; }
@@ -85,9 +88,10 @@ namespace HighStakes.City
             foreach (var result in save.results)
             {
                 results.Add(result); Score += result.score;
-                Money += story.contracts[results.Count - 1].reward;
+                contractMoney += story.contracts[results.Count - 1].reward;
                 Reputation += story.contracts[results.Count - 1].reputation;
             }
+            streetSalesIncome = Math.Clamp(save.streetSalesIncome, 0, long.MaxValue - int.MaxValue);
             if (!Finished)
             {
                 CurrentFailures = Mathf.Max(0, save.currentFailures);
@@ -118,7 +122,7 @@ namespace HighStakes.City
                     efficiency = CurrentTotalTime > 0 ? Mathf.Clamp01(Elapsed / CurrentTotalTime) : 1f
                 };
                 results.Add(result); Score += result.score;
-                Money += level.reward; Reputation += level.reputation;
+                contractMoney += level.reward; Reputation += level.reputation;
                 StepIndex = 0; Elapsed = 0; CurrentTotalTime = 0;
                 CurrentFailures = 0; CurrentMistakes = 0; KnowsRoute = false; AlarmRaised = false;
                 NavigationTime = 0; Detections = 0; Strategy = null;
@@ -141,13 +145,15 @@ namespace HighStakes.City
             // An alarm anywhere in an attempt forfeits the level's clean-run bonus.
         }
         public void RecordMistake() { if (!Finished) CurrentMistakes++; }
+        internal bool CanCreditStreetSale(long total) => total > 0 && total <= long.MaxValue - int.MaxValue - streetSalesIncome;
+        internal void CreditStreetSale(long total) => streetSalesIncome += total;
         public void RaiseAlarm() { if (!Finished) AlarmRaised = true; }
         public void RecordDetection() { if (Active) Detections++; }
         public void RecordNavigation(float delta) { if (Active) NavigationTime += Mathf.Max(0, delta); }
         public CampaignSave Capture() => new CampaignSave {
             results = new List<LevelResult>(results), currentFailures = CurrentFailures,
             currentMistakes = CurrentMistakes, currentTotalTime = CurrentTotalTime, currentAlarm = AlarmRaised,
-            currentNavigationTime = NavigationTime, currentDetections = Detections
+            currentNavigationTime = NavigationTime, currentDetections = Detections, streetSalesIncome = streetSalesIncome
         };
         public Conversation FindConversation(string id)
         {

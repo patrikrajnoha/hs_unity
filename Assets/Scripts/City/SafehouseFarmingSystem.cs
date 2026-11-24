@@ -53,7 +53,7 @@ namespace HighStakes.City
         private bool built;
 
         public void Build(Transform room, Material stoneMaterial, Material trimMaterial,
-            Material glassMaterial, Material navyMaterial, Material mintMaterial)
+            Material glassMaterial, Material navyMaterial, Material mintMaterial, Font signFont, Material signMaterial)
         {
             if (built)
                 return;
@@ -75,7 +75,7 @@ namespace HighStakes.City
             templatesRoot.localPosition = new Vector3(0f, -1000f, 0f);
 
             CreateItemsAndTemplates();
-            BuildEquipment(room);
+            BuildEquipment(room, signFont, signMaterial);
         }
 
         public void ConfigurePlayer(GameObject player)
@@ -118,7 +118,7 @@ namespace HighStakes.City
 
             var hud = player.AddComponent<SafehouseInventoryHud>();
             hud.Initialize(inventory, ui.waterStatus, ui.selectedStatus, ui.feedback, ui.canvas,
-                ui.inventoryPanel);
+                ui.inventoryPanel, ui.consumeHint);
         }
 
         private void CreateItemsAndTemplates()
@@ -165,7 +165,7 @@ namespace HighStakes.City
             DryPrefab = CreateDryTemplate();
         }
 
-        private void BuildEquipment(Transform room)
+        private void BuildEquipment(Transform room, Font signFont, Material signMaterial)
         {
             // Layout zones inside the room:
             // left wall = growing, front-left = water and supplies,
@@ -188,7 +188,6 @@ namespace HighStakes.City
             // centred on that wall instead of placing it beyond the room,
             // where the old position clipped through the corner.
             CreateSupplyShelf(new Vector3(0f, 0.95f, 3.0f));
-            SpawnPickup(SeedItem, new Vector3(-0.5f, 1.45f, 2.72f), "Supply / Seeds");
             SpawnPickup(MushroomSeedItem, new Vector3(-0.05f, 1.45f, 2.72f), "Supply / Mushroom Spores");
             SpawnPickup(CocaSeedItem, new Vector3(0.4f, 1.45f, 2.72f), "Supply / Coca Seeds");
             SpawnPickup(PackEmptyItem, new Vector3(0.5f, 1.45f, 2.72f), "Supply / Empty Bag", true);
@@ -200,11 +199,13 @@ namespace HighStakes.City
             SpawnPickup(PrunerItem, new Vector3(2.15f, 1.65f, 2.45f), "Workbench / Pruning Shears");
             SpawnPickup(RakeItem, new Vector3(3.15f, 1.3f, 2.45f), "Workbench / Rake");
 
-            Label(room, LocalizationManager.GetOrFallback("ui.safehouse.grow_room", "SAFEHOUSE GROW ROOM"),
-                new Vector3(-2.45f, 2.55f, 0.25f), 0.075f, mint.color);
-            Label(room, LocalizationManager.GetOrFallback("ui.safehouse.packing", "PACKING"),
-                new Vector3(2.75f, 1.75f, -4.35f), 0.075f, glass.color);
-            Label(room, "MIXING LAB", new Vector3(2.75f, 1.75f, -2.45f), 0.075f, mint.color);
+            // The text front faces the centre aisle between the stations.
+            OldQuarterBootstrap.CreateSign(room, LocalizationManager.GetOrFallback("ui.safehouse.grow_room", "SAFEHOUSE GROW ROOM"),
+                new Vector3(-2.45f, 2.55f, 0.25f), 0.075f, 42, mint.color, signFont, signMaterial, -90);
+            OldQuarterBootstrap.CreateSign(room, LocalizationManager.GetOrFallback("ui.safehouse.packing", "PACKING"),
+                new Vector3(2.75f, 1.75f, -3.55f), 0.075f, 42, glass.color, signFont, signMaterial, 90);
+            OldQuarterBootstrap.CreateSign(room, "MIXING LAB", new Vector3(2.75f, 1.75f, -1.65f),
+                0.075f, 42, mint.color, signFont, signMaterial, 90);
         }
 
         private Transform CreateMixingWorkbench(Vector3 localPosition)
@@ -368,6 +369,8 @@ namespace HighStakes.City
 
         private void CreateSupplyShelf(Vector3 localPosition)
         {
+            const float shelfThickness = 0.14f;
+            const float upperShelfHeight = 1.25f;
             var shelf = new GameObject("Supply Shelf").transform;
             shelf.SetParent(farmRoot, false);
             shelf.localPosition = localPosition;
@@ -375,8 +378,25 @@ namespace HighStakes.City
             // Its long axis is X, so it cannot cut through the grow rack on
             // the left wall or block the central walkway.
             Box("Supply back", shelf, new Vector3(0f, 0.9f, 0f), new Vector3(2.2f, 1.8f, 0.12f), navy);
-            Box("Supply shelf", shelf, new Vector3(0f, 0.25f, -0.03f), new Vector3(2.2f, 0.14f, 0.6f), trim);
-            Box("Supply shelf", shelf, new Vector3(0f, 1.25f, -0.03f), new Vector3(2.2f, 0.14f, 0.6f), trim);
+            Box("Supply shelf", shelf, new Vector3(0f, 0.25f, -0.03f), new Vector3(2.2f, shelfThickness, 0.6f), trim);
+            Box("Supply shelf", shelf, new Vector3(0f, upperShelfHeight, -0.03f), new Vector3(2.2f, shelfThickness, 0.6f), trim);
+            PlaceSeedPacket(shelf, new Vector3(-0.5f, upperShelfHeight + shelfThickness * 0.5f, -0.22f));
+        }
+
+        private void PlaceSeedPacket(Transform shelf, Vector3 positionOnShelf)
+        {
+            const float packetHeight = 0.42f;
+            // Keep this display pickup upright and clear of the loose supplies below.
+            var packet = CreatePickupModelRoot("Supply / Seeds", SeedItem, "Untagged", "",
+                new Vector3(0.34f, packetHeight, 0.13f), parent: shelf);
+            packet.transform.localPosition = positionOnShelf + Vector3.up * (packetHeight * 0.5f);
+            AddVisual(packet.transform, PrimitiveType.Cube, "Seed packet", Vector3.zero,
+                new Vector3(0.34f, packetHeight, 0.085f), mint);
+            AddVisual(packet.transform, PrimitiveType.Cube, "Packet label", new Vector3(0f, 0f, -0.045f),
+                new Vector3(0.26f, 0.27f, 0.013f), navy);
+            var emblem = AddVisual(packet.transform, PrimitiveType.Sphere, "Seed emblem", new Vector3(0f, 0f, -0.054f),
+                new Vector3(0.12f, 0.19f, 0.02f), glass);
+            emblem.transform.localRotation = Quaternion.Euler(0f, 0f, -30f);
         }
 
         private void SpawnPickup(Item item, Vector3 localPosition, string objectName, bool respawns = false)
@@ -598,11 +618,11 @@ namespace HighStakes.City
         }
 
         private GameObject CreatePickupModelRoot(string name, Item item, string tag,
-            string requiredTool, Vector3 colliderSize, Vector3 colliderCenter = default)
+            string requiredTool, Vector3 colliderSize, Vector3 colliderCenter = default, Transform parent = null)
         {
             var go = new GameObject(name);
             go.tag = string.IsNullOrEmpty(tag) ? "Untagged" : tag;
-            go.transform.SetParent(templatesRoot, false);
+            go.transform.SetParent(parent != null ? parent : templatesRoot, false);
             go.transform.localPosition = Vector3.zero;
 
             var collider = go.AddComponent<BoxCollider>();
@@ -794,6 +814,9 @@ namespace HighStakes.City
             inventoryCanvasGroup.blocksRaycasts = false;
             UiText(inventoryPanel, "ITEMS  [1-8]", 9, new Color32(160, 181, 183, 255),
                 new Vector2(12f, -8f), new Vector2(180f, 14f));
+            var consumeHint = UiText(inventoryPanel, "", 13, new Color32(119, 233, 196, 255),
+                new Vector2(200f, -1f), new Vector2(236f, 15f));
+            consumeHint.alignment = TextAlignmentOptions.Right;
 
             var slots = new Image[8];
             for (int i = 0; i < slots.Length; i++)
@@ -848,6 +871,7 @@ namespace HighStakes.City
                 promptText = promptText,
                 waterStatus = null,
                 selectedStatus = null,
+                consumeHint = consumeHint,
                 feedback = feedback,
                 wateringCountdown = wateringCountdown,
                 inventoryPanel = inventoryPanel.gameObject
@@ -937,22 +961,6 @@ namespace HighStakes.City
             return go;
         }
 
-        private void Label(Transform parent, string text, Vector3 localPosition, float size, Color color)
-        {
-            var go = new GameObject("Sign " + text, typeof(TextMesh));
-            go.transform.SetParent(parent, false);
-            go.transform.localPosition = localPosition;
-            go.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
-            var label = go.GetComponent<TextMesh>();
-            label.text = text;
-            label.characterSize = size;
-            label.fontSize = 42;
-            label.anchor = TextAnchor.MiddleCenter;
-            label.color = color;
-            label.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            go.GetComponent<MeshRenderer>().sharedMaterial = label.font.material;
-        }
-
         private static void RemoveCollider(GameObject go)
         {
             var collider = go.GetComponent<Collider>();
@@ -968,6 +976,7 @@ namespace HighStakes.City
             public TextMeshProUGUI promptText;
             public TextMeshProUGUI waterStatus;
             public TextMeshProUGUI selectedStatus;
+            public TextMeshProUGUI consumeHint;
             public TextMeshProUGUI feedback;
             public TextMeshProUGUI wateringCountdown;
             public GameObject inventoryPanel;
@@ -980,6 +989,7 @@ namespace HighStakes.City
         private Inventory inventory;
         private TextMeshProUGUI waterStatus;
         private TextMeshProUGUI selectedStatus;
+        private TextMeshProUGUI consumeHint;
         private TextMeshProUGUI feedback;
         private Canvas inventoryCanvas;
         private RectTransform inventoryPanel;
@@ -991,11 +1001,12 @@ namespace HighStakes.City
         private float feedbackUntil;
 
         public void Initialize(Inventory owner, TextMeshProUGUI waterText, TextMeshProUGUI selectedText,
-            TextMeshProUGUI feedbackText, Canvas canvas, GameObject panelObject)
+            TextMeshProUGUI feedbackText, Canvas canvas, GameObject panelObject, TextMeshProUGUI productHint)
         {
             inventory = owner;
             waterStatus = waterText;
             selectedStatus = selectedText;
+            consumeHint = productHint;
             feedback = feedbackText;
             inventoryCanvas = canvas;
             inventoryPanel = panelObject != null ? panelObject.GetComponent<RectTransform>() : null;
@@ -1058,6 +1069,10 @@ namespace HighStakes.City
             UpdateInventoryAnimation();
 
             Item selected = inventory.GetSelectedItem();
+            if (consumeHint != null)
+                consumeHint.text = ProductItemFactory.IsDrugProduct(selected)
+                    ? LocalizationManager.Get("ui.product_effects.consume_hint")
+                    : string.Empty;
             if (selectedStatus != null)
                 selectedStatus.text = selected == null
                     ? LocalizationManager.GetOrFallback("ui.inventory.empty", "EMPTY")
@@ -1174,8 +1189,7 @@ namespace HighStakes.City
             if (camera == null)
                 camera = FindAnyObjectByType<Camera>();
             if (camera != null)
-                label.transform.rotation = Quaternion.LookRotation(
-                    camera.transform.position - label.transform.position, Vector3.up);
+                label.transform.rotation = camera.transform.rotation;
         }
     }
 }

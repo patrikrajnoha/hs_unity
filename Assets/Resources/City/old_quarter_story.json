@@ -2,7 +2,7 @@
   "contracts": [
     {
       "id": "first_delivery",
-      "title": "01 / First impressions",
+      "title": "First impressions",
       "description": "Get inside The Jade Room and complete your first delivery.",
       "reward": 150,
       "reputation": 5,
@@ -45,7 +45,7 @@
     },
     {
       "id": "power_cut",
-      "title": "02 / Power cut",
+      "title": "Power cut",
       "description": "Search the workshop and repair its electrical panel in the correct order.",
       "reward": 220,
       "reputation": 7,
@@ -96,7 +96,7 @@
     },
     {
       "id": "paper_trail",
-      "title": "03 / Paper trail",
+      "title": "Paper trail",
       "description": "Enter the warehouse, retrieve the ledger and lose any pursuit.",
       "reward": 350,
       "reputation": 12,
@@ -139,7 +139,7 @@
     },
     {
       "id": "cross_check",
-      "title": "04 / Cross-check",
+      "title": "Cross-check",
       "description": "Corroborate the ledger with a shipping manifest, cafe invoice and a witness.",
       "reward": 420,
       "reputation": 15,
@@ -190,7 +190,7 @@
     },
     {
       "id": "last_broadcast",
-      "title": "05 / The last broadcast",
+      "title": "The last broadcast",
       "description": "Use the radio house to expose the evidence, then escape to extraction.",
       "reward": 600,
       "reputation": 20,

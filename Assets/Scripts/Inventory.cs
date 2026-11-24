@@ -31,6 +31,7 @@ public class Inventory : MonoBehaviour
 
     public GameObject shopUI;
     private GameMaster gm;
+    private PlayerController cityPlayer;
 
     public Sprite normalBorderSprite;
     public Sprite selectedBorderSprite;
@@ -50,6 +51,8 @@ public class Inventory : MonoBehaviour
     void Start()
     {
         gm = FindObjectOfType<GameMaster>();
+        if (TryGetComponent<HighStakes.City.CityInputBridge>(out _))
+            cityPlayer = GetComponent<PlayerController>();
 
         inventoryItems = new InventorySlot[inventoryLimit];
         EnsureSlotVisuals();
@@ -104,7 +107,7 @@ public class Inventory : MonoBehaviour
 
     void Update()
     {
-        if (GameMaster.GameOverActive)
+        if (GameMaster.GameOverActive || (cityPlayer != null && cityPlayer.IsDialogueInputLocked))
             return;
 
         HandleSelection();

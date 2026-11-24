@@ -26,7 +26,9 @@ public class PauseMenuController : MonoBehaviour
     private TMP_Text languageLabel;
     private TMP_Text minimapToggleLabel;
     private TMP_Text closeSettingsLabel;
+    private TMP_Text campaignStatsLabel;
     private MinimapController minimapController;
+    private HighStakes.City.CityHud cityHud;
     private HighStakes.City.CityMissionDirector cityMissionDirector;
 
     private bool isPaused;
@@ -159,6 +161,8 @@ public class PauseMenuController : MonoBehaviour
         isPaused = paused;
         Time.timeScale = paused ? 0f : 1f;
 
+        if (paused)
+            RefreshCampaignStats();
         if (pausePanel != null)
             pausePanel.SetActive(paused);
     }
@@ -183,10 +187,17 @@ public class PauseMenuController : MonoBehaviour
             new Color(0.376f, 0.835f, 0.91f, 0.92f));
         settingsButtonLabel = settingsButton.GetComponentInChildren<TMP_Text>(true);
         settingsButton.onClick.AddListener(OpenSettings);
-        if (FindAnyObjectByType<HighStakes.City.CityMissionDirector>() != null)
+        cityMissionDirector = FindAnyObjectByType<HighStakes.City.CityMissionDirector>();
+        cityHud = FindAnyObjectByType<HighStakes.City.CityHud>();
+        if (cityMissionDirector != null)
         {
             var cardRect = card.GetComponent<RectTransform>();
             cardRect.sizeDelta = new Vector2(cardRect.sizeDelta.x, 500f);
+            GameObject stats = CreateLabel("CampaignStats", card, "", 17f, TextAlignmentOptions.Center);
+            Anchor(stats.GetComponent<RectTransform>(), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f),
+                new Vector2(0f, -96f), new Vector2(390f, 30f));
+            campaignStatsLabel = stats.GetComponent<TMP_Text>();
+            campaignStatsLabel.color = new Color32(223, 207, 222, 255);
             newCampaignButton = CreateButton("NewCampaignButton", card, "", new Vector2(0f, -215f),
                 new Color(0.38f, 0.45f, 0.56f, 0.92f));
             newCampaignButton.GetComponentInChildren<TMP_Text>(true).color = Color.white;
@@ -300,13 +311,17 @@ public class PauseMenuController : MonoBehaviour
 
     private void ToggleMinimap()
     {
-        if (minimapController == null)
-            minimapController = FindAnyObjectByType<MinimapController>(FindObjectsInactive.Include);
-
-        if (minimapController == null)
-            return;
-
-        minimapController.SetVisible(!minimapController.IsVisible);
+        if (cityHud != null)
+        {
+            cityHud.SetMapVisible(!cityHud.IsMapVisible);
+        }
+        else
+        {
+            if (minimapController == null)
+                minimapController = FindAnyObjectByType<MinimapController>(FindObjectsInactive.Include);
+            if (minimapController != null)
+                minimapController.SetVisible(!minimapController.IsVisible);
+        }
         UpdateMinimapToggleLabel();
     }
 
@@ -340,7 +355,14 @@ public class PauseMenuController : MonoBehaviour
                 : LocalizationManager.GetOrFallback("ui.language.english", "ENGLISH");
             languageLabel.text = LocalizationManager.GetOrFallback("ui.settings.language", "LANGUAGE") + ": " + languageName;
         }
+        RefreshCampaignStats();
         UpdateMinimapToggleLabel();
+    }
+
+    private void RefreshCampaignStats()
+    {
+        if (campaignStatsLabel != null && cityMissionDirector != null && cityMissionDirector.Progress != null)
+            campaignStatsLabel.text = HighStakes.City.CityHud.CampaignStats(cityMissionDirector.Progress);
     }
 
     private void UpdateMinimapToggleLabel()
@@ -348,10 +370,10 @@ public class PauseMenuController : MonoBehaviour
         if (minimapToggleLabel == null)
             return;
 
-        if (minimapController == null)
+        if (cityHud == null && minimapController == null)
             minimapController = FindAnyObjectByType<MinimapController>(FindObjectsInactive.Include);
 
-        bool visible = minimapController == null || minimapController.IsVisible;
+        bool visible = cityHud != null ? cityHud.IsMapVisible : minimapController == null || minimapController.IsVisible;
         string state = visible
             ? LocalizationManager.GetOrFallback("ui.minimap.on", "ON")
             : LocalizationManager.GetOrFallback("ui.minimap.off", "OFF");

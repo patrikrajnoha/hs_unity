@@ -1084,7 +1084,7 @@
     {
       "key": "city.contract.first_delivery.title",
       "lines": [
-        "01 / Prvý dojem"
+        "Prvý dojem"
       ]
     },
     {
@@ -1120,7 +1120,7 @@
     {
       "key": "city.contract.power_cut.title",
       "lines": [
-        "02 / Výpadok prúdu"
+        "Výpadok prúdu"
       ]
     },
     {
@@ -1162,7 +1162,7 @@
     {
       "key": "city.contract.paper_trail.title",
       "lines": [
-        "03 / Papierová stopa"
+        "Papierová stopa"
       ]
     },
     {
@@ -1198,7 +1198,7 @@
     {
       "key": "city.contract.cross_check.title",
       "lines": [
-        "04 / Krížová kontrola"
+        "Krížová kontrola"
       ]
     },
     {
@@ -1240,7 +1240,7 @@
     {
       "key": "city.contract.last_broadcast.title",
       "lines": [
-        "05 / Posledné vysielanie"
+        "Posledné vysielanie"
       ]
     },
     {
@@ -2342,9 +2342,63 @@
       ]
     },
     {
-      "key": "ui.city.continue_free_roam_enter",
+      "key": "ui.city.next_chapter_enter",
       "lines": [
-        "POKRAČOVAŤ VO VOĽNOM REŽIME  [ ENTER ]"
+        "ĎALŠIA KAPITOLA  [ENTER]"
+      ]
+    },
+    {
+      "key": "ui.city.next_chapter_title",
+      "lines": [
+        "Ďalšia kapitola · {title}"
+      ]
+    },
+    {
+      "key": "ui.city.chapter",
+      "lines": [
+        "KAPITOLA {current}/{total}"
+      ]
+    },
+    {
+      "key": "ui.city.mission_time",
+      "lines": [
+        "ZOSTÁVAJÚCI ČAS"
+      ]
+    },
+    {
+      "key": "ui.city.police",
+      "lines": [
+        "POLÍCIA"
+      ]
+    },
+    {
+      "key": "ui.city.hold_position",
+      "lines": [
+        "Zostaň na mieste · {seconds} s"
+      ]
+    },
+    {
+      "key": "ui.city.talk",
+      "lines": [
+        "Porozprávať sa"
+      ]
+    },
+    {
+      "key": "ui.city.open_door",
+      "lines": [
+        "Otvoriť dvere"
+      ]
+    },
+    {
+      "key": "ui.city.close_door",
+      "lines": [
+        "Zavrieť dvere"
+      ]
+    },
+    {
+      "key": "ui.city.inspect",
+      "lines": [
+        "Preskúmať"
       ]
     },
     {
@@ -2980,25 +3034,25 @@
     {
       "key": "ui.notice.break_sight",
       "lines": [
-        ""
+        "Strážnikom sa stratíš za budovami. Počas prenasledovania vedia otvárať dvere."
       ]
     },
     {
       "key": "ui.city.district_clear",
       "lines": [
-        "OKRSOK / ČISTÝ"
+        "Pokoj"
       ]
     },
     {
       "key": "ui.city.police_searching",
       "lines": [
-        "POLÍCIA / HĽADÁ"
+        "Pátranie"
       ]
     },
     {
       "key": "ui.city.police_pursuit",
       "lines": [
-        "POLÍCIA / STÍHANIE"
+        "Stíhanie"
       ]
     },
     {
@@ -3209,6 +3263,192 @@
       "key": "ui.city.performance",
       "lines": [
         "Posledná misia: {efficiency}% efektivita / {navigation}s presun / {detections} odhalení"
+      ]
+    },
+    {
+      "key": "ui.street_trade.balance",
+      "lines": [
+        "HOTOVOSŤ  ${amount}"
+      ]
+    },
+    {
+      "key": "ui.street_trade.offer",
+      "lines": [
+        "Ponúknuť drogy"
+      ]
+    },
+    {
+      "key": "ui.street_trade.select_product",
+      "lines": [
+        "Najprv si v inventári vyber drogu, ktorú chceš ponúknuť."
+      ]
+    },
+    {
+      "key": "ui.street_trade.cooldown",
+      "lines": [
+        "Daj tejto osobe chvíľu, kým jej niečo ponúkneš znova."
+      ]
+    },
+    {
+      "key": "ui.street_trade.ignored",
+      "lines": [
+        "{npc} odmieta ponuku a ďalej si ťa nevšíma."
+      ]
+    },
+    {
+      "key": "ui.street_trade.reported",
+      "lines": [
+        "{npc} odmieta ponuku a volá políciu."
+      ]
+    },
+    {
+      "key": "ui.street_trade.report_countdown",
+      "lines": [
+        "O {seconds} s"
+      ]
+    },
+    {
+      "key": "ui.street_trade.report_hint",
+      "lines": [
+        "Niekto zavolal políciu. Vzdiaľ sa, kým sa začne naháňačka."
+      ]
+    },
+    {
+      "key": "ui.street_trade.no_response",
+      "lines": [
+        "Na hlásenie nezareagoval žiadny policajt."
+      ]
+    },
+    {
+      "key": "ui.street_trade.pursuit",
+      "lines": [
+        "Policajt zareagoval na hlásenie. Zbav sa polície."
+      ]
+    },
+    {
+      "key": "ui.street_trade.caught",
+      "lines": [
+        "Polícia ťa chytila a vrátila ťa na začiatok štvrte."
+      ]
+    },
+    {
+      "key": "ui.street_trade.quantity",
+      "lines": [
+        "Mám záujem o {item}. Koľko kusov predávaš?"
+      ]
+    },
+    {
+      "key": "ui.street_trade.one",
+      "lines": [
+        "Predať jeden kus"
+      ]
+    },
+    {
+      "key": "ui.street_trade.all",
+      "lines": [
+        "Predať všetky kusy ({count})"
+      ]
+    },
+    {
+      "key": "ui.street_trade.initial_offer",
+      "lines": [
+        "Za {count}× {item} ti dám ${price}."
+      ]
+    },
+    {
+      "key": "ui.street_trade.final_offer",
+      "lines": [
+        "Moja posledná ponuka za {count}× {item} je ${price}."
+      ]
+    },
+    {
+      "key": "ui.street_trade.accept",
+      "lines": [
+        "Prijať ${price}"
+      ]
+    },
+    {
+      "key": "ui.street_trade.counter",
+      "lines": [
+        "Navrhnúť ${price}"
+      ]
+    },
+    {
+      "key": "ui.street_trade.leave",
+      "lines": [
+        "Odísť"
+      ]
+    },
+    {
+      "key": "ui.street_trade.interrupted",
+      "lines": [
+        "Obchod sa prerušil."
+      ]
+    },
+    {
+      "key": "ui.street_trade.unavailable",
+      "lines": [
+        "Obchod sa už nedá dokončiť."
+      ]
+    },
+    {
+      "key": "ui.street_trade.sold",
+      "lines": [
+        "Predané {count}× {item} za ${price}."
+      ]
+    },
+    {
+      "key": "ui.product_effects.consume_hint",
+      "lines": [
+        "[X] Použiť vybranú drogu"
+      ]
+    },
+    {
+      "key": "ui.product_effects.select_product",
+      "lines": [
+        "Vyber v inventári drogu, ktorú chceš použiť."
+      ]
+    },
+    {
+      "key": "ui.product_effects.consumed",
+      "lines": [
+        "Práve si použil {item}."
+      ]
+    },
+    {
+      "key": "ui.product_effects.concealment",
+      "lines": [
+        "Skrátený dohľad polície"
+      ]
+    },
+    {
+      "key": "ui.product_effects.widerview",
+      "lines": [
+        "Širšie zorné pole"
+      ]
+    },
+    {
+      "key": "ui.product_effects.sprint",
+      "lines": [
+        "Rýchlejší šprint"
+      ]
+    },
+    {
+      "key": "ui.product_effects.walk",
+      "lines": [
+        "Rýchlejšia chôdza"
+      ]
+    },
+    {
+      "key": "item.Mushroom.name",
+      "lines": [
+        "Huby"
+      ]
+    },
+    {
+      "key": "item.CocaLeaf.name",
+      "lines": [
+        "Listy koky"
       ]
     }
   ]

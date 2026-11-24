@@ -140,7 +140,10 @@ public static class CampaignRuntimeChecks
             if (!director.Progress.Finished)
             {
                 Require(director.IsBetweenLevels && hud.ResultsVisible && Time.timeScale == 0, "Level summary did not pause gameplay");
-                director.ContinueCampaign();
+                string nextLabel = LocalizationManager.GetOrFallback("ui.city.next_chapter_enter", "NEXT CHAPTER  [ENTER]");
+                var nextButton = Array.Find(hud.GetComponentsInChildren<UnityEngine.UI.Button>(), button => button.name == nextLabel);
+                Require(nextButton != null, "Level summary is missing the Next Chapter button");
+                nextButton.onClick.Invoke();
                 Require(!director.IsBetweenLevels && Time.timeScale == 1, "Continue did not resume gameplay");
             }
         }
@@ -163,7 +166,7 @@ public static class CampaignRuntimeChecks
         Require(!director.HasEnded && !hud.ResultsVisible && Time.timeScale == 1 && !player.IsDialogueInputLocked,
             "Continue Free Roam did not release controls");
         // Exercise the exact null-Current HUD path that used to throw on the next frame.
-        hud.Refresh(director.Progress, 0, "", "Clear", "", "Workshop");
+        hud.Refresh(director.Progress, CityPoliceStatus.Clear);
         typeof(CityMissionDirector).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(director, null);
         signal.Invoke(director, new object[] { "finish_campaign" });
         typeof(CityMissionDirector).GetMethod("Fail", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(director, new object[] { "probe", "regression" });

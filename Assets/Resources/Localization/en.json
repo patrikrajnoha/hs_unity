@@ -1084,7 +1084,7 @@
     {
       "key": "city.contract.first_delivery.title",
       "lines": [
-        "01 / First impressions"
+        "First impressions"
       ]
     },
     {
@@ -1120,7 +1120,7 @@
     {
       "key": "city.contract.power_cut.title",
       "lines": [
-        "02 / Power cut"
+        "Power cut"
       ]
     },
     {
@@ -1162,7 +1162,7 @@
     {
       "key": "city.contract.paper_trail.title",
       "lines": [
-        "03 / Paper trail"
+        "Paper trail"
       ]
     },
     {
@@ -1198,7 +1198,7 @@
     {
       "key": "city.contract.cross_check.title",
       "lines": [
-        "04 / Cross-check"
+        "Cross-check"
       ]
     },
     {
@@ -1240,7 +1240,7 @@
     {
       "key": "city.contract.last_broadcast.title",
       "lines": [
-        "05 / The last broadcast"
+        "The last broadcast"
       ]
     },
     {
@@ -2342,9 +2342,63 @@
       ]
     },
     {
-      "key": "ui.city.continue_free_roam_enter",
+      "key": "ui.city.next_chapter_enter",
       "lines": [
-        "CONTINUE FREE ROAM  [ ENTER ]"
+        "NEXT CHAPTER  [ENTER]"
+      ]
+    },
+    {
+      "key": "ui.city.next_chapter_title",
+      "lines": [
+        "Next chapter · {title}"
+      ]
+    },
+    {
+      "key": "ui.city.chapter",
+      "lines": [
+        "CHAPTER {current}/{total}"
+      ]
+    },
+    {
+      "key": "ui.city.mission_time",
+      "lines": [
+        "TIME LEFT"
+      ]
+    },
+    {
+      "key": "ui.city.police",
+      "lines": [
+        "POLICE"
+      ]
+    },
+    {
+      "key": "ui.city.hold_position",
+      "lines": [
+        "Stay in position · {seconds} s"
+      ]
+    },
+    {
+      "key": "ui.city.talk",
+      "lines": [
+        "Talk"
+      ]
+    },
+    {
+      "key": "ui.city.open_door",
+      "lines": [
+        "Open door"
+      ]
+    },
+    {
+      "key": "ui.city.close_door",
+      "lines": [
+        "Close door"
+      ]
+    },
+    {
+      "key": "ui.city.inspect",
+      "lines": [
+        "Inspect"
       ]
     },
     {
@@ -2986,19 +3040,19 @@
     {
       "key": "ui.city.district_clear",
       "lines": [
-        "DISTRICT / Clear"
+        "Clear"
       ]
     },
     {
       "key": "ui.city.police_searching",
       "lines": [
-        "POLICE / Searching"
+        "Searching"
       ]
     },
     {
       "key": "ui.city.police_pursuit",
       "lines": [
-        "POLICE / Pursuit"
+        "Pursuit"
       ]
     },
     {
@@ -3209,6 +3263,192 @@
       "key": "ui.city.performance",
       "lines": [
         "Last mission: {efficiency}% efficiency / {navigation}s navigating / {detections} detections"
+      ]
+    },
+    {
+      "key": "ui.street_trade.balance",
+      "lines": [
+        "CASH  ${amount}"
+      ]
+    },
+    {
+      "key": "ui.street_trade.offer",
+      "lines": [
+        "Offer drugs"
+      ]
+    },
+    {
+      "key": "ui.street_trade.select_product",
+      "lines": [
+        "Select a drug in your inventory first."
+      ]
+    },
+    {
+      "key": "ui.street_trade.cooldown",
+      "lines": [
+        "Give this person some time before trying again."
+      ]
+    },
+    {
+      "key": "ui.street_trade.ignored",
+      "lines": [
+        "{npc} refused your offer and ignored you."
+      ]
+    },
+    {
+      "key": "ui.street_trade.reported",
+      "lines": [
+        "{npc} refused and is calling the police."
+      ]
+    },
+    {
+      "key": "ui.street_trade.report_countdown",
+      "lines": [
+        "In {seconds} s"
+      ]
+    },
+    {
+      "key": "ui.street_trade.report_hint",
+      "lines": [
+        "Someone called the police. Move away before the pursuit starts."
+      ]
+    },
+    {
+      "key": "ui.street_trade.no_response",
+      "lines": [
+        "No officer responded to the report."
+      ]
+    },
+    {
+      "key": "ui.street_trade.pursuit",
+      "lines": [
+        "An officer responded to the report. Lose the police."
+      ]
+    },
+    {
+      "key": "ui.street_trade.caught",
+      "lines": [
+        "The police caught you and sent you back to the district entrance."
+      ]
+    },
+    {
+      "key": "ui.street_trade.quantity",
+      "lines": [
+        "I'm interested in {item}. How many are you selling?"
+      ]
+    },
+    {
+      "key": "ui.street_trade.one",
+      "lines": [
+        "Sell one"
+      ]
+    },
+    {
+      "key": "ui.street_trade.all",
+      "lines": [
+        "Sell all {count}"
+      ]
+    },
+    {
+      "key": "ui.street_trade.initial_offer",
+      "lines": [
+        "I'll pay ${price} for {count}× {item}."
+      ]
+    },
+    {
+      "key": "ui.street_trade.final_offer",
+      "lines": [
+        "My final offer is ${price} for {count}× {item}."
+      ]
+    },
+    {
+      "key": "ui.street_trade.accept",
+      "lines": [
+        "Accept ${price}"
+      ]
+    },
+    {
+      "key": "ui.street_trade.counter",
+      "lines": [
+        "Ask for ${price}"
+      ]
+    },
+    {
+      "key": "ui.street_trade.leave",
+      "lines": [
+        "Walk away"
+      ]
+    },
+    {
+      "key": "ui.street_trade.interrupted",
+      "lines": [
+        "The deal was interrupted."
+      ]
+    },
+    {
+      "key": "ui.street_trade.unavailable",
+      "lines": [
+        "The deal could no longer be completed."
+      ]
+    },
+    {
+      "key": "ui.street_trade.sold",
+      "lines": [
+        "Sold {count}× {item} for ${price}."
+      ]
+    },
+    {
+      "key": "ui.product_effects.consume_hint",
+      "lines": [
+        "[X] Use selected drug"
+      ]
+    },
+    {
+      "key": "ui.product_effects.select_product",
+      "lines": [
+        "Select a drug in your inventory to use it."
+      ]
+    },
+    {
+      "key": "ui.product_effects.consumed",
+      "lines": [
+        "Used {item}."
+      ]
+    },
+    {
+      "key": "ui.product_effects.concealment",
+      "lines": [
+        "Reduced police sight"
+      ]
+    },
+    {
+      "key": "ui.product_effects.widerview",
+      "lines": [
+        "Wider field of view"
+      ]
+    },
+    {
+      "key": "ui.product_effects.sprint",
+      "lines": [
+        "Faster sprinting"
+      ]
+    },
+    {
+      "key": "ui.product_effects.walk",
+      "lines": [
+        "Faster walking"
+      ]
+    },
+    {
+      "key": "item.Mushroom.name",
+      "lines": [
+        "Mushrooms"
+      ]
+    },
+    {
+      "key": "item.CocaLeaf.name",
+      "lines": [
+        "Coca Leaves"
       ]
     }
   ]

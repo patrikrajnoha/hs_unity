@@ -69,6 +69,9 @@ public static class ProductItemFactory
         return item != null && item.category == ProductCategory.PackagedProduct && item.isPackaged;
     }
 
+    public static bool IsDrugProduct(Item item) => item != null && item.isIllegal &&
+        (IsRawProduct(item) || IsPackagedProduct(item) || item.name == "Pack");
+
     public static int GetMarketPrice(Item item)
     {
         if (item == null)
@@ -164,7 +167,7 @@ public static class ProductItemFactory
         packaged.category = ProductCategory.PackagedProduct;
         packaged.quality = rawProduct.quality;
         packaged.productId = rawProduct.productId + "_packaged";
-        packaged.baseProductId = rawProduct.baseProductId;
+        packaged.baseProductId = string.IsNullOrEmpty(rawProduct.baseProductId) ? rawProduct.name : rawProduct.baseProductId;
         packaged.effectName = rawProduct.effectName;
         packaged.effectValue = rawProduct.effectValue;
         packaged.mixCount = rawProduct.mixCount;

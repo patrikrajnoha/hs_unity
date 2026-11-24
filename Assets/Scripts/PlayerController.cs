@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     private CharacterController controller;
     private PlayerCameraModeSwitcher cameraModeSwitcher;
+    private HighStakes.City.PlayerProductEffects productEffects;
     private Vector2 moveInput;
     private Vector3 velocity;
     private bool isGrounded;
@@ -37,6 +38,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         cameraModeSwitcher = GetComponent<PlayerCameraModeSwitcher>();
+        productEffects = GetComponent<HighStakes.City.PlayerProductEffects>();
         var input = GetComponent<PlayerInput>();
         if (input != null && input.actions != null)
             input.SwitchCurrentActionMap("Gameplay");
@@ -148,6 +150,8 @@ public class PlayerController : MonoBehaviour
         if (!dialogueInputLocked)
         {
             float currentSpeed = isRunning ? runSpeed : moveSpeed;
+            if (productEffects != null)
+                currentSpeed *= isRunning ? productEffects.SprintSpeedMultiplier : productEffects.WalkSpeedMultiplier;
             Vector3 move = cameraModeSwitcher != null && cameraModeSwitcher.IsThirdPerson
                 ? cameraModeSwitcher.GetMovementDirection(moveInput)
                 : transform.right * moveInput.x + transform.forward * moveInput.y;

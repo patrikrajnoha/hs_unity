@@ -94,7 +94,10 @@ public class PoliceBehavior : MonoBehaviour, INpcBehavior
             return;
         }
         Transform target = gm.criminal.transform;
-        HasVisualContact = CanSeeTarget(target, isChasing ? pursuitViewDistance : saleDetectionDistance);
+        float viewDistance = isChasing ? pursuitViewDistance : saleDetectionDistance;
+        if (target.TryGetComponent(out HighStakes.City.PlayerProductEffects productEffects))
+            viewDistance *= productEffects.PoliceSightMultiplier;
+        HasVisualContact = CanSeeTarget(target, viewDistance);
         if (!isChasing)
         {
             if (!HasVisualContact && !isCalled) return;

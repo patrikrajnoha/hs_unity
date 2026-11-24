@@ -125,8 +125,7 @@ public class GameMaster : MonoBehaviour
     }
 
     /// <summary>
-    /// Starts the wanted chase only after the per-player heat controller reaches
-    /// 100%. Seeing a deal never calls this method and never causes Game Over.
+    /// Starts a wanted chase after maximum heat or a dispatched police report.
     /// </summary>
     public bool BeginPoliceChase(GameObject suspect)
     {
