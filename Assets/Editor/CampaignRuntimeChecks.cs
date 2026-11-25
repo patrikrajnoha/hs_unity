@@ -88,6 +88,7 @@ public static class CampaignRuntimeChecks
     }
     private static void CheckRuntime()
     {
+        AudioRuntimeChecks.Check();
         GameLogger.GameplaySource = "signal_validation";
         GameLogger.Track("validation_run", new GameplayEventData { reason = "signal_validation" });
         var director = UnityEngine.Object.FindAnyObjectByType<CityMissionDirector>();
@@ -96,7 +97,13 @@ public static class CampaignRuntimeChecks
         Require(director != null && player != null && hud != null, "Campaign did not initialise");
         Require(director.HasPriorityInteraction(player.gameObject), "Story interaction did not take priority over nearby pickups");
         var interiors = UnityEngine.Object.FindObjectsByType<CityInterior>();
-        Require(interiors.Length == 4, "Expected four real interiors");
+        Require(interiors.Length == 5, "Expected four mission interiors and a separate production warehouse");
+        var farm = UnityEngine.Object.FindAnyObjectByType<SafehouseFarmingSystem>();
+        Require(farm != null && farm.GetComponent<CityInterior>().roomName == "Warehouse / Production", "Production is not inside its dedicated warehouse");
+        var productionDoor = Array.Find(UnityEngine.Object.FindObjectsByType<CityDoor>(), d => d.roomName == "Warehouse / Production");
+        Require(productionDoor != null && productionDoor.minimumLevel == 1, "Production warehouse is locked behind a mission");
+        Require(farm.PackagingStation != null && farm.MixingStation == null && farm.PlantPrefab != null,
+            "Production warehouse lacks its farming/packing equipment");
         Require(NavMesh.CalculateTriangulation().indices.Length > 0, "Runtime navigation was not baked");
         foreach (var room in interiors)
         {
@@ -131,6 +138,15 @@ public static class CampaignRuntimeChecks
             Require(door.minimumLevel == 1 || !door.Toggle(1), "A locked room opened before its level");
             Require(door.Toggle(5), "Door did not unlock");
         }
+        foreach (var contract in director.Progress.Story.contracts)
+            foreach (var step in contract.steps)
+                Require(!farm.GetComponent<CityInterior>().Contains(actors[step.target].transform.position), "A mission target was placed in the production warehouse");
+        Require(Vector3.Distance(actors["ledger"].transform.position, new Vector3(35, 1.375f, -22)) < .01f &&
+                Vector3.Distance(actors["manifest"].transform.position, new Vector3(29, 1.19f, -20)) < .01f,
+            "Original archive mission positions changed");
+        WarehouseInventoryChecks.Check();
+        WarehouseInventoryChecks.CheckSimplifiedProduction();
+        Debug.Log("WAREHOUSE LAYOUT PASS: separate unlocked production, original mission positions and no overlapping targets.");
         var signal = typeof(CityMissionDirector).GetMethod("Signal", BindingFlags.Instance | BindingFlags.NonPublic);
         Require(signal != null, "Progression bridge missing");
         while (!director.Progress.Finished)

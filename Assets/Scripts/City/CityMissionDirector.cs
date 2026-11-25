@@ -206,6 +206,7 @@ namespace HighStakes.City
             actors.TryGetValue("officer", out CityActor mapOfficer);
             hud.UpdateMap(player.transform.position, facing, target != null ? (Vector3?)target.transform.position : null,
                 mapOfficer != null ? (Vector3?)mapOfficer.transform.position : null);
+            if (WarehouseGuideUI.IsOpen) return;
             if (keyboard != null && keyboard.eKey.wasPressedThisFrame && canInteract) Interact(nearby);
             else if (keyboard != null && keyboard.gKey.wasPressedThisFrame && customer != null) OfferProduct(customer);
             else if (keyboard != null && keyboard.xKey.wasPressedThisFrame && productEffects != null && inventory != null)
@@ -466,7 +467,7 @@ namespace HighStakes.City
                 { progress.KnowsRoute = true; progress.Strategy = "locker_code"; }
               hud.Notify(LocalizationManager.GetOrFallback("ui.notice.locker_code", "Locker code learned. The ledger can be taken without an alarm.")); }
             else if (choice.signal == "mistake")
-            { progress.RecordMistake(); SaveCheckpoint(); hud.Notify(LocalizationManager.GetOrFallback("ui.notice.wrong_answer", "Wrong answer. -75 score. Check the clue and try again.")); }
+            { GameAudio.Play(AudioCue.Failure); progress.RecordMistake(); SaveCheckpoint(); hud.Notify(LocalizationManager.GetOrFallback("ui.notice.wrong_answer", "Wrong answer. -75 score. Check the clue and try again.")); }
             else if (choice.signal != "puzzle_click" && !string.IsNullOrEmpty(choice.signal)) Signal(choice.signal);
             if (betweenLevels || ended) return;
             if (string.IsNullOrEmpty(choice.next)) CloseConversation();
@@ -488,6 +489,7 @@ namespace HighStakes.City
             if (signal == "collect_ledger" && progress.Step?.signal == signal) progress.Strategy = quiet ? "locker_code" : "forced_locker";
             data.strategy = progress.Strategy;
             if (!progress.Signal(signal)) return;
+            GameAudio.Play(completed != progress.ContractIndex ? AudioCue.Success : signal.StartsWith("collect_") ? AudioCue.Pickup : AudioCue.Objective);
             GameLogger.Track("objective_complete", data); objectiveElapsed = 0;
             if (starting) { data.mode = "mission"; GameLogger.Track("mission_start", data); }
             if (signal.StartsWith("collect_"))
@@ -580,6 +582,7 @@ namespace HighStakes.City
             if (ended || betweenLevels || progress.Finished) return;
             var data = EventData(); data.reason = reasonId; data.objectiveSeconds = objectiveElapsed;
             GameLogger.Track("mission_failed", data); objectiveElapsed = 0;
+            GameAudio.Play(AudioCue.Failure);
             CloseConversation(); progress.Fail(); safeTime = 0;
             GameLogger.LogWarning("campaign", "contract_failed", $"Contract {progress.ContractIndex + 1} failed: {reason}");
             ClearPoliceAndRespawn();

@@ -1,64 +1,49 @@
 using UnityEngine;
+using HighStakes.City;
 
+// Resolve one pickup before any pickup/station processes its E key.
+[DefaultExecutionOrder(-100)]
 public class ObjectDetector : MonoBehaviour
 {
-    public float pickupRange = 4f;
-    private PickableObject closestObject;
+    public float pickupRange = 3f;
+    public PickableObject CurrentTarget { get; private set; }
     private Camera playerCamera;
 
-    private void Start()
+    private void Start() { playerCamera = GetComponentInChildren<Camera>(); }
+    private void Update() { RefreshTarget(); }
+
+    public void RefreshTarget()
     {
-        playerCamera = this.GetComponentInChildren<Camera>();
-    }
-
-    void Update()
-    {
-        if (GameMaster.GameOverActive)
-            return;
-
-        FindClosestObject();
-
-        // Highlight the closest object
-        if (closestObject != null)
-        {
-            closestObject.Highlight(true);
-            closestObject.isLooking = true;
-        }
-    }
-
-    void FindClosestObject()
-    {
-        PickableObject[] objects = FindObjectsOfType<PickableObject>();
-        float closestDistance = Mathf.Infinity;
+        if (playerCamera == null) playerCamera = GetComponentInChildren<Camera>();
         PickableObject nearest = null;
-
-        foreach (PickableObject obj in objects)
+        float best = float.MaxValue;
+        bool blocked = GameMaster.GameOverActive || WarehouseGuideUI.IsOpen || Time.timeScale <= 0;
+        var controller = GetComponent<PlayerController>();
+        blocked |= controller != null && controller.IsDialogueInputLocked;
+        foreach (var obj in FindObjectsByType<PickableObject>(FindObjectsSortMode.None))
         {
-            float distance = Vector3.Distance(transform.position, obj.transform.position);
-            obj.isInRange = false;
-            obj.isLooking = false; // reset
-
-            // Check distance and if player is roughly looking at it
-            Vector3 direction = (obj.transform.position - playerCamera.transform.position).normalized;
-            float dot = Vector3.Dot(playerCamera.transform.forward, direction);
-
-            if (distance < pickupRange && dot > 0.95f) // looking at object
+            obj.isInRange = obj.isLooking = false;
+            if (blocked || obj.item == null || obj.CompareTag("pot")) continue;
+            if (CityInteractionTargeting.TryScore(transform, playerCamera, obj.transform, pickupRange, out float score) && score < best)
             {
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    nearest = obj;
-                }
+                best = score;
+                nearest = obj;
             }
         }
+        if (CurrentTarget != null && CurrentTarget != nearest) CurrentTarget.Highlight(false);
+        CurrentTarget = nearest;
+        if (nearest == null) return;
+        nearest.isInRange = nearest.isLooking = true;
+        nearest.Highlight(true);
+    }
 
-        // Remove highlight from previous object
-        if (closestObject != null && closestObject != nearest)
-            closestObject.Highlight(false);
-
-        closestObject = nearest;
-
-        if (closestObject != null)
-            closestObject.isInRange = true;
+    private void OnDisable()
+    {
+        if (CurrentTarget != null)
+        {
+            CurrentTarget.isInRange = CurrentTarget.isLooking = false;
+            CurrentTarget.Highlight(false);
+        }
+        CurrentTarget = null;
     }
 }

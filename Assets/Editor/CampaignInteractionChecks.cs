@@ -76,7 +76,7 @@ public static class CampaignInteractionChecks
         yield return Continue(2);
 
         yield return Talk("mara", 0, 0);
-        yield return Door("Warehouse");
+        yield return Door("Archive");
         yield return Talk("ledger", 0);
         Require(director.IsConversationActive && director.Progress.Step.signal == "collect_ledger", "Unknown code was accepted");
         yield return Tap(Key.Digit2);
@@ -89,7 +89,7 @@ public static class CampaignInteractionChecks
         yield return Talk("mara", 0, 0);
         yield return Talk("ada", 0);
         Require(director.Progress.KnowsRoute, "Ada code was not learned");
-        yield return Door("Warehouse");
+        yield return Door("Archive");
         yield return Talk("ledger", 0);
         Require(director.Progress.Strategy == "locker_code" && !ledgerOfficer.isChasing, "Code route started a new pursuit");
         yield return Hold("safehouse", 5.5f);

@@ -1168,19 +1168,19 @@
     {
       "key": "city.contract.paper_trail.description",
       "lines": [
-        "Vojdi do skladu, získaj účtovnú knihu a zbav sa prenasledovateľov."
+        "Vojdi do archívu, získaj účtovnú knihu a zbav sa prenasledovateľov."
       ]
     },
     {
       "key": "city.contract.paper_trail.step.0.objective",
       "lines": [
-        "Vypočuj si Maru o skladovej účtovnej knihe."
+        "Vypočuj si Maru o archívovej účtovnej knihe."
       ]
     },
     {
       "key": "city.contract.paper_trail.step.1.objective",
       "lines": [
-        "Otvor sklad a nájdi účtovnú knihu. Ada ti môže dať kód skrinky."
+        "Otvor archív a nájdi účtovnú knihu. Ada ti môže dať kód skrinky."
       ]
     },
     {
@@ -1216,7 +1216,7 @@
     {
       "key": "city.contract.cross_check.step.1.objective",
       "lines": [
-        "Preskúmaj prepravný manifest vo vnútri skladu."
+        "Preskúmaj prepravný manifest vo vnútri archívu."
       ]
     },
     {
@@ -1402,7 +1402,7 @@
     {
       "key": "city.conversation.mara.ledger.text",
       "lines": [
-        "Záznamy v sklade odhalia ľudí, ktorí vydierajú naše obchody. Vyber si postup: požiadaj Adu o kód pre tichý prístup alebo vylom skrinku a čel poplachu. Poplach znamená stratu bonusu +300 za čistý priebeh. Potom sa ukry v dielni a vráť sa ku mne."
+        "Záznamy v archíve odhalia ľudí, ktorí vydierajú naše obchody. Vyber si postup: požiadaj Adu o kód pre tichý prístup alebo vylom skrinku a čel poplachu. Poplach znamená stratu bonusu +300 za čistý priebeh. Potom sa ukry v dielni a vráť sa ku mne."
       ]
     },
     {
@@ -1474,7 +1474,7 @@
     {
       "key": "city.conversation.ada.route.text",
       "lines": [
-        "Kód skrinky: 0417. S ním sa alarm pri účtovnej knihe nespustí. Vchod do skladu je od cesty. Ak neskôr nájdeš prepravné dokumenty, hľadaj zhodné číslo zásielky a never len menu."
+        "Kód skrinky: 0417. S ním sa alarm pri účtovnej knihe nespustí. Vchod do archívu je od cesty. Ak neskôr nájdeš prepravné dokumenty, hľadaj zhodné číslo zásielky a never len menu."
       ]
     },
     {
@@ -1588,7 +1588,7 @@
     {
       "key": "city.conversation.officer.idle.text",
       "lines": [
-        "Dobré popoludnie. Neblokujte priechody a nechajte skladové skrinky na pokoji. Ak začujete alarm, nenúťte ma bežať. Ja aj moje kolená máme ťažký týždeň."
+        "Dobré popoludnie. Neblokujte priechody a nechajte archívne skrinky na pokoji. Ak začujete alarm, nenúťte ma bežať. Ja aj moje kolená máme ťažký týždeň."
       ]
     },
     {
@@ -1630,7 +1630,7 @@
     {
       "key": "city.conversation.local.rumor.text",
       "lines": [
-        "Kaviareň je otvorená zákazníkom. Dielňa potrebuje opravy. Sklad a rádiový dom sa odomknú, keď ti Mara začne dôverovať s náročnejšími úlohami. Hľadaj nefritové označenia dverí."
+        "Kaviareň je otvorená zákazníkom. Dielňa potrebuje opravy. Archív a rádiový dom sa odomknú, keď ti Mara začne dôverovať s náročnejšími úlohami. Hľadaj nefritové označenia dverí."
       ]
     },
     {
@@ -1834,7 +1834,7 @@
     {
       "key": "city.conversation.mara.power_done.text",
       "lines": [
-        "Svetlá opäť svietia. Riadil si sa pokynmi namiesto hádania. Tu máš 220 $. Teraz môžeme riešiť skladové záznamy."
+        "Svetlá opäť svietia. Riadil si sa pokynmi namiesto hádania. Tu máš 220 $. Teraz môžeme riešiť archívne záznamy."
       ]
     },
     {
@@ -1858,7 +1858,7 @@
     {
       "key": "city.conversation.mara.evidence.text",
       "lines": [
-        "Porovnaj skladový manifest s Tomasovou faktúrou z kaviarne. Zapamätaj si spoločné ID zásielky. Potom presvedč Adu, aby svedčila. Čítaj pozorne: nesprávne ID ti zníži skóre. Za dôkazy, ktoré obstoja, dostaneš 420 $."
+        "Porovnaj archívny manifest s Tomasovou faktúrou z kaviarne. Zapamätaj si spoločné ID zásielky. Potom presvedč Adu, aby svedčila. Čítaj pozorne: nesprávne ID ti zníži skóre. Za dôkazy, ktoré obstoja, dostaneš 420 $."
       ]
     },
     {
@@ -1876,7 +1876,7 @@
     {
       "key": "city.conversation.evidence.manifest.speaker",
       "lines": [
-        "Skladový manifest"
+        "Archívny manifest"
       ]
     },
     {
@@ -1900,7 +1900,7 @@
     {
       "key": "city.conversation.evidence.invoice.text",
       "lines": [
-        "Faktúra J-417 zodpovedá skladovému manifestu. Tomas zaplatil bežný poplatok za prepravu; ďalšia platba bola požadovaná osobitne. Ručne písaná poznámka potvrdzuje rádiový kanál: 108.4."
+        "Faktúra J-417 zodpovedá archívnemu manifestu. Tomas zaplatil bežný poplatok za prepravu; ďalšia platba bola požadovaná osobitne. Ručne písaná poznámka potvrdzuje rádiový kanál: 108.4."
       ]
     },
     {
@@ -2014,7 +2014,7 @@
     {
       "key": "city.conversation.final.radio.text",
       "lines": [
-        "Dôkazy sú načítané. Vyber verejnú núdzovú frekvenciu zo skladových a kaviarenských dokumentov."
+        "Dôkazy sú načítané. Vyber verejnú núdzovú frekvenciu zo archívnych a kaviarenských dokumentov."
       ]
     },
     {
@@ -3068,9 +3068,9 @@
       ]
     },
     {
-      "key": "city.actor.door_warehouse_records.name",
+      "key": "city.actor.door_archive_records.name",
       "lines": [
-        "Dvere / Sklad / Archív"
+        "Dvere / Archív / Archív"
       ]
     },
     {
@@ -3118,7 +3118,7 @@
     {
       "key": "city.actor.ledger.name",
       "lines": [
-        "Skladová skrinka"
+        "Archívna skrinka"
       ]
     },
     {
@@ -3148,7 +3148,7 @@
     {
       "key": "city.actor.manifest.name",
       "lines": [
-        "Sklad / Manifest"
+        "Archív / Manifest"
       ]
     },
     {
@@ -3172,7 +3172,7 @@
     {
       "key": "city.conversation.ledger.open.speaker",
       "lines": [
-        "Skrinka v sklade"
+        "Skrinka v archíve"
       ]
     },
     {
@@ -3449,6 +3449,234 @@
       "key": "item.CocaLeaf.name",
       "lines": [
         "Listy koky"
+      ]
+    },
+    {
+      "key": "ui.audio.master",
+      "lines": [
+        "Celková hlasitosť"
+      ]
+    },
+    {
+      "key": "ui.audio.music",
+      "lines": [
+        "Hudba"
+      ]
+    },
+    {
+      "key": "ui.audio.effects",
+      "lines": [
+        "Zvukové efekty"
+      ]
+    },
+    {
+      "key": "ui.audio.ambience",
+      "lines": [
+        "Ruch mesta"
+      ]
+    },
+    {
+      "key": "ui.audio.mute",
+      "lines": [
+        "STLMIŤ VŠETKO"
+      ]
+    },
+    {
+      "key": "ui.audio.unmute",
+      "lines": [
+        "ZAPNÚŤ ZVUK"
+      ]
+    },
+    {
+      "key": "ui.audio.defaults",
+      "lines": [
+        "OBNOVIŤ ZVUK"
+      ]
+    },
+    {
+      "key": "city.actor.door_warehouse_production.name",
+      "lines": [
+        "Dvere / Sklad / Pestovanie a balenie"
+      ]
+    },
+    {
+      "key": "ui.warehouse.production",
+      "lines": [
+        "PESTOVANIE / BALENIE / PREDAJ"
+      ]
+    },
+    {
+      "key": "ui.warehouse.inventory_title",
+      "lines": [
+        "INVENTÁR · 12 políčok"
+      ]
+    },
+    {
+      "key": "ui.warehouse.controls",
+      "lines": [
+        "Klikni na predmet a vyber ho. Podrž ľavé tlačidlo myši a presuň ho na iné políčko."
+      ]
+    },
+    {
+      "key": "ui.warehouse.help",
+      "lines": [
+        "Návod [H]"
+      ]
+    },
+    {
+      "key": "ui.warehouse.close",
+      "lines": [
+        "Zavrieť [Q]"
+      ]
+    },
+    {
+      "key": "ui.warehouse.guide_title",
+      "lines": [
+        "SKLAD · Od semienka po balíček"
+      ]
+    },
+    {
+      "key": "ui.warehouse.guide_body",
+      "lines": [
+        "1. ZOBER VÝBAVU\nPriblíž sa, pozri na predmet a stlač E. Vezmi semienko zo stola, krhlu, nožnice a prázdne vrecko.\n2. ZASAĎ\nV inventári Q vyber semienko. Zavri ho, pozri na voľný kvetináč zblízka a stlač F.\n3. POLEJ\nVyber krhlu. Pri zdroji vody ju naplň cez E, pri zasadenej rastline stlač C. Máš 45 sekúnd na poliatie.\n4. POČKAJ A POZBIERAJ\nRast sleduj nad rastlinou (približne 18 s). Keď dozreje, vyber nožnice a stlač E. Suchú rastlinu odstráň hrabľami cez E.\n5. ZABAĽ\nMaj úrodu a prázdne vrecko. Pozri na baliaci stôl a stlač E. Hotový balíček nájdeš priamo v inventári Q.\n6. POUŽI ALEBO PREDAJ\nQ / klik vyberie predmet, Q zavrie inventár. Koliesko alebo 1–9 mení výber aj počas hry. G ponúkne produkt človeku na ulici, X ho spotrebuje. Ľavý klik predmet vyhodí."
+      ]
+    },
+    {
+      "key": "ui.warehouse.shortcuts",
+      "lines": [
+        "[Q] Inventár a presúvanie vecí     [H] Ako pestovať a baliť"
+      ]
+    },
+    {
+      "key": "ui.warehouse.inventory_shortcut",
+      "lines": [
+        "[Q] Inventár"
+      ]
+    },
+    {
+      "key": "ui.warehouse.empty",
+      "lines": [
+        "Prázdny inventár.\n\nPozri na predmet zblízka a zober ho cez E."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_after_close",
+      "lines": [
+        "Q zavrie inventár.\nPouži predmet pri správnom mieste podľa výzvy na obrazovke."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_seed",
+      "lines": [
+        "Zavri cez Q.\nPri prázdnom kvetináči stlač F."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_can",
+      "lines": [
+        "Zavri cez Q.\nE pri vode naplní krhlu. C pri rastline ju poleje."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_pruner",
+      "lines": [
+        "Zavri cez Q.\nPri zrelej rastline stlač E a pozbieraj úrodu."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_rake",
+      "lines": [
+        "Zavri cez Q.\nPri suchej rastline stlač E a vyčisti kvetináč."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_bag",
+      "lines": [
+        "Zavri cez Q.\nS úrodou pri baliacom stole stlač E."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_package",
+      "lines": [
+        "Zavri cez Q.\nG pri človeku ponúkne produkt. X ho spotrebuje."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_crop",
+      "lines": [
+        "Zavri cez Q.\nS prázdnym vreckom pri baliacom stole stlač E."
+      ]
+    },
+    {
+      "key": "ui.warehouse.zone_seeds",
+      "lines": [
+        "1 · SEMIENKA"
+      ]
+    },
+    {
+      "key": "ui.warehouse.zone_can",
+      "lines": [
+        "KRHLA"
+      ]
+    },
+    {
+      "key": "ui.warehouse.zone_shears",
+      "lines": [
+        "NOŽNICE"
+      ]
+    },
+    {
+      "key": "ui.warehouse.zone_rake",
+      "lines": [
+        "HRABLE"
+      ]
+    },
+    {
+      "key": "ui.warehouse.zone_bags",
+      "lines": [
+        "PRÁZDNE VRECKÁ"
+      ]
+    },
+    {
+      "key": "ui.warehouse.zone_grow",
+      "lines": [
+        "2 · PESTOVANIE"
+      ]
+    },
+    {
+      "key": "ui.warehouse.zone_pack",
+      "lines": [
+        "3 · BALENIE"
+      ]
+    },
+    {
+      "key": "ui.warehouse.need_bag",
+      "lines": [
+        "Zober prázdne vrecko zo zásobovacieho stola."
+      ]
+    },
+    {
+      "key": "ui.warehouse.pack_action",
+      "lines": [
+        "Zabaliť"
+      ]
+    },
+    {
+      "key": "ui.warehouse.packed_inventory",
+      "lines": [
+        "Hotový balíček je v inventári [Q]."
+      ]
+    },
+    {
+      "key": "ui.warehouse.pack_failed",
+      "lines": [
+        "Uvoľni políčko v inventári. Suroviny zostali zachované."
+      ]
+    },
+    {
+      "key": "ui.warehouse.select_shears",
+      "lines": [
+        "Na zber vyber nožnice v inventári [Q]."
       ]
     }
   ]

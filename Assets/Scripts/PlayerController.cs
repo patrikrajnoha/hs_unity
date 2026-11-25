@@ -27,7 +27,18 @@ public class PlayerController : MonoBehaviour
     Vector2 currentMouseDeltaVelocity;
     public float mouseSmoothTime = 0.05f; // smaller = snappier
 
-    public bool IsDialogueInputLocked => dialogueInputLocked;
+    private bool inventoryInputLocked;
+    public bool IsDialogueInputLocked => dialogueInputLocked || inventoryInputLocked;
+
+    public void SetInventoryInputLocked(bool locked)
+    {
+        inventoryInputLocked = locked;
+        moveInput = Vector2.zero;
+        lookInput = Vector2.zero;
+        currentMouseDelta = Vector2.zero;
+        currentMouseDeltaVelocity = Vector2.zero;
+        isRunning = false;
+    }
 
     private void Awake()
     {
@@ -43,7 +54,7 @@ public class PlayerController : MonoBehaviour
         if (input != null && input.actions != null)
             input.SwitchCurrentActionMap("Gameplay");
 
-        if (!dialogueInputLocked) LockMouse();
+        if (!IsDialogueInputLocked) LockMouse();
     }
 
     public void ResetMotion() { velocity = Vector3.zero; }
@@ -111,12 +122,12 @@ public class PlayerController : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        moveInput = dialogueInputLocked ? Vector2.zero : context.ReadValue<Vector2>();
+        moveInput = IsDialogueInputLocked ? Vector2.zero : context.ReadValue<Vector2>();
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (!dialogueInputLocked && context.performed && isGrounded)
+        if (!IsDialogueInputLocked && context.performed && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             isGrounded = false; // prevent instant reset
@@ -125,7 +136,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnRun(InputAction.CallbackContext context)
     {
-        if (dialogueInputLocked)
+        if (IsDialogueInputLocked)
         {
             isRunning = false;
             return;
@@ -138,7 +149,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnLook(InputAction.CallbackContext context)
     {
-        lookInput = dialogueInputLocked ? Vector2.zero : context.ReadValue<Vector2>();
+        lookInput = IsDialogueInputLocked ? Vector2.zero : context.ReadValue<Vector2>();
     }
 
 
@@ -147,7 +158,7 @@ public class PlayerController : MonoBehaviour
         isGrounded = controller.isGrounded;
         if (isGrounded && velocity.y < 0) velocity.y = -2f;
         Vector3 horizontal = Vector3.zero;
-        if (!dialogueInputLocked)
+        if (!IsDialogueInputLocked)
         {
             float currentSpeed = isRunning ? runSpeed : moveSpeed;
             if (productEffects != null)
@@ -177,7 +188,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleLook()
     {
-        if (dialogueInputLocked)
+        if (IsDialogueInputLocked)
             return;
 
         Vector2 targetMouseDelta = lookInput * mouseSensitivity;

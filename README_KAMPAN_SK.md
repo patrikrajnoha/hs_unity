@@ -31,3 +31,25 @@ JSONL záznamy sa ukladajú automaticky a ostávajú v počítači. V editore ot
 Ide o samostatný Unity projekt s funkčnou prototypovou mapou a jednoduchými vlastnými modelmi. Neobsahuje chýbajúce Git LFS modely a textúry pôvodného repozitára. Päť levelov sú kapitoly v jednej mape, nie päť samostatných máp. Dialógy a misie sú v Assets/Resources/City/old_quarter_story.json.
 
 Overenie a jeho obmedzenia sú v CAMPAIGN_VALIDATION.md.
+
+
+## Samostatný sklad na voľné hranie
+
+Výrobný sklad s označením WAREHOUSE je západne od dielne pri Mare a je prístupný od začiatku. Obsahuje pestovanie, vodu, náradie, balenie a miešanie. Pripravené produkty môžeš ponúkať viacerým obyvateľom na ulici; jednotliví obyvatelia majú vlastný čas do ďalšej ponuky a môžu kúpiť, odmietnuť alebo zavolať políciu. Nie je to misijná budova.
+
+Päť pôvodných misií a všetky ich ciele zostávajú na pôvodných súradniciach. Pôvodná budova s účtovnou knihou a manifestom sa teraz volá ARCHIVE, aby sa odlíšila od skladu na voľnú výrobu. Poradie krokov, hádanky, odmeny a časové limity sa nemenia.
+
+### Inventár a sprievodca skladom
+
+- **Q** otvorí dosku inventára s 12 políčkami a uvoľní kurzor. Klik vyberie predmet; podržanie ľavého tlačidla a potiahnutie zmení poradie. Prázdne políčko presunie predmet na koniec zoznamu.
+- **Q**, **Escape** alebo tlačidlo Zavrieť vrátia ovládanie hráča. Klikanie v otvorenom inventári predmety nevyhadzuje. Po zavretí vyberáš aj kolieskom alebo klávesmi **1–9**; posledné tri políčka vyberieš myšou alebo kolieskom.
+- **H** v produkčnom sklade otvorí postup pestovania a balenia. Návod je dostupný aj tlačidlom v inventári, po slovensky aj anglicky.
+- Zber výbavy: **E**. Vybrané semienko pri prázdnom kvetináči: **F**. Vybraná krhla pri vode: **E**, pri zasadenej rastline: **C**. Polej do 45 sekúnd; rast po poliatí trvá približne 18 sekúnd. S vybranými nožnicami zober zrelú úrodu cez **E**. Hrabľami cez **E** odstrániš suchú rastlinu.
+- S úrodou a prázdnym vreckom pozri na baliaci stôl a stlač **E**; hotový balíček sa pridá rovno do inventára. Na ulici **G** ponúka vybraný produkt zákazníkovi; **X** ho spotrebuje. Ľavý klik počas hrania predmet vyhadzuje.
+- Počas otvoreného inventára čas hry a rast rastlín pokračujú. Pôvodné misie a ich umiestnenie zostávajú zachované.
+
+### Zjednodušený sklad
+
+Sklad má dva vyvýšené kvetináče, jeden zdroj vody, baliaci stôl a jeden označený stôl s piatimi zásobami. Miešanie, ďalšie plodiny, prísady, nábytok na oddych a prepínače svetiel sú zo skladu odstránené. Semienka a vrecká sa doplnia po dvoch sekundách. Výbava zostáva na mieste namiesto padania za stoly.
+
+Výber používa polohu predmetu na obrazovke, dosah od hráča a kontrolu prekážok. Funguje aj pri kamere za hráčom. Zbieranie má prednosť pred baliacim stolom a vodou, aby jedno E nespustilo viac úkonov. Po pozbieraní oboch plodov sa kvetináč uvoľní; dekoratívne listy ho už neblokujú.

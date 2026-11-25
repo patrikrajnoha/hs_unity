@@ -73,6 +73,8 @@ public class PauseMenuController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            var inventoryHud = FindAnyObjectByType<HighStakes.City.SafehouseInventoryHud>();
+            if (inventoryHud != null && inventoryHud.CloseForEscape()) return;
             if (cityMissionDirector == null)
                 cityMissionDirector = FindAnyObjectByType<HighStakes.City.CityMissionDirector>();
 
@@ -217,7 +219,7 @@ public class PauseMenuController : MonoBehaviour
         GameObject settingsCard = CreateUiObject("SettingsCard", settingsPanel.transform);
         RectTransform settingsCardRect = settingsCard.GetComponent<RectTransform>();
         Anchor(settingsCardRect, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            Vector2.zero, new Vector2(460f, 340f));
+            Vector2.zero, new Vector2(460f, 690f));
         Image cardImage = settingsCard.AddComponent<Image>();
         cardImage.color = new Color(0.09f, 0.145f, 0.243f, 0.98f);
         AddOutline(settingsCard, new Color(0.38f, 0.84f, 0.91f, 0.4f));
@@ -238,11 +240,15 @@ public class PauseMenuController : MonoBehaviour
             new Color(0.376f, 0.835f, 0.91f, 0.92f));
         languageLabel = languageButton.GetComponentInChildren<TMP_Text>(true);
         languageButton.onClick.AddListener(ToggleLanguage);
+        Anchor(minimapToggleButton.GetComponent<RectTransform>(), new Vector2(.5f, 1), new Vector2(.5f, 1), new Vector2(0, -105), new Vector2(360, 50));
+        Anchor(languageButton.GetComponent<RectTransform>(), new Vector2(.5f, 1), new Vector2(.5f, 1), new Vector2(0, -170), new Vector2(360, 50));
+        AudioSettingsPanel.Create(settingsCard.transform, -220);
 
         closeSettingsButton = CreateButton("CloseSettingsButton", settingsCard.transform, "", new Vector2(0f, -100f),
             new Color(0.38f, 0.45f, 0.56f, 0.92f));
         closeSettingsLabel = closeSettingsButton.GetComponentInChildren<TMP_Text>(true);
         closeSettingsButton.onClick.AddListener(CloseSettings);
+        Anchor(closeSettingsButton.GetComponent<RectTransform>(), new Vector2(.5f, 0), new Vector2(.5f, 0), new Vector2(0, 65), new Vector2(360, 50));
 
         settingsPanel.SetActive(false);
         UpdateLocalizedUi();
@@ -406,6 +412,7 @@ public class PauseMenuController : MonoBehaviour
 
         Button button = root.AddComponent<Button>();
         button.targetGraphic = image;
+        button.onClick.AddListener(() => GameAudio.Play(AudioCue.Click));
         ColorBlock colors = button.colors;
         colors.normalColor = colour;
         colors.highlightedColor = Color.Lerp(colour, Color.white, 0.18f);

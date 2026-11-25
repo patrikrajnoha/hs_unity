@@ -168,7 +168,7 @@ public sealed class HighStakesMainMenu : MonoBehaviour
 
         GameObject card = CreateUiObject("Main Menu Settings Card", settingsPanel.transform);
         Anchor(card.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
-            Vector2.zero, new Vector2(520f, 340f));
+            Vector2.zero, new Vector2(520f, 600f));
         Image cardImage = card.AddComponent<Image>();
         cardImage.color = Panel;
         AddOutline(card, new Color(Accent.r, Accent.g, Accent.b, 0.55f));
@@ -183,10 +183,13 @@ public sealed class HighStakesMainMenu : MonoBehaviour
             new Vector2(390f, 64f), Accent);
         languageLabel = languageButton.GetComponentInChildren<TMP_Text>(true);
         languageButton.onClick.AddListener(ToggleLanguage);
+        Anchor(languageButton.GetComponent<RectTransform>(), new Vector2(.5f, 1), new Vector2(.5f, 1), new Vector2(0, -115), new Vector2(390, 54));
+        AudioSettingsPanel.Create(card.transform, -165);
 
         Button backButton = CreateButton("BackButton", card.transform,
             LocalizationManager.GetOrFallback("ui.settings.back", "BACK"), new Vector2(0f, -75f),
             new Vector2(390f, 56f), Muted);
+        Anchor(backButton.GetComponent<RectTransform>(), new Vector2(.5f, 0), new Vector2(.5f, 0), new Vector2(0, 55), new Vector2(390, 50));
         backLabel = backButton.GetComponentInChildren<TMP_Text>(true);
         backButton.onClick.AddListener(CloseSettings);
 
@@ -237,6 +240,11 @@ public sealed class HighStakesMainMenu : MonoBehaviour
 
     private void Update()
     {
+        if (settingsPanel != null && settingsPanel.activeSelf)
+        {
+            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame) CloseSettings();
+            return;
+        }
         if (Keyboard.current != null &&
             (Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame))
         {
@@ -316,6 +324,7 @@ public sealed class HighStakesMainMenu : MonoBehaviour
         image.color = accent;
         Button button = objectRoot.AddComponent<Button>();
         button.targetGraphic = image;
+        button.onClick.AddListener(() => GameAudio.Play(AudioCue.Click));
         ColorBlock colors = button.colors;
         colors.normalColor = accent;
         colors.highlightedColor = Color.Lerp(accent, Color.white, 0.16f);

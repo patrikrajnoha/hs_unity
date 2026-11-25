@@ -38,6 +38,9 @@ public class PlantSpawner : MonoBehaviour
 
     void Update()
     {
+        if (HighStakes.City.WarehouseGuideUI.IsOpen || Time.timeScale <= 0) return;
+        var detector = GetComponent<ObjectDetector>();
+        if (detector != null && detector.CurrentTarget != null) return;
         if (!TryGetTargetPot(out GameObject pot, out _))
             return;
 
@@ -219,68 +222,18 @@ public class PlantSpawner : MonoBehaviour
         if (playerCamera == null)
             return false;
 
-        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
-        RaycastHit[] hits = Physics.RaycastAll(ray, interactionDistance + 1f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
-        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
-
-        foreach (RaycastHit hit in hits)
+        float best = float.MaxValue;
+        foreach (var candidate in GameObject.FindGameObjectsWithTag("pot"))
         {
-            // Resolve the gameplay state from the collider's hierarchy. This
-            // supports visible child colliders and keeps the interaction tied
-            // to the tagged pot root instead of a particular collider layout.
-            PickableObject state = hit.collider.GetComponentInParent<PickableObject>();
-            if (state == null || !state.CompareTag("pot"))
-                continue;
-
-            if (!IsPotInRange(state))
-                continue;
-
-            pot = state.gameObject;
-            hitDistance = hit.distance;
-            return true;
-        }
-
-        // The pot collider is intentionally small, so the camera ray can hit
-        // the soil or the temporary plant instead of the pot itself. Resolve
-        // the nearest pot as a fallback while the player is close and looking
-        // towards it, so the interaction does not depend on pixel-perfect aim.
-        GameObject[] pots = GameObject.FindGameObjectsWithTag("pot");
-        GameObject nearestPot = null;
-        float nearestDistance = float.MaxValue;
-
-        foreach (GameObject candidate in pots)
-        {
-            if (candidate == null)
-                continue;
-
-            PickableObject state = candidate.GetComponent<PickableObject>() ?? candidate.GetComponentInParent<PickableObject>();
-            if (state == null || !state.CompareTag("pot") || !IsPotInRange(state))
-                continue;
-
-            Vector3 direction = state.transform.position - playerCamera.transform.position;
-            float distance = direction.magnitude;
-            if (distance > interactionDistance + 1f)
-                continue;
-
-            direction.Normalize();
-            if (Vector3.Dot(playerCamera.transform.forward, direction) < 0.55f)
-                continue;
-
-            if (distance < nearestDistance)
+            if (CityInteractionTargeting.TryScore(transform, playerCamera, candidate.transform,
+                    interactionDistance, out float score) && score < best)
             {
-                nearestDistance = distance;
-                nearestPot = state.gameObject;
+                best = score;
+                pot = candidate;
             }
         }
-
-        if (nearestPot != null)
-        {
-            pot = nearestPot;
-            hitDistance = nearestDistance;
-            return true;
-        }
-
-        return false;
+        hitDistance = best;
+        return pot != null;
     }
 
     private bool IsPotInRange(PickableObject potState)
@@ -324,7 +277,7 @@ public class PlantSpawner : MonoBehaviour
     private IEnumerator GrowPlant(GameObject plant)
     {
         int stages = plant.transform.childCount;
-        float stageTime = growthTime / stages;
+        float stageTime = growthTime / Mathf.Max(1, stages - 1);
         PlantGrowthIndicator indicator = plant.GetComponent<PlantGrowthIndicator>();
         if (indicator == null)
             indicator = plant.AddComponent<PlantGrowthIndicator>();
@@ -343,7 +296,7 @@ public class PlantSpawner : MonoBehaviour
 
             // If this is the last stage, start monitoring for children
             if (i == stages - 1)
-                StartCoroutine(DestroyWhenEmpty(currentStage.gameObject, 5f, plant.GetComponent<PlantCropState>()));
+                StartCoroutine(DestroyWhenEmpty(currentStage.gameObject, .5f, plant.GetComponent<PlantCropState>()));
 
             if (i < stages - 1)
             {
@@ -365,13 +318,20 @@ public class PlantSpawner : MonoBehaviour
     // Coroutine to destroy plant when last stage has no more children
     private IEnumerator DestroyWhenEmpty(GameObject lastStage, float delay, PlantCropState cropState)
     {
-        while (lastStage.transform.childCount > 0)
-            yield return null; // wait until all children are gone
+        // Leaves and stems remain after picking the buds; they must not keep the pot occupied forever.
+        while (lastStage != null && HasHarvestRemaining(lastStage))
+            yield return null;
+        if (lastStage == null) yield break;
 
         yield return new WaitForSeconds(delay);
 
         // Drop seeds before destroying
-        DropSeeds(lastStage.transform.position, cropState != null ? cropState.seedItem : null);
+        var inventory = GetComponent<Inventory>();
+        Item returnedSeed = cropState != null ? cropState.seedItem : null;
+        if (GetComponent<CityInputBridge>() != null && inventory != null && returnedSeed != null)
+            inventory.AddItem(returnedSeed);
+        else
+            DropSeeds(lastStage.transform.position, returnedSeed);
 
         // Get the pot (parent of the plant)
         Transform pot = lastStage.transform.parent.parent; // because lastStage -> plantPrefab -> pot
@@ -403,6 +363,13 @@ public class PlantSpawner : MonoBehaviour
     }
 
 
+
+    public static bool HasHarvestRemaining(GameObject stage)
+    {
+        foreach (var pickup in stage.GetComponentsInChildren<PickableObject>())
+            if (pickup.CompareTag("bud")) return true;
+        return false;
+    }
 
     private void DropSeeds(Vector3 dropPosition, Item seedItem)
     {

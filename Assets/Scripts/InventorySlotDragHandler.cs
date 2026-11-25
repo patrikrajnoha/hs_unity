@@ -86,6 +86,20 @@ public class InventorySlotDragHandler : MonoBehaviour,
         dragGhost = null;
     }
 
+    private void OnDisable() => CancelDrag();
+
+    public void CancelDrag()
+    {
+        if (dragGhost == null) return;
+        if (slotImage != null)
+        {
+            slotImage.color = originalColor;
+            slotImage.raycastTarget = true;
+        }
+        Destroy(dragGhost.gameObject);
+        dragGhost = null;
+    }
+
     private void UpdateGhostPosition(PointerEventData eventData)
     {
         RectTransform ghostRect = dragGhost.rectTransform;

@@ -518,7 +518,7 @@ namespace HighStakes.City
             colors.pressedColor = Color.Lerp(fill, Ink, 0.2f);
             button.colors = colors;
             image.canvasRenderer.SetColor(fill);
-            button.onClick.AddListener(() => action?.Invoke());
+            button.onClick.AddListener(() => { GameAudio.Play(AudioCue.Click); action?.Invoke(); });
             return button;
         }
 

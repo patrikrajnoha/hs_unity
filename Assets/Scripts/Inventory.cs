@@ -25,6 +25,7 @@ public class Inventory : MonoBehaviour
     public float spawnDistance = 2f;
 
     private int inventoryLimit = 12;
+    public bool IsBoardOpen { get; set; }
     private InventorySlot[] inventoryItems;
     private int currentItemCount = 0;
     private int selectedIndex = 0;
@@ -54,6 +55,7 @@ public class Inventory : MonoBehaviour
         if (TryGetComponent<HighStakes.City.CityInputBridge>(out _))
             cityPlayer = GetComponent<PlayerController>();
 
+        inventoryLimit = Mathf.Min(inventoryLimit, inventorySlots.Length);
         inventoryItems = new InventorySlot[inventoryLimit];
         EnsureSlotVisuals();
         ClearInventoryUI();
@@ -107,11 +109,11 @@ public class Inventory : MonoBehaviour
 
     void Update()
     {
-        if (GameMaster.GameOverActive || (cityPlayer != null && cityPlayer.IsDialogueInputLocked))
+        if (GameMaster.GameOverActive || (cityPlayer != null && cityPlayer.IsDialogueInputLocked && !IsBoardOpen))
             return;
 
         HandleSelection();
-        HandleUse();
+        if (!IsBoardOpen) HandleUse();
         HandleNumberKeys();
     }
 
@@ -145,6 +147,7 @@ public class Inventory : MonoBehaviour
             if (inventorySlots[i] == null) continue;
 
             inventorySlots[i].sprite = null;
+            inventorySlots[i].color = Color.clear;
             inventorySlots[i].enabled = true;
             inventorySlots[i].raycastTarget = true;
 
@@ -178,6 +181,7 @@ public class Inventory : MonoBehaviour
         inventoryItems[currentItemCount] = new InventorySlot(item, 1);
         UpdateSlotUI(currentItemCount);
         currentItemCount++;
+        UpdateSlotColors();
         GameLogger.LogInfo("inventory", "item_added", "Added " + item.itemName + " (x1)");
         return true;
     }
@@ -189,6 +193,7 @@ public class Inventory : MonoBehaviour
         if (slot != null && slot.item != null)
         {
             inventorySlots[index].sprite = slot.item.icon;
+            inventorySlots[index].color = slot.item.icon != null ? Color.white : Color.clear;
             inventorySlots[index].enabled = true;
 
             // Keep the count visible even when it is one. This makes every
@@ -204,6 +209,7 @@ public class Inventory : MonoBehaviour
             if (inventorySlots[index] == null) return;
 
             inventorySlots[index].sprite = null;
+            inventorySlots[index].color = Color.clear;
             inventorySlots[index].enabled = true;
             inventorySlots[index].raycastTarget = true;
             SetQuantityLabel(index, string.Empty, false);
@@ -231,7 +237,7 @@ public class Inventory : MonoBehaviour
 
     void HandleNumberKeys()
     {
-        for (int i = 0; i < inventoryLimit; i++)
+        for (int i = 0; i < Mathf.Min(9, inventoryLimit); i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
@@ -570,6 +576,7 @@ public class Inventory : MonoBehaviour
 
         inventoryItems[currentItemCount - 1] = null;
         inventorySlots[currentItemCount - 1].sprite = null;
+        inventorySlots[currentItemCount - 1].color = Color.clear;
         inventorySlots[currentItemCount - 1].enabled = true;
         inventorySlots[currentItemCount - 1].raycastTarget = true;
 

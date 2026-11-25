@@ -227,6 +227,7 @@ public sealed class ProductMixingSystem : MonoBehaviour
 
     private void Update()
     {
+        if (HighStakes.City.WarehouseGuideUI.IsOpen) return;
         if (GameMaster.GameOverActive || mixingStation == null || inventory == null)
             return;
 

@@ -71,6 +71,7 @@ public class WaterFill : MonoBehaviour
 
     void Update()
     {
+        if (HighStakes.City.WarehouseGuideUI.IsOpen || Time.timeScale <= 0) return;
         if (GameMaster.GameOverActive)
             return;
 
@@ -91,6 +92,8 @@ public class WaterFill : MonoBehaviour
             playerCamera = player.GetComponentInChildren<Camera>();
             Inventory inventory = player.GetComponent<Inventory>();
             puim = player.GetComponent<PlayerUIManager>();
+            var detector = player.GetComponent<ObjectDetector>();
+            if (detector != null && detector.CurrentTarget != null) continue;
             if (playerCamera == null || inventory == null || puim == null)
                 continue;
 
@@ -136,22 +139,8 @@ public class WaterFill : MonoBehaviour
 
     private bool IsTargeted(Camera camera)
     {
-        Ray ray = new Ray(camera.transform.position, camera.transform.forward);
-        RaycastHit[] hits = Physics.RaycastAll(ray, fillDistance + 1f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
-        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
-
-        foreach (RaycastHit hit in hits)
-        {
-            Transform hitTransform = hit.transform;
-            if (hitTransform == transform || hitTransform.IsChildOf(transform) || transform.IsChildOf(hitTransform))
-                return true;
-        }
-
-        // Some interactable fixtures (including the scene's water shelf) have
-        // no usable collider on the visual mesh. Keep the interaction usable
-        // by falling back to the same distance + facing check used before the
-        // raycast was introduced.
-        Vector3 directionToSource = (transform.position - camera.transform.position).normalized;
-        return Vector3.Dot(camera.transform.forward, directionToSource) >= 0.85f;
+        var owner = camera.GetComponentInParent<PlayerController>();
+        return owner != null && HighStakes.City.CityInteractionTargeting.TryScore(owner.transform,
+            camera, transform, fillDistance, out _);
     }
 }

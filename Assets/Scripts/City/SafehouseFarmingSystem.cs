@@ -111,11 +111,6 @@ namespace HighStakes.City
             packing.packagingStation = PackagingStation;
             packing.stationDistance = 3f;
 
-            var mixing = player.AddComponent<ProductMixingSystem>();
-            mixing.Initialize(MixingStation,
-                new[] { GreenBudItem, MushroomItem, CocaLeafItem },
-                new[] { CukeItem, EnergyDrinkItem, ParacetamolItem, FocusTonicItem });
-
             var hud = player.AddComponent<SafehouseInventoryHud>();
             hud.Initialize(inventory, ui.waterStatus, ui.selectedStatus, ui.feedback, ui.canvas,
                 ui.inventoryPanel, ui.consumeHint);
@@ -167,45 +162,33 @@ namespace HighStakes.City
 
         private void BuildEquipment(Transform room, Font signFont, Material signMaterial)
         {
-            // Layout zones inside the room:
-            // left wall = growing, front-left = water and supplies,
-            // front-right = packing, back-right = workshop and rest.
-            // The centre remains open as a clear route from the door.
-            CreateShelf(new Vector3(-3.25f, 0.85f, 1.25f), new Vector3(1.0f, 1.7f, 4.2f));
-
-            float[] potDepths = { -0.35f, 0.95f, 2.25f, 3.55f };
-            for (int i = 0; i < potDepths.Length; i++)
-                CreatePot(i + 1, new Vector3(-2.15f, 0.55f, potDepths[i]));
-
-            CreateGrowLight("Grow Light A", new Vector3(-2.1f, 3.1f, 0.25f));
-            CreateGrowLight("Grow Light B", new Vector3(-2.1f, 3.1f, 2.8f));
-
-            CreateWaterSource(new Vector3(-4.15f, 0.55f, -3.35f));
-            MixingStation = CreateMixingWorkbench(new Vector3(2.75f, 0.55f, -1.65f));
-            PackagingStation = CreatePackagingWorkbench(new Vector3(2.75f, 0.55f, -3.55f));
-
-            // The back wall is around local Z 3.4. Keep the supply shelf
-            // centred on that wall instead of placing it beyond the room,
-            // where the old position clipped through the corner.
-            CreateSupplyShelf(new Vector3(0f, 0.95f, 3.0f));
-            SpawnPickup(MushroomSeedItem, new Vector3(-0.05f, 1.45f, 2.72f), "Supply / Mushroom Spores");
-            SpawnPickup(CocaSeedItem, new Vector3(0.4f, 1.45f, 2.72f), "Supply / Coca Seeds");
-            SpawnPickup(PackEmptyItem, new Vector3(0.5f, 1.45f, 2.72f), "Supply / Empty Bag", true);
-            SpawnPickup(CukeItem, new Vector3(-0.5f, 1.05f, 2.72f), "Mixing / Cuke");
-            SpawnPickup(EnergyDrinkItem, new Vector3(0f, 1.05f, 2.72f), "Mixing / Energy Drink");
-            SpawnPickup(ParacetamolItem, new Vector3(0.5f, 1.05f, 2.72f), "Mixing / Paracetamol");
-            SpawnPickup(FocusTonicItem, new Vector3(1f, 1.05f, 2.72f), "Mixing / Focus Tonic");
-            SpawnPickup(WateringCanItem, new Vector3(-2.95f, 0.1f, -3.35f), "Supply / Watering Can");
-            SpawnPickup(PrunerItem, new Vector3(2.15f, 1.65f, 2.45f), "Workbench / Pruning Shears");
-            SpawnPickup(RakeItem, new Vector3(3.15f, 1.3f, 2.45f), "Workbench / Rake");
-
-            // The text front faces the centre aisle between the stations.
-            OldQuarterBootstrap.CreateSign(room, LocalizationManager.GetOrFallback("ui.safehouse.grow_room", "SAFEHOUSE GROW ROOM"),
-                new Vector3(-2.45f, 2.55f, 0.25f), 0.075f, 42, mint.color, signFont, signMaterial, -90);
-            OldQuarterBootstrap.CreateSign(room, LocalizationManager.GetOrFallback("ui.safehouse.packing", "PACKING"),
-                new Vector3(2.75f, 1.75f, -3.55f), 0.075f, 42, glass.color, signFont, signMaterial, 90);
-            OldQuarterBootstrap.CreateSign(room, "MIXING LAB", new Vector3(2.75f, 1.75f, -1.65f),
-                0.075f, 42, mint.color, signFont, signMaterial, 90);
+            // Only three zones: growing left, water right, labelled supplies at the back.
+            float[] depths = { -2.1f, 0f };
+            for (int i = 0; i < depths.Length; i++)
+            {
+                Box("Pot stand", farmRoot, new Vector3(-2.8f, .3f, depths[i]),
+                    new Vector3(1.1f, .6f, 1.1f), navy);
+                CreatePot(i + 1, new Vector3(-2.8f, .95f, depths[i]));
+            }
+            CreateGrowLight("Grow Light", new Vector3(-2.8f, 3.1f, -1));
+            CreateWaterSource(new Vector3(-4.1f, .55f, -3.3f));
+            PackagingStation = CreatePackagingWorkbench(new Vector3(2.9f, .25f, -.7f));
+            Box("Supplies table", farmRoot, new Vector3(0, .5f, 3.3f), new Vector3(7.4f, 1f, .8f), trim);
+            Item[] supplies = { SeedItem, WateringCanItem, PrunerItem, RakeItem, PackEmptyItem };
+            string[] names = { "Seeds", "Watering Can", "Pruning Shears", "Rake", "Empty Bag" };
+            string[] keys = { "seeds", "can", "shears", "rake", "bags" };
+            for (int i = 0; i < supplies.Length; i++)
+            {
+                float x = -2.8f + i * 1.4f;
+                SpawnPickup(supplies[i], new Vector3(x, 1.35f, 3.05f), "Supply / " + names[i],
+                    i == 0 || i == 4);
+                OldQuarterBootstrap.CreateSign(room, LocalizationManager.Get("ui.warehouse.zone_" + keys[i]),
+                    new Vector3(x, 2.4f, 3.3f), .045f, 36, mint.color, signFont, signMaterial, 0);
+            }
+            OldQuarterBootstrap.CreateSign(room, LocalizationManager.Get("ui.warehouse.zone_grow"),
+                new Vector3(-4.35f, 2.35f, 0), .065f, 40, mint.color, signFont, signMaterial, -90);
+            OldQuarterBootstrap.CreateSign(room, LocalizationManager.Get("ui.warehouse.zone_pack"),
+                new Vector3(3.4f, 1.85f, -.7f), .065f, 40, glass.color, signFont, signMaterial, 90);
         }
 
         private Transform CreateMixingWorkbench(Vector3 localPosition)
@@ -289,10 +272,9 @@ namespace HighStakes.City
             light.intensity = 2.4f;
             light.color = new Color(1f, 0.72f, 0.42f);
             light.enabled = true;
-            var switcher = fixture.AddComponent<LampSwitch>();
-            switcher.switchDistance = 3f;
+
             Box("Warm grow panel", fixture.transform, Vector3.zero, new Vector3(2.6f, 0.12f, 0.55f), glass, false);
-            Box("Switch", fixture.transform, new Vector3(0f, -1.65f, 0f), new Vector3(0.18f, 0.28f, 0.08f), mint);
+
         }
 
         private void CreateWaterSource(Vector3 localPosition)
@@ -408,19 +390,25 @@ namespace HighStakes.City
             pickup.name = objectName;
             pickup.transform.localPosition = localPosition;
             pickup.transform.localRotation = Quaternion.identity;
+            if (item == WateringCanItem) pickup.transform.localScale *= .55f;
+            else if (item == PrunerItem) pickup.transform.localScale *= .7f;
+            else if (item == RakeItem) pickup.transform.localScale *= .5f;
+            else if (item == SeedItem || item == PackEmptyItem) pickup.transform.localScale *= 1.5f;
             pickup.SetActive(true);
 
             PickableObject pickable = pickup.GetComponent<PickableObject>();
             if (pickable != null)
             {
                 pickable.item = item;
-                pickable.EnableWorldPhysics();
+                // Display supplies stay put instead of falling behind furniture.
+                var body = pickup.GetComponent<Rigidbody>();
+                if (body != null) { body.isKinematic = true; body.useGravity = false; }
             }
 
             if (respawns)
             {
                 var point = pickup.AddComponent<PackEmptyRespawnPoint>();
-                point.respawnDelay = 25f;
+                point.respawnDelay = 2f;
                 point.ConfigureAsWorldSpawnPoint(pickup.transform.position, pickup.transform.rotation);
             }
         }
@@ -807,18 +795,18 @@ namespace HighStakes.City
 
             var root = canvasObject.transform as RectTransform;
             var inventoryPanel = UiPanel("Inventory Panel", root, new Vector2(0.5f, 0f), new Vector2(0f, 12f),
-                new Vector2(470f, 70f), new Color32(12, 22, 34, 235));
+                new Vector2(800f, 240f), new Color32(12, 22, 34, 235));
             var inventoryCanvasGroup = inventoryPanel.gameObject.AddComponent<CanvasGroup>();
             inventoryCanvasGroup.alpha = 0f;
             inventoryCanvasGroup.interactable = false;
             inventoryCanvasGroup.blocksRaycasts = false;
-            UiText(inventoryPanel, "ITEMS  [1-8]", 9, new Color32(160, 181, 183, 255),
+            UiText(inventoryPanel, "", 9, new Color32(160, 181, 183, 255),
                 new Vector2(12f, -8f), new Vector2(180f, 14f));
             var consumeHint = UiText(inventoryPanel, "", 13, new Color32(119, 233, 196, 255),
-                new Vector2(200f, -1f), new Vector2(236f, 15f));
+                new Vector2(500f, -48f), new Vector2(278f, 24f));
             consumeHint.alignment = TextAlignmentOptions.Right;
 
-            var slots = new Image[8];
+            var slots = new Image[12];
             for (int i = 0; i < slots.Length; i++)
             {
                 var buttonObject = new GameObject("Inventory Slot " + (i + 1), typeof(RectTransform), typeof(Image), typeof(Button));
@@ -827,8 +815,8 @@ namespace HighStakes.City
                 buttonRect.anchorMin = new Vector2(0f, 0f);
                 buttonRect.anchorMax = new Vector2(0f, 0f);
                 buttonRect.pivot = new Vector2(0f, 0f);
-                buttonRect.anchoredPosition = new Vector2(12f + i * 54f, 8f);
-                buttonRect.sizeDelta = new Vector2(46f, 46f);
+                buttonRect.anchoredPosition = new Vector2(24f + (i % 6) * 76f, 88f - (i / 6) * 70f);
+                buttonRect.sizeDelta = new Vector2(54f, 54f);
                 var buttonImage = buttonObject.GetComponent<Image>();
                 buttonImage.color = new Color32(30, 52, 63, 220);
                 var colors = buttonObject.GetComponent<Button>().colors;
@@ -847,6 +835,8 @@ namespace HighStakes.City
                 icon.preserveAspect = true;
                 icon.raycastTarget = true;
                 slots[i] = icon;
+                var number = UiText(buttonObject.transform, (i + 1).ToString(), 11,
+                    new Color32(255, 194, 92, 255), new Vector2(2, -1), new Vector2(20, 16));
             }
 
             var promptPanel = UiPanel("Farming Prompt", root, new Vector2(0.5f, 0f), new Vector2(0f, 158f),
@@ -998,17 +988,22 @@ namespace HighStakes.City
         private Vector2 inventoryClosedPosition;
         private float inventoryAnimation;
         private bool inventoryTargetOpen;
+        public bool IsOpen => inventoryTargetOpen;
+        private int closedFrame = -1;
+        private PlayerController inputOwner;
         private float feedbackUntil;
 
         public void Initialize(Inventory owner, TextMeshProUGUI waterText, TextMeshProUGUI selectedText,
             TextMeshProUGUI feedbackText, Canvas canvas, GameObject panelObject, TextMeshProUGUI productHint)
         {
             inventory = owner;
+            gameObject.AddComponent<WarehouseGuideUI>().Initialize(this, owner, canvas, panelObject);
             waterStatus = waterText;
             selectedStatus = selectedText;
             consumeHint = productHint;
             feedback = feedbackText;
             inventoryCanvas = canvas;
+            inputOwner = GetComponent<PlayerController>();
             inventoryPanel = panelObject != null ? panelObject.GetComponent<RectTransform>() : null;
             inventoryGroup = panelObject != null ? panelObject.GetComponent<CanvasGroup>() : null;
             if (inventoryPanel != null)
@@ -1063,10 +1058,13 @@ namespace HighStakes.City
             if (inventoryCanvas != null)
                 inventoryCanvas.enabled = true;
 
+            if (Time.timeScale <= 0f) return;
+
             if (Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame)
                 SetInventoryOpen(!inventoryTargetOpen);
 
             UpdateInventoryAnimation();
+            if (feedback != null) feedback.enabled = !inventoryTargetOpen;
 
             Item selected = inventory.GetSelectedItem();
             if (consumeHint != null)
@@ -1100,9 +1098,35 @@ namespace HighStakes.City
             }
         }
 
-        private void SetInventoryOpen(bool open, bool instant = false)
+        public bool CloseForEscape()
         {
-            inventoryTargetOpen = open;
+            if (!IsOpen) return closedFrame == Time.frameCount;
+            SetInventoryOpen(false, true);
+            return true;
+        }
+
+        private void OnDisable() { SetInventoryOpen(false, true); }
+
+        public void SetInventoryOpen(bool open, bool instant = false)
+        {
+            if (inventoryTargetOpen != open)
+            {
+                inventoryTargetOpen = open;
+                if (!open)
+                {
+                    closedFrame = Time.frameCount;
+                    // Slots live on the HUD canvas rather than the player.
+                    if (inventoryPanel != null)
+                        foreach (var drag in inventoryPanel.GetComponentsInChildren<InventorySlotDragHandler>()) drag.CancelDrag();
+                }
+                if (inventory != null) inventory.IsBoardOpen = open;
+                if (inputOwner != null)
+                {
+                    inputOwner.SetInventoryInputLocked(open);
+                    if (open) inputOwner.UnlockMouse();
+                    else if (!inputOwner.IsDialogueInputLocked && Time.timeScale > 0f) inputOwner.LockMouse();
+                }
+            }
             if (instant)
             {
                 inventoryAnimation = open ? 1f : 0f;

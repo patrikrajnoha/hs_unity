@@ -97,14 +97,14 @@
     {
       "id": "paper_trail",
       "title": "Paper trail",
-      "description": "Enter the warehouse, retrieve the ledger and lose any pursuit.",
+      "description": "Enter the archive, retrieve the ledger and lose any pursuit.",
       "reward": 350,
       "reputation": 12,
       "baseScore": 1500,
       "timeLimit": 360,
       "steps": [
         {
-          "objective": "Hear Mara out about the warehouse ledger.",
+          "objective": "Hear Mara out about the archive ledger.",
           "signal": "accept_ledger",
           "target": "mara",
           "dialogue": "mara.ledger",
@@ -112,7 +112,7 @@
           "requiresClear": false
         },
         {
-          "objective": "Open the warehouse and find its ledger. Ada has an optional locker code.",
+          "objective": "Open the archive and find its ledger. Ada has an optional locker code.",
           "signal": "collect_ledger",
           "target": "ledger",
           "dialogue": "",
@@ -155,7 +155,7 @@
           "requiresClear": false
         },
         {
-          "objective": "Inspect the shipping manifest inside the warehouse.",
+          "objective": "Inspect the shipping manifest inside the archive.",
           "signal": "read_manifest",
           "target": "manifest",
           "dialogue": "evidence.manifest",
@@ -316,7 +316,7 @@
     {
       "id": "mara.ledger",
       "speaker": "Mara / Fixer",
-      "text": "The warehouse ledger names the people squeezing our shops. Choose your route: ask Ada for the locker code for a quiet recovery, or force the locker to save the detour and face an alarm. An alarm forfeits the +300 clean-run bonus. Then hide inside the workshop and return to me.",
+      "text": "The archive ledger names the people squeezing our shops. Choose your route: ask Ada for the locker code for a quiet recovery, or force the locker to save the detour and face an alarm. An alarm forfeits the +300 clean-run bonus. Then hide inside the workshop and return to me.",
       "choices": [
         {
           "text": "Take the ledger job.",
@@ -365,7 +365,7 @@
     {
       "id": "ada.route",
       "speaker": "Ada / Dock worker",
-      "text": "Locker code: 0417. Use it and the ledger alarm stays quiet. The warehouse entrance faces the road. Later, if you find shipping records, look for a matching shipment number rather than trusting a name.",
+      "text": "Locker code: 0417. Use it and the ledger alarm stays quiet. The archive entrance faces the road. Later, if you find shipping records, look for a matching shipment number rather than trusting a name.",
       "choices": [
         {
           "text": "Use the code.",
@@ -441,7 +441,7 @@
     {
       "id": "officer.idle",
       "speaker": "Officer Novak",
-      "text": "Afternoon. Keep the crossings clear and leave the warehouse lockers alone. If you hear an alarm, don't make me run. My knees and I are having a difficult week.",
+      "text": "Afternoon. Keep the crossings clear and leave the archive lockers alone. If you hear an alarm, don't make me run. My knees and I are having a difficult week.",
       "choices": [
         {
           "text": "Just taking a walk, officer."
@@ -465,7 +465,7 @@
     {
       "id": "local.rumor",
       "speaker": "Old Quarter resident",
-      "text": "The cafe is open to customers. The workshop needs repairs. The warehouse and radio house unlock as Mara trusts you with bigger jobs. Look for the jade door signs.",
+      "text": "The cafe is open to customers. The workshop needs repairs. The archive and radio house unlock as Mara trusts you with bigger jobs. Look for the jade door signs.",
       "choices": [
         {
           "text": "Good to know.",
@@ -609,7 +609,7 @@
     {
       "id": "mara.power_done",
       "speaker": "Mara / Fixer",
-      "text": "Lights are back. You followed the instructions instead of guessing. Here is $220. Now we can deal with the warehouse records.",
+      "text": "Lights are back. You followed the instructions instead of guessing. Here is $220. Now we can deal with the archive records.",
       "choices": [
         {
           "text": "Collect payment.",
@@ -626,7 +626,7 @@
     {
       "id": "mara.evidence",
       "speaker": "Mara / Fixer",
-      "text": "Cross-check the warehouse manifest against Tomas's cafe invoice. Remember their shared shipment ID. Then convince Ada to testify. Read carefully: bluffing the wrong ID loses score. $420 for evidence that actually holds up.",
+      "text": "Cross-check the archive manifest against Tomas's cafe invoice. Remember their shared shipment ID. Then convince Ada to testify. Read carefully: bluffing the wrong ID loses score. $420 for evidence that actually holds up.",
       "choices": [
         {
           "text": "Build the case.",
@@ -642,7 +642,7 @@
     },
     {
       "id": "evidence.manifest",
-      "speaker": "Warehouse manifest",
+      "speaker": "Archive manifest",
       "text": "Shipment J-417. Destination: The Jade Room. Contents: machine parts. The ledger records a second, unreceipted payment. An attached radio note says: emergency public channel 108.4.",
       "choices": [
         {
@@ -655,7 +655,7 @@
     {
       "id": "evidence.invoice",
       "speaker": "The Jade Room / Invoice",
-      "text": "Invoice J-417 matches the warehouse manifest. Tomas paid the normal shipping fee; the extra payment was demanded separately. A handwritten note confirms the radio channel: 108.4.",
+      "text": "Invoice J-417 matches the archive manifest. Tomas paid the normal shipping fee; the extra payment was demanded separately. A handwritten note confirms the radio channel: 108.4.",
       "choices": [
         {
           "text": "Keep the invoice as evidence.",
@@ -735,7 +735,7 @@
     {
       "id": "final.radio",
       "speaker": "Radio house / Transmitter",
-      "text": "Evidence loaded. Select the public emergency frequency from the warehouse and cafe documents.",
+      "text": "Evidence loaded. Select the public emergency frequency from the archive and cafe documents.",
       "choices": [
         {
           "text": "104.8 FM.",
@@ -756,7 +756,7 @@
     },
     {
       "id": "ledger.open",
-      "speaker": "Warehouse locker",
+      "speaker": "Archive locker",
       "text": "Choose your approach. Ada at the docks can share the code: an extra conversation keeps the alarm quiet and protects the +300 clean-run bonus. Forcing the locker saves the detour, but summons police.",
       "choices": [
         {

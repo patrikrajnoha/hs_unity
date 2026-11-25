@@ -105,7 +105,7 @@ public class PickableObject : MonoBehaviour
 
     void Update()
     {
-        if (GameMaster.GameOverActive)
+        if (GameMaster.GameOverActive || HighStakes.City.WarehouseGuideUI.IsOpen)
             return;
 
         
@@ -157,7 +157,7 @@ public class PickableObject : MonoBehaviour
                     continue;
 
                 bool hasRequiredToolSelected = true;
-                if (requiredToolName != "")
+                if (!string.IsNullOrEmpty(requiredToolName))
                     hasRequiredToolSelected = inventory.HasSelectedItem(requiredToolName);
 
                 // Pots are fixed gameplay targets. PlantSpawner owns their
@@ -165,6 +165,11 @@ public class PickableObject : MonoBehaviour
                 // surface a false E prompt and could destroy the pot.
                 bool isFixedPot = CompareTag("pot");
 
+                if (!isFixedPot && isInRange && isLooking && !hasRequiredToolSelected)
+                {
+                    var ui = player.GetComponent<PlayerUIManager>();
+                    if (ui != null) ui.ShowPopup(LocalizationManager.Get("ui.warehouse.select_shears"));
+                }
                 if (!isFixedPot && CompareTag("bud") && isInRange && isLooking && hasRequiredToolSelected)
                 {
                     PlayerUIManager ui = player.GetComponent<PlayerUIManager>();
@@ -200,7 +205,7 @@ public class PickableObject : MonoBehaviour
                         if (hud != null)
                             hud.ShowFeedback("INVENTORY FULL");
                         GameLogger.LogWarning("inventory", "pickup_failed_full", $"{player.name} cannot pick up {item?.itemName ?? "item"}: inventory full");
-                        Debug.Log($"{player.name} cannot pick up {item.itemName}");
+                        Debug.Log($"{player.name} cannot pick up {item?.itemName}");
                     }
                 }
             }

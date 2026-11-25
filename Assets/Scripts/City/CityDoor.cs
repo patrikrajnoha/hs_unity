@@ -17,6 +17,7 @@ namespace HighStakes.City
         {
             if (level < minimumLevel) return false;
             IsOpen = !IsOpen;
+            GameAudio.Play(AudioCue.Door, transform.position);
             return true;
         }
         private void Update()
@@ -31,7 +32,7 @@ namespace HighStakes.City
                 nextCrowdCheck = Time.time + 0.5f;
                 foreach (var officer in PoliceHeatRegistry.ActivePolice)
                     if (officer != null && officer.isChasing && Vector3.Distance(officer.transform.position, transform.position) < 2.4f)
-                    { IsOpen = true; break; }
+                    { IsOpen = true; GameAudio.Play(AudioCue.Door, transform.position); break; }
             }
         }
     }

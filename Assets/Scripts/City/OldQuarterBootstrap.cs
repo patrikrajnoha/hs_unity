@@ -43,13 +43,13 @@ namespace HighStakes.City
             AddPerson("tomas", "Tomas / Barista", new Vector3(15, 0.3f, 19), stone, "tomas.idle", false);
             AddPerson("ada", "Ada / Dock worker", new Vector3(32, 0.3f, -9), trim, "ada.route", false);
             AddLocation("parcel", "Dock parcel", new Vector3(35, 0.3f, 9), new Vector3(0.7f, 0.6f, 0.7f));
-            AddLocation("ledger", "Warehouse locker", new Vector3(35, 1.3f, -22), new Vector3(0.6f, 0.15f, 0.5f));
+            AddLocation("ledger", "Archive locker", new Vector3(35, 1.3f, -22), new Vector3(0.6f, 0.15f, 0.5f));
             // Keep the hold pad in front of the supply shelf, on the reachable central aisle.
             AddLocation("safehouse", "Safehouse", new Vector3(-17, 0.26f, -20), new Vector3(1.8f, 0.06f, 1.8f));
             AddLocation("fuse", "Workshop / Spare fuse", new Vector3(-20, 1.15f, -21), new Vector3(0.35f, 0.25f, 0.25f));
             AddLocation("wiring", "Workshop / Maintenance note", new Vector3(-14, 0.6f, -22), new Vector3(0.5f, 0.08f, 0.6f));
             AddLocation("switchboard", "Workshop / Switchboard", new Vector3(-13.65f, 1.1f, -19), new Vector3(0.25f, 0.7f, 0.9f));
-            AddLocation("manifest", "Warehouse / Manifest", new Vector3(29, 1.15f, -20), new Vector3(0.5f, 0.08f, 0.6f));
+            AddLocation("manifest", "Archive / Manifest", new Vector3(29, 1.15f, -20), new Vector3(0.5f, 0.08f, 0.6f));
             AddLocation("invoice", "Cafe / Invoice", new Vector3(19, 1.35f, 21.2f), new Vector3(0.5f, 0.08f, 0.6f));
             AddLocation("radio", "Radio house / Transmitter", new Vector3(-17, 1.45f, 21.4f), new Vector3(1.1f, 0.5f, 0.6f));
             AddLocation("extraction", "Final extraction", new Vector3(-20, 0.24f, -9), new Vector3(1.8f, 0.06f, 1.8f));
@@ -206,7 +206,9 @@ namespace HighStakes.City
             string room = null; int unlockLevel = 1;
             if (position.x == 17 && position.z == 19) room = "The Jade Room / Cafe";
             if (position.x == -17 && position.z == -19) { room = "Workshop / Safehouse"; unlockLevel = 1; }
-            if (position.x == 32 && position.z == -19) { room = "Warehouse / Records"; unlockLevel = 3; }
+            if (position.x == 32 && position.z == -19) { room = "Archive / Records"; unlockLevel = 3; }
+            // A separate, always-open production building; authored mission positions stay unchanged.
+            if (position.x == -32 && position.z == -19) room = "Warehouse / Production";
             if (position.x == -17 && position.z == 19) { room = "Radio House / Studio"; unlockLevel = 5; }
             if (room == null)
             {
@@ -234,11 +236,11 @@ namespace HighStakes.City
                 var upper = Box("Ceiling and upper floors", module, Vector3.up * ((height + 3.8f) / 2), new Vector3(width, height - 3.8f, depth), wall);
                 var upperModifier = upper.AddComponent<NavMeshModifier>(); upperModifier.overrideArea = true; upperModifier.area = 1;
                 FurnishRoom(module, room);
-                if (room == "Workshop / Safehouse")
+                if (room == "Warehouse / Production")
                 {
                     safehouseFarming = module.gameObject.AddComponent<SafehouseFarmingSystem>();
                     safehouseFarming.Build(module, stone, trim, glass, navy, mint, signFont, signMaterial);
-                    CreateSign(module, "OLD QUARTER", new Vector3(0, 6.1f, -depth / 2 - 0.085f),
+                    CreateSign(module, LocalizationManager.GetOrFallback("ui.warehouse.production", "GROW / PACK / SELL"), new Vector3(0, 6.1f, -depth / 2 - 0.085f),
                         0.12f, 48, Color.white, signFont, signMaterial);
                 }
                 AddDoor(module, room, unlockLevel, depth);
@@ -279,6 +281,7 @@ namespace HighStakes.City
 
         private void FurnishRoom(Transform room, string name)
         {
+            if (name.Contains("Production")) return; // Production supplies its own minimal equipment.
             // Physical furniture leaves a wide central route from every entrance.
             if (name.Contains("Cafe"))
             {
@@ -298,9 +301,9 @@ namespace HighStakes.City
                 Box("Workbench", room, new Vector3(2.75f, 0.45f, 2.45f), new Vector3(2.4f, 0.9f, 1.1f), trim);
                 Box("Tool shelf", room, new Vector3(3.75f, 0.9f, 0.25f), new Vector3(0.85f, 1.8f, 0.65f), navy);
                 Box("Safehouse sofa", room, new Vector3(2.65f, 0.45f, 4.25f), new Vector3(2.7f, 0.9f, 1), mint);
-                Box("Fuse board casing", room, new Vector3(-4.35f, 1.2f, -0.7f), new Vector3(0.25f, 0.95f, 1.2f), navy);
+                if (name.Contains("Workshop")) Box("Fuse board casing", room, new Vector3(-4.35f, 1.2f, -0.7f), new Vector3(0.25f, 0.95f, 1.2f), navy);
             }
-            else if (name.Contains("Warehouse"))
+            else if (name.Contains("Archive"))
             {
                 foreach (int side in new[] { -1, 1 })
                     foreach (float z in new[] { 0f, 3f })

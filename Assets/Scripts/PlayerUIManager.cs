@@ -96,6 +96,9 @@ public class PlayerUIManager : MonoBehaviour
 
     void UpdatePopup()
     {
+        if (HighStakes.City.WarehouseGuideUI.IsOpen) currentPopupMessage = null;
+        if (wateringCountdownText != null)
+            wateringCountdownText.enabled = !HighStakes.City.WarehouseGuideUI.IsOpen;
         if (!string.IsNullOrEmpty(currentPopupMessage))
         {
             if (popupText != null) popupText.text = currentPopupMessage;

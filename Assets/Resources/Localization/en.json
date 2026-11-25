@@ -1168,19 +1168,19 @@
     {
       "key": "city.contract.paper_trail.description",
       "lines": [
-        "Enter the warehouse, retrieve the ledger and lose any pursuit."
+        "Enter the archive, retrieve the ledger and lose any pursuit."
       ]
     },
     {
       "key": "city.contract.paper_trail.step.0.objective",
       "lines": [
-        "Hear Mara out about the warehouse ledger."
+        "Hear Mara out about the archive ledger."
       ]
     },
     {
       "key": "city.contract.paper_trail.step.1.objective",
       "lines": [
-        "Open the warehouse and find its ledger. Ada has an optional locker code."
+        "Open the archive and find its ledger. Ada has an optional locker code."
       ]
     },
     {
@@ -1216,7 +1216,7 @@
     {
       "key": "city.contract.cross_check.step.1.objective",
       "lines": [
-        "Inspect the shipping manifest inside the warehouse."
+        "Inspect the shipping manifest inside the archive."
       ]
     },
     {
@@ -1402,7 +1402,7 @@
     {
       "key": "city.conversation.mara.ledger.text",
       "lines": [
-        "The warehouse ledger names the people squeezing our shops. Choose your route: ask Ada for the locker code for a quiet recovery, or force the locker to save the detour and face an alarm. An alarm forfeits the +300 clean-run bonus. Then hide inside the workshop and return to me."
+        "The archive ledger names the people squeezing our shops. Choose your route: ask Ada for the locker code for a quiet recovery, or force the locker to save the detour and face an alarm. An alarm forfeits the +300 clean-run bonus. Then hide inside the workshop and return to me."
       ]
     },
     {
@@ -1474,7 +1474,7 @@
     {
       "key": "city.conversation.ada.route.text",
       "lines": [
-        "Locker code: 0417. Use it and the ledger alarm stays quiet. The warehouse entrance faces the road. Later, if you find shipping records, look for a matching shipment number rather than trusting a name."
+        "Locker code: 0417. Use it and the ledger alarm stays quiet. The archive entrance faces the road. Later, if you find shipping records, look for a matching shipment number rather than trusting a name."
       ]
     },
     {
@@ -1588,7 +1588,7 @@
     {
       "key": "city.conversation.officer.idle.text",
       "lines": [
-        "Afternoon. Keep the crossings clear and leave the warehouse lockers alone. If you hear an alarm, don't make me run. My knees and I are having a difficult week."
+        "Afternoon. Keep the crossings clear and leave the archive lockers alone. If you hear an alarm, don't make me run. My knees and I are having a difficult week."
       ]
     },
     {
@@ -1630,7 +1630,7 @@
     {
       "key": "city.conversation.local.rumor.text",
       "lines": [
-        "The cafe is open to customers. The workshop needs repairs. The warehouse and radio house unlock as Mara trusts you with bigger jobs. Look for the jade door signs."
+        "The cafe is open to customers. The workshop needs repairs. The archive and radio house unlock as Mara trusts you with bigger jobs. Look for the jade door signs."
       ]
     },
     {
@@ -1834,7 +1834,7 @@
     {
       "key": "city.conversation.mara.power_done.text",
       "lines": [
-        "Lights are back. You followed the instructions instead of guessing. Here is $220. Now we can deal with the warehouse records."
+        "Lights are back. You followed the instructions instead of guessing. Here is $220. Now we can deal with the archive records."
       ]
     },
     {
@@ -1858,7 +1858,7 @@
     {
       "key": "city.conversation.mara.evidence.text",
       "lines": [
-        "Cross-check the warehouse manifest against Tomas's cafe invoice. Remember their shared shipment ID. Then convince Ada to testify. Read carefully: bluffing the wrong ID loses score. $420 for evidence that actually holds up."
+        "Cross-check the archive manifest against Tomas's cafe invoice. Remember their shared shipment ID. Then convince Ada to testify. Read carefully: bluffing the wrong ID loses score. $420 for evidence that actually holds up."
       ]
     },
     {
@@ -1876,7 +1876,7 @@
     {
       "key": "city.conversation.evidence.manifest.speaker",
       "lines": [
-        "Warehouse manifest"
+        "Archive manifest"
       ]
     },
     {
@@ -1900,7 +1900,7 @@
     {
       "key": "city.conversation.evidence.invoice.text",
       "lines": [
-        "Invoice J-417 matches the warehouse manifest. Tomas paid the normal shipping fee; the extra payment was demanded separately. A handwritten note confirms the radio channel: 108.4."
+        "Invoice J-417 matches the archive manifest. Tomas paid the normal shipping fee; the extra payment was demanded separately. A handwritten note confirms the radio channel: 108.4."
       ]
     },
     {
@@ -2014,7 +2014,7 @@
     {
       "key": "city.conversation.final.radio.text",
       "lines": [
-        "Evidence loaded. Select the public emergency frequency from the warehouse and cafe documents."
+        "Evidence loaded. Select the public emergency frequency from the archive and cafe documents."
       ]
     },
     {
@@ -3068,9 +3068,9 @@
       ]
     },
     {
-      "key": "city.actor.door_warehouse_records.name",
+      "key": "city.actor.door_archive_records.name",
       "lines": [
-        "Door / Warehouse / Records"
+        "Door / Archive / Records"
       ]
     },
     {
@@ -3118,7 +3118,7 @@
     {
       "key": "city.actor.ledger.name",
       "lines": [
-        "Warehouse locker"
+        "Archive locker"
       ]
     },
     {
@@ -3148,7 +3148,7 @@
     {
       "key": "city.actor.manifest.name",
       "lines": [
-        "Warehouse / Manifest"
+        "Archive / Manifest"
       ]
     },
     {
@@ -3172,7 +3172,7 @@
     {
       "key": "city.conversation.ledger.open.speaker",
       "lines": [
-        "Warehouse locker"
+        "Archive locker"
       ]
     },
     {
@@ -3449,6 +3449,234 @@
       "key": "item.CocaLeaf.name",
       "lines": [
         "Coca Leaves"
+      ]
+    },
+    {
+      "key": "ui.audio.master",
+      "lines": [
+        "Master volume"
+      ]
+    },
+    {
+      "key": "ui.audio.music",
+      "lines": [
+        "Music"
+      ]
+    },
+    {
+      "key": "ui.audio.effects",
+      "lines": [
+        "Sound effects"
+      ]
+    },
+    {
+      "key": "ui.audio.ambience",
+      "lines": [
+        "City ambience"
+      ]
+    },
+    {
+      "key": "ui.audio.mute",
+      "lines": [
+        "MUTE ALL"
+      ]
+    },
+    {
+      "key": "ui.audio.unmute",
+      "lines": [
+        "UNMUTE"
+      ]
+    },
+    {
+      "key": "ui.audio.defaults",
+      "lines": [
+        "RESET AUDIO"
+      ]
+    },
+    {
+      "key": "city.actor.door_warehouse_production.name",
+      "lines": [
+        "Door / Warehouse / Production"
+      ]
+    },
+    {
+      "key": "ui.warehouse.production",
+      "lines": [
+        "GROW / PACK / SELL"
+      ]
+    },
+    {
+      "key": "ui.warehouse.inventory_title",
+      "lines": [
+        "INVENTORY · 12 slots"
+      ]
+    },
+    {
+      "key": "ui.warehouse.controls",
+      "lines": [
+        "Click an item to select it. Hold the left mouse button and drag it to another slot."
+      ]
+    },
+    {
+      "key": "ui.warehouse.help",
+      "lines": [
+        "Guide [H]"
+      ]
+    },
+    {
+      "key": "ui.warehouse.close",
+      "lines": [
+        "Close [Q]"
+      ]
+    },
+    {
+      "key": "ui.warehouse.guide_title",
+      "lines": [
+        "WAREHOUSE · From seed to package"
+      ]
+    },
+    {
+      "key": "ui.warehouse.guide_body",
+      "lines": [
+        "1. COLLECT EQUIPMENT\nApproach and look at an item, then press E. Take a seed from the supply table, a watering can, pruning shears and an empty bag.\n2. PLANT\nOpen Q and select a seed. Close the board, look at an empty pot nearby and press F.\n3. WATER\nSelect the watering can. Fill it at the water source with E; water the planted crop with C. Water within 45 seconds.\n4. GROW AND HARVEST\nWatch progress above the crop (about 18 s). When mature, select shears and press E. Clear a dry plant with a rake and E.\n5. PACK\nCarry a harvested product and an empty bag. Look at the packing table and press E. The finished package goes directly into inventory Q.\n6. USE OR SELL\nQ / click selects an item, Q closes the board. Scroll or 1–9 changes selection during play. G offers a product to a person outside; X consumes it. Left click drops an item."
+      ]
+    },
+    {
+      "key": "ui.warehouse.shortcuts",
+      "lines": [
+        "[Q] Inventory and rearrange items     [H] Growing and packing guide"
+      ]
+    },
+    {
+      "key": "ui.warehouse.inventory_shortcut",
+      "lines": [
+        "[Q] Inventory"
+      ]
+    },
+    {
+      "key": "ui.warehouse.empty",
+      "lines": [
+        "Empty inventory.\n\nLook at a nearby item and collect it with E."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_after_close",
+      "lines": [
+        "Q closes the board.\nUse the item at the right place, following the on-screen prompt."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_seed",
+      "lines": [
+        "Close with Q.\nPress F at an empty pot."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_can",
+      "lines": [
+        "Close with Q.\nE at water fills the can. C at a planted crop waters it."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_pruner",
+      "lines": [
+        "Close with Q.\nPress E at a mature crop to harvest."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_rake",
+      "lines": [
+        "Close with Q.\nPress E at a dry plant to clear the pot."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_bag",
+      "lines": [
+        "Close with Q.\nCarry a crop and press E at the packing table."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_package",
+      "lines": [
+        "Close with Q.\nG offers it to a person. X consumes it."
+      ]
+    },
+    {
+      "key": "ui.warehouse.use_crop",
+      "lines": [
+        "Close with Q.\nCarry an empty bag and press E at the packing table."
+      ]
+    },
+    {
+      "key": "ui.warehouse.zone_seeds",
+      "lines": [
+        "1 · SEEDS"
+      ]
+    },
+    {
+      "key": "ui.warehouse.zone_can",
+      "lines": [
+        "WATERING CAN"
+      ]
+    },
+    {
+      "key": "ui.warehouse.zone_shears",
+      "lines": [
+        "SHEARS"
+      ]
+    },
+    {
+      "key": "ui.warehouse.zone_rake",
+      "lines": [
+        "RAKE"
+      ]
+    },
+    {
+      "key": "ui.warehouse.zone_bags",
+      "lines": [
+        "EMPTY BAGS"
+      ]
+    },
+    {
+      "key": "ui.warehouse.zone_grow",
+      "lines": [
+        "2 · GROWING"
+      ]
+    },
+    {
+      "key": "ui.warehouse.zone_pack",
+      "lines": [
+        "3 · PACKING"
+      ]
+    },
+    {
+      "key": "ui.warehouse.need_bag",
+      "lines": [
+        "Collect an empty bag from the supply table."
+      ]
+    },
+    {
+      "key": "ui.warehouse.pack_action",
+      "lines": [
+        "Pack"
+      ]
+    },
+    {
+      "key": "ui.warehouse.packed_inventory",
+      "lines": [
+        "Finished package added to inventory [Q]."
+      ]
+    },
+    {
+      "key": "ui.warehouse.pack_failed",
+      "lines": [
+        "Free an inventory slot. Ingredients were kept."
+      ]
+    },
+    {
+      "key": "ui.warehouse.select_shears",
+      "lines": [
+        "Select pruning shears in inventory [Q] to harvest."
       ]
     }
   ]
