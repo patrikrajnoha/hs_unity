@@ -108,6 +108,12 @@ public class GameMaster : MonoBehaviour
         crimeHappened = true;
         criminal = suspect;
 
+        PlayerStats stats = suspect.GetComponent<PlayerStats>();
+        if (stats != null) stats.ChangeMoney(-stats.money);
+        var city = FindAnyObjectByType<HighStakes.City.CityMissionDirector>();
+        if (city != null) city.ConfiscateMoney();
+        GameOverController.MarkPoliceArrest();
+
         PlayerUIManager playerUi = suspect.GetComponent<PlayerUIManager>();
         if (playerUi != null)
         {
@@ -122,6 +128,12 @@ public class GameMaster : MonoBehaviour
         GameLogger.LogWarning("police", "player_arrested", $"Player caught: {suspect.name}");
         Debug.Log($"[GameMaster] Player caught selling drugs: {suspect.name}");
         return true;
+    }
+
+    public static void ReportCompletedSale(GameObject suspect)
+    {
+        foreach (PoliceBehavior officer in PoliceHeatRegistry.ActivePolice)
+            if (officer != null) officer.WitnessCompletedSale(suspect);
     }
 
     /// <summary>

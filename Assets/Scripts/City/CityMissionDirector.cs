@@ -156,20 +156,6 @@ namespace HighStakes.City
             }
             CityPoliceStatus police = PoliceStatus();
             bool pursued = police != CityPoliceStatus.Clear;
-            foreach (var officer in PoliceHeatRegistry.ActivePolice)
-            {
-                if (officer == null || !officer.isChasing || !officer.HasVisualContact) continue;
-                if (Vector3.Distance(player.transform.position, officer.transform.position) >= 1.5f) continue;
-                if (progress.Active)
-                    Fail(LocalizationManager.GetOrFallback("ui.notice.caught",
-                        "Caught. This level restarts; earlier scores stay. -200 score."), "caught");
-                else
-                {
-                    ClearPoliceAndRespawn();
-                    hud.Notify(LocalizationManager.Get("ui.street_trade.caught"));
-                }
-                return;
-            }
             CityActor target = ObjectiveTarget();
             float distance = target != null ? Vector3.Distance(player.transform.position, target.transform.position) : 0;
             if (target != null && distance > 2.7f) progress.RecordNavigation(Time.deltaTime);
@@ -436,6 +422,7 @@ namespace HighStakes.City
             }
 
             progress.CreditStreetSale(sale.Total);
+            if (sale.Product.isIllegal) GameMaster.ReportCompletedSale(player.gameObject);
             SaveCheckpoint();
             GameLogger.LogInfo("economy", "street_sale_completed", $"Sold {sale.Quantity} x {sale.Product.name} to {speakingTo.id} for ${sale.Total}");
             CloseConversation();
@@ -762,6 +749,14 @@ namespace HighStakes.City
             PlayerPrefs.SetString(SaveKey, JsonUtility.ToJson(progress.Capture()));
             PlayerPrefs.Save();
             GameLogger.LogDebug("save_system", "checkpoint_saved", $"Checkpoint saved at contract {progress.ContractIndex}");
+        }
+
+        public void ConfiscateMoney()
+        {
+            if (progress == null) return;
+            progress.ConfiscateMoney();
+            SaveCheckpoint();
+            if (hud != null) hud.Refresh(progress, PoliceStatus());
         }
         public bool HandleEscape()
         {

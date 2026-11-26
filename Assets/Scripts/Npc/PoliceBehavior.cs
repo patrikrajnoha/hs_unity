@@ -32,6 +32,8 @@ public class PoliceBehavior : MonoBehaviour, INpcBehavior
     public bool HasVisualContact { get; private set; }
     [SerializeField, Min(1f)] private float searchDuration = 12f;
     [SerializeField, Min(1f)] private float pursuitViewDistance = 32f;
+    [SerializeField, Min(0.1f)] private float pursuitSpeed = 6.2f;
+    [SerializeField, Min(0.1f)] private float arrestDistance = 1.5f;
     private Vector3 lastSeenPosition;
     private float lastSeenTime;
     private float nextRepath;
@@ -87,7 +89,6 @@ public class PoliceBehavior : MonoBehaviour, INpcBehavior
     {
         if (gm == null) gm = GameMaster.Instance;
         if (gm == null || GameMaster.GameOverActive) return;
-        DetectSaleInProgress();
         if (!gm.crimeHappened || gm.criminal == null)
         {
             if (isChasing) StopChase();
@@ -105,6 +106,11 @@ public class PoliceBehavior : MonoBehaviour, INpcBehavior
         }
         if (HasVisualContact)
         {
+            if (Vector3.Distance(transform.position, target.position) <= arrestDistance)
+            {
+                gm.TryCatchPlayer(target.gameObject);
+                return;
+            }
             State = PursuitState.Pursuing;
             lastSeenPosition = target.position;
             lastSeenTime = Time.time;
@@ -122,7 +128,7 @@ public class PoliceBehavior : MonoBehaviour, INpcBehavior
         if (agent == null || !agent.enabled || !agent.isOnNavMesh || Time.time < nextRepath) return;
         nextRepath = Time.time + 0.35f;
         agent.isStopped = false;
-        agent.speed = HasVisualContact ? (personality == PolicePersonality.Lazy ? 4.5f : 6.2f) : 2.4f;
+        agent.speed = HasVisualContact ? pursuitSpeed : 2.4f;
         Vector3 destination = lastSeenPosition;
         // Search the last known area, never the hidden player's live position.
         if (!HasVisualContact && !agent.pathPending && agent.remainingDistance < 1.5f && Time.time > nextSearchPoint)
@@ -195,6 +201,26 @@ public class PoliceBehavior : MonoBehaviour, INpcBehavior
     {
         if (CanSeeTarget(target.transform, saleDetectionDistance))
             target.ReportPoliceObservation(this);
+    }
+
+    public void WitnessCompletedSale(GameObject suspect)
+    {
+        if (!isActiveAndEnabled || suspect == null || GameMaster.GameOverActive ||
+            !CanSeeTarget(suspect.transform, saleDetectionDistance)) return;
+        if (gm == null) gm = GameMaster.Instance;
+        if (gm == null || !gm.BeginPoliceChase(suspect)) return;
+        PoliceHeatController heat = suspect.GetComponent<PoliceHeatController>();
+        if (heat != null) heat.RegisterWitnessedCrime();
+        StartChase(suspect.transform);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Vector3 origin = visionOrigin != null ? visionOrigin.position : transform.position + Vector3.up * 1.5f;
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(origin, saleDetectionDistance);
+        Gizmos.DrawRay(origin, Quaternion.AngleAxis(-saleFieldOfView * 0.5f, Vector3.up) * transform.forward * saleDetectionDistance);
+        Gizmos.DrawRay(origin, Quaternion.AngleAxis(saleFieldOfView * 0.5f, Vector3.up) * transform.forward * saleDetectionDistance);
     }
 
     private void SetRangeScale(float x, float z)

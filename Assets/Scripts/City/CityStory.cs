@@ -43,6 +43,7 @@ namespace HighStakes.City
         public float currentNavigationTime;
         public int currentDetections;
         public long streetSalesIncome;
+        public long confiscatedMoney;
     }
 
     // Gameplay state and score calculations do not depend on scene objects.
@@ -59,7 +60,8 @@ namespace HighStakes.City
         public bool Active => !Finished && StepIndex > 0;
         private int contractMoney;
         private long streetSalesIncome;
-        public long Money => contractMoney + streetSalesIncome;
+        private long confiscatedMoney;
+        public long Money => Math.Max(0, contractMoney + streetSalesIncome - confiscatedMoney);
         public int Reputation { get; private set; }
         public int Score { get; private set; }
         public int CurrentFailures { get; private set; }
@@ -92,6 +94,7 @@ namespace HighStakes.City
                 Reputation += story.contracts[results.Count - 1].reputation;
             }
             streetSalesIncome = Math.Clamp(save.streetSalesIncome, 0, long.MaxValue - int.MaxValue);
+            confiscatedMoney = Math.Clamp(save.confiscatedMoney, 0, contractMoney + streetSalesIncome);
             if (!Finished)
             {
                 CurrentFailures = Mathf.Max(0, save.currentFailures);
@@ -147,13 +150,15 @@ namespace HighStakes.City
         public void RecordMistake() { if (!Finished) CurrentMistakes++; }
         internal bool CanCreditStreetSale(long total) => total > 0 && total <= long.MaxValue - int.MaxValue - streetSalesIncome;
         internal void CreditStreetSale(long total) => streetSalesIncome += total;
+        public void ConfiscateMoney() => confiscatedMoney = contractMoney + streetSalesIncome;
         public void RaiseAlarm() { if (!Finished) AlarmRaised = true; }
         public void RecordDetection() { if (Active) Detections++; }
         public void RecordNavigation(float delta) { if (Active) NavigationTime += Mathf.Max(0, delta); }
         public CampaignSave Capture() => new CampaignSave {
             results = new List<LevelResult>(results), currentFailures = CurrentFailures,
             currentMistakes = CurrentMistakes, currentTotalTime = CurrentTotalTime, currentAlarm = AlarmRaised,
-            currentNavigationTime = NavigationTime, currentDetections = Detections, streetSalesIncome = streetSalesIncome
+            currentNavigationTime = NavigationTime, currentDetections = Detections, streetSalesIncome = streetSalesIncome,
+            confiscatedMoney = confiscatedMoney
         };
         public Conversation FindConversation(string id)
         {

@@ -554,17 +554,14 @@ public class BuyerBehavior : MonoBehaviour, INpcBehavior
             "totalPrice", totalPrice.ToString());
         playerInventory.RemoveItem(itemBeingSold, amount);
         currentPlayer.ChangeMoney(totalPrice);
+        if (itemBeingSold != null && itemBeingSold.isIllegal)
+            GameMaster.ReportCompletedSale(currentPlayer.gameObject);
         trust += 5;
 
         // Increase addiction
         currentRequest.addictiveness += currentRequest.addictAmount;
         // Optional: clamp max addiction
         currentRequest.addictiveness = Mathf.Min(currentRequest.addictiveness, 100);
-
-        // Completing a sale is not proof that police witnessed it. PoliceHeatController
-        // receives a report only from PoliceBehavior after distance, FOV and LOS pass.
-        // Do not call GameMaster.ReportCrime here: that used to start a chase even
-        // when no police officer could see the deal.
 
         // Resolve the manager at completion time as well as during Start. This
         // keeps a valid sale connected to stage progression if script startup

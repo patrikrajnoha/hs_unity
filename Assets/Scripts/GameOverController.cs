@@ -17,6 +17,16 @@ public sealed class GameOverController : MonoBehaviour
 
     private GameObject overlayCanvas;
     private bool isShown;
+    private static bool policeArrest;
+    private static bool confiscateOnRestart;
+
+    public static void MarkPoliceArrest() => policeArrest = true;
+    public static bool ConsumeArrestRestart()
+    {
+        bool result = confiscateOnRestart;
+        confiscateOnRestart = false;
+        return result;
+    }
 
     public bool IsShown => isShown;
 
@@ -61,6 +71,8 @@ public sealed class GameOverController : MonoBehaviour
 
     public void RestartCurrentScene()
     {
+        confiscateOnRestart = policeArrest;
+        policeArrest = false;
         GameLogger.LogInfo("gameplay", "restart_scene", "Restarting scene: " + SceneManager.GetActiveScene().name);
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -68,6 +80,8 @@ public sealed class GameOverController : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
+        policeArrest = false;
+        confiscateOnRestart = false;
         GameLogger.LogInfo("gameplay", "return_to_main_menu", "Returning to main menu scene: " + mainMenuSceneName);
         Time.timeScale = 1f;
         SceneManager.LoadScene(mainMenuSceneName);

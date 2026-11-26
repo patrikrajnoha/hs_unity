@@ -24,6 +24,7 @@ public class PlayerStats : MonoBehaviour
 
     private void Start()
     {
+        if (GameOverController.ConsumeArrestRestart()) money = 0;
         gm = GetComponent<GameMaster>();
         /*
         panel = GameObject.FindGameObjectWithTag("statPan");
@@ -160,6 +161,7 @@ public class PlayerStats : MonoBehaviour
     {
         money += amount;
         if (money < 0) money = 0;
+        UpdateStatsUI();
     }
     public bool CanAfford(int price)
     {

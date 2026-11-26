@@ -108,6 +108,14 @@ public sealed class PoliceHeatController : MonoBehaviour
         PursuitStateChanged?.Invoke(false);
     }
 
+    public void RegisterWitnessedCrime()
+    {
+        if (pursuitActive) return;
+        SetHeat(maxHeat);
+        pursuitActive = true;
+        PursuitStateChanged?.Invoke(true);
+    }
+
     private void ActivatePursuit()
     {
         if (gameMaster == null)

@@ -44,9 +44,7 @@ public class InteractionRangeTrigger : MonoBehaviour
             !officer.CanSeeTarget(target.transform, 2f)) return;
         npc.isClose = true;
         npc.currentPlayer = target.gameObject;
-        gm.arrest = true;
-        target.StopMove();
-        officer.Arrest();
+        gm.TryCatchPlayer(target.gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
