@@ -46,6 +46,9 @@ namespace HighStakes.City
             float qualityBonus = (ProductQualityRules.Multiplier(product.quality) - 1f) * 0.4f;
             float mixBonus = Mathf.Clamp(product.effectValue * 0.005f, 0f, 0.2f);
             active[(int)effect] = new ActiveEffect { EndsAt = Time.timeAsDouble + Duration, Potency = 1f + qualityBonus + mixBonus };
+            var visuals = GetComponent<PlayerPerceptionEffects>();
+            if (visuals == null) visuals = gameObject.AddComponent<PlayerPerceptionEffects>();
+            visuals.Consume(baseId);
             return true;
         }
 
@@ -72,6 +75,12 @@ namespace HighStakes.City
         }
 
         private void OnDisable() => RestoreFieldOfView();
+
+        internal void ResetProductEffects()
+        {
+            Array.Clear(active, 0, active.Length);
+            RestoreFieldOfView();
+        }
 
         private void RestoreFieldOfView()
         {

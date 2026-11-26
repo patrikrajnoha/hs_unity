@@ -357,6 +357,7 @@ namespace HighStakes.City
             var player = go.AddComponent<PlayerController>();
             player.playerCamera = camera.transform;
             go.AddComponent<PlayerProductEffects>();
+            go.AddComponent<PlayerPerceptionEffects>();
             // Keep the system cursor hidden for camera look, but show a small
             // in-game pointer at the centre of the player's view.
             go.AddComponent<PlayerAimReticle>();

@@ -105,6 +105,8 @@ public class GameMaster : MonoBehaviour
             return false;
 
         IsGameOver = true;
+        var perception = suspect.GetComponent<HighStakes.City.PlayerPerceptionEffects>();
+        if (perception != null) perception.ResetEffects();
         crimeHappened = true;
         criminal = suspect;
 

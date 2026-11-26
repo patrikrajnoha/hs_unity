@@ -42,6 +42,9 @@ public static class HighStakesFeatureBootstrap
         if (player.GetComponent<PlayerAimReticle>() == null)
             player.AddComponent<PlayerAimReticle>();
 
+        if (player.GetComponent<HighStakes.City.PlayerPerceptionEffects>() == null)
+            player.AddComponent<HighStakes.City.PlayerPerceptionEffects>();
+
         if (player.GetComponent<HighStakes.City.CityInputBridge>() != null)
             return;
 

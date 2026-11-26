@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
         if (!IsDialogueInputLocked) LockMouse();
     }
 
-    public void ResetMotion() { velocity = Vector3.zero; }
+    public void ResetMotion() { velocity = Vector3.zero; GetComponent<HighStakes.City.PlayerPerceptionEffects>()?.ResetEffects(); }
 
     public void LockMouse()
     {
